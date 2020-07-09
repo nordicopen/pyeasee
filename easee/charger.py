@@ -42,6 +42,14 @@ class Charger:
         ).text()
         return float(value)
 
+    def get_cached_config_entry(self, key):
+        """ Get cached config entry """
+        return self._config[key]
+
+    def get_cached_state_entry(self, key):
+        """ Get cached config entry """
+        return self._state[key]
+
     async def get_config(self, from_cache=False):
         """ get config for charger """
         if not from_cache:
