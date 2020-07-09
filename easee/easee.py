@@ -5,7 +5,7 @@ from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
 from enum import Enum
 from .charger import Charger
 
-__VERSION__ = "0.7.1"
+__VERSION__ = "0.7.2"
 
 _LOGGER = logging.getLogger(__name__)
 
