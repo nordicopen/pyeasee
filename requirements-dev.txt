@@ -28,6 +28,7 @@ pyflakes==2.2.0
 Pygments==2.6.1
 pyparsing==2.4.7
 pytest==5.4.3
+pytest-asyncio==0.14.0
 readme-renderer==26.0
 regex==2020.6.8
 requests==2.24.0
