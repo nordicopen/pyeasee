@@ -14,16 +14,15 @@ The library is tested on Python 3.7 and Python 3.8
 
 Easee is the connection class and Charger
 
-```
+```python
 from easee import Easee, Charger
 
-async def print_chargers():
-    easee = Easee("+760111111", "password"])
+async def get_chargers_info():
+    _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])
+    easee = Easee(sys.argv[1], sys.argv[2])
     chargers = await easee.get_chargers()
-    tasks = [c.async_update() for c in chargers]
-    await asyncio.wait(tasks)
-
-    _LOGGER.info("Chargers: %s %s", chargers[0].id, chargers[0].state)
+    for charger in chargers:
+        state = await charger.get_state()
+        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
     await easee.close()
-
 ```
