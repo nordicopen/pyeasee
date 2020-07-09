@@ -15,10 +15,9 @@ async def main():
     _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])
     easee = Easee(sys.argv[1], sys.argv[2])
     chargers = await easee.get_chargers()
-    tasks = [c.async_update() for c in chargers]
-    if tasks:
-        await asyncio.wait(tasks)
-    _LOGGER.info("Chargers: %s", [str(c) for c in chargers])
+    for charger in chargers:
+        state = await charger.get_state()
+        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
     await easee.close()
 
 

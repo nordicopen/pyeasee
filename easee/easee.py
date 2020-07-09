@@ -1,72 +1,13 @@
 import aiohttp
-import asyncio
 import logging
-import datetime
-import json
+from datetime import datetime, timedelta
 from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
 from enum import Enum
+from .charger import Charger
 
 __VERSION__ = "0.7.1"
 
 _LOGGER = logging.getLogger(__name__)
-
-STATUS = {
-    1: "STANDBY",
-    2: "PAUSED",
-    3: "CHARGING",
-    4: "READY_TO_CHARGE",
-    5: "UNKNOWN",
-    6: "CAR_CONNECTED",
-}
-
-NODE_TYPE = {
-    1: "Master",
-    2: "Extender",
-}
-
-PHASE_MODE = {
-    1: "Locked to single phase",
-    2: "Auto",
-    3: "Locked to three phase",
-}
-
-
-class Charger:
-    def __init__(self, id: str, name: str, easee: Any):
-        self.id: str = id
-        self.name: str = name
-        self.easee = easee
-        self.state: {}
-        self.config: {}
-
-    async def get_consumption_between_dates(self, from_date, to_date):
-        value = await (
-            await self.easee.get(
-                f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
-            )
-        ).text()
-        return float(value)
-
-    async def start(self):
-        return await self.session.post(f"/api/chargers/{self.id}/commands/start_charging")
-
-    async def async_update(self):
-        state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-        self.state = {
-            **state,
-            "chargerOpMode": STATUS[state["chargerOpMode"]],
-        }
-
-        config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-        self.config = {
-            **config,
-            "localNodeType": NODE_TYPE[config["localNodeType"]],
-            "phaseMode": PHASE_MODE[config["phaseMode"]],
-        }
-
-        _LOGGER.debug(
-            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.name, self.state, self.config
-        )
 
 
 async def raise_for_status(response):
@@ -88,7 +29,9 @@ class Easee:
     def __init__(self, username, password, session: aiohttp.ClientSession = None):
         self.username = username
         self.password = password
-        _LOGGER.info("user: '%s', pass: '%s'", username, password)
+        _LOGGER.info("Easee python library version: %s", __VERSION__)
+
+        _LOGGER.debug("user: '%s', pass: '%s'", username, password)
         self.base = "https://api.easee.cloud"
         self.token = {}
         self.headers = {
@@ -122,7 +65,7 @@ class Easee:
             await self._connect()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
-        if self.token["expires"] < datetime.datetime.now():
+        if self.token["expires"] < datetime.now():
             self._refresh_token()
 
     async def _handle_token_response(self, res):
@@ -130,10 +73,10 @@ class Easee:
         Handle the token request and set new datetime when it expires
         """
         self.token = await res.json()
-        _LOGGER.info("TOKEN: %s", self.token)
+        _LOGGER.debug("TOKEN: %s", self.token)
         expiresIn = int(self.token["expiresIn"])
-        now = datetime.datetime.now()
-        self.token["expires"] = now + datetime.timedelta(0, 86400)
+        now = datetime.now()
+        self.token["expires"] = now + timedelta(0, expiresIn)
 
     async def _connect(self):
         """
