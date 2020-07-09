@@ -1,3 +1,7 @@
+![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
+
+[![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/fondberg)
+
 # Easee EV Charger library
 
 This library is a thin wrapper around [Easee's Rest API](https://api.easee.cloud/index.html)
