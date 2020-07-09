@@ -6,7 +6,7 @@ import json
 from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
 from enum import Enum
 
-__VERSION__ = "0.7.0"
+__VERSION__ = "0.7.1"
 
 _LOGGER = logging.getLogger(__name__)
 
