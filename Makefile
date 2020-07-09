@@ -6,3 +6,9 @@ bump:
 
 build:
 	python setup.py sdist bdist_wheel
+
+publish-test:
+	twine upload --repository testpypi dist/*
+
+publish:
+	twine upload dist/*
