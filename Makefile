@@ -4,11 +4,14 @@ __VERSION__ = "0.7.1"
 bump:
 	bump2version --current-version $(__VERSION__) patch Makefile setup.py setup.py easee/easee.py
 
-build:
+clean:
+	rm -rf easee.egg-info dist build
+
+build: clean
 	python setup.py sdist bdist_wheel
 
 publish-test:
 	twine upload --repository testpypi dist/*
 
-publish:
+publish: build
 	twine upload dist/*
