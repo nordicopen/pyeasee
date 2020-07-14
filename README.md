@@ -19,14 +19,22 @@ The library is tested on Python 3.7 and Python 3.8
 Easee is the connection class and Charger
 
 ```python
-from easee import Easee, Charger
+from easee import Easee, Charger, Site
 
-async def get_chargers_info():
+async def main():
     _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])
     easee = Easee(sys.argv[1], sys.argv[2])
     chargers = await easee.get_chargers()
     for charger in chargers:
         state = await charger.get_state()
         _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+
+    sites = await easee.get_sites()
+    for site in sites:
+        _LOGGER.info("Get sites circuits chargers: %s", site["createdOn"])
+        charger = site.get_circuits()[0].get_chargers()[0]
+        state = await charger.get_state()
+        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+
     await easee.close()
 ```

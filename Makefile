@@ -1,5 +1,5 @@
 
-__VERSION__ = "0.7.3"
+__VERSION__ = "0.7.4"
 
 bump:
 	bump2version --current-version $(__VERSION__) patch Makefile setup.py setup.py easee/easee.py

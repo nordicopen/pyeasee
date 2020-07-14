@@ -1,8 +1,9 @@
 import sys
 import asyncio
 import logging
-from .easee import Easee, Charger
-
+from .easee import Easee
+from .charger import Charger
+from .site import Site
 
 logging.basicConfig(
     format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=logging.INFO
@@ -18,6 +19,14 @@ async def main():
     for charger in chargers:
         state = await charger.get_state()
         _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+
+    sites = await easee.get_sites()
+    for site in sites:
+        _LOGGER.info("Get sites circuits chargers: %s", site["createdOn"])
+        charger = site.get_circuits()[0].get_chargers()[0]
+        state = await charger.get_state()
+        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+
     await easee.close()
 
 
