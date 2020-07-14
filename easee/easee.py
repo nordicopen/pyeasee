@@ -8,7 +8,7 @@ from .charger import Charger
 from .site import Site
 
 
-__VERSION__ = "0.7.3"
+__VERSION__ = "0.7.4"
 
 _LOGGER = logging.getLogger(__name__)
 
