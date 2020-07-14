@@ -1,9 +1,12 @@
+import asyncio
 import aiohttp
 import logging
 from datetime import datetime, timedelta
 from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
 from enum import Enum
 from .charger import Charger
+from .site import Site
+
 
 __VERSION__ = "0.7.3"
 
@@ -115,3 +118,17 @@ class Easee:
         records = await (await self.get("/api/chargers")).json()
         _LOGGER.debug("Chargers:  %s", records)
         return [Charger(k["id"], k["name"], self) for k in records]
+
+    async def get_site(self, id: int) -> Site:
+        """ get site by id """
+        data = await (await self.get(f"/api/sites/{id}")).json()
+        _LOGGER.debug("Site:  %s", data)
+        return Site(data, self)
+
+    async def get_sites(self) -> List[Site]:
+        """ Get all sites """
+        records = await (await self.get("/api/sites")).json()
+        _LOGGER.debug("Sites:  %s", records)
+        sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+        return sites
+
