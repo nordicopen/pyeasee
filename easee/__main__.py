@@ -64,9 +64,12 @@ async def main():
     easee = Easee(args.username, args.password)
     if args.chargers:
         chargers: List[Charger] = await easee.get_chargers()
+        data = []
         for charger in chargers:
             await charger.async_update()
-            print(charger.toJSON())
+            data.append(charger.get_data())
+
+        print(json.dumps(data, indent=2,))
 
     if args.site:
         sites: List[Site] = await easee.get_sites()

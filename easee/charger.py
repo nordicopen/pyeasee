@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set, Union, cast
 
+from .utils import BaseDict
+
 _LOGGER = logging.getLogger(__name__)
 
 STATUS = {
@@ -26,10 +28,10 @@ PHASE_MODE = {
 }
 
 
-class Charger:
-    def __init__(self, id: str, name: str, easee: Any):
-        self.id: str = id
-        self.name: str = name
+class Charger(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
+        self.id: str = entries["id"]
         self.easee = easee
         self._state: Dict[str, Any] = {}
         self._config: Dict[str, Any] = {}
@@ -72,11 +74,8 @@ class Charger:
             }
         return self._state
 
-    def toJSON(self):
-        return json.dumps(
-            {"name": self.name, "id": self.id, "state": self._state, "config": self._config},
-            indent=2,
-        )
+    def get_data(self):
+        return ({"id": self.id, "state": self._state, "config": self._config},)
 
     async def start(self):
         """Start charging session"""
@@ -140,5 +139,5 @@ class Charger:
         self._config = await self.get_config()
 
         _LOGGER.debug(
-            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.name, self._state, self._config
+            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.id, self._state, self._config
         )

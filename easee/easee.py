@@ -117,7 +117,7 @@ class Easee:
         """
         records = await (await self.get("/api/chargers")).json()
         _LOGGER.debug("Chargers:  %s", records)
-        return [Charger(k["id"], k["name"], self) for k in records]
+        return [Charger(k, self) for k in records]
 
     async def get_site(self, id: int) -> Site:
         """ get site by id """
