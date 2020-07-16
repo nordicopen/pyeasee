@@ -28,13 +28,25 @@ PHASE_MODE = {
 }
 
 
+class ChargerState(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
+        self.easee = easee
+
+
+class ChargerConfig(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
+        self.easee = easee
+
+
 class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any):
         super().__init__(entries)
         self.id: str = entries["id"]
         self.easee = easee
-        self._state: Dict[str, Any] = {}
-        self._config: Dict[str, Any] = {}
+        self._config: ChargerConfig({}, easee)
+        self._state: ChargerState({}, easee)
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
@@ -57,25 +69,29 @@ class Charger(BaseDict):
         """ get config for charger """
         if not from_cache:
             config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-            self._config = {
-                **config,
-                "localNodeType": NODE_TYPE[config["localNodeType"]],
-                "phaseMode": PHASE_MODE[config["phaseMode"]],
-            }
+            self._config = ChargerConfig(
+                {
+                    **config,
+                    "localNodeType": NODE_TYPE[config["localNodeType"]],
+                    "phaseMode": PHASE_MODE[config["phaseMode"]],
+                },
+                self.easee,
+            )
         return self._config
 
     async def get_state(self, from_cache=False):
         """ get state for charger """
         if not from_cache:
             state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-            self._state = {
-                **state,
-                "chargerOpMode": STATUS[state["chargerOpMode"]],
-            }
+            self._state = ChargerState(
+                {**state, "chargerOpMode": STATUS[state["chargerOpMode"]],}, self.easee
+            )
         return self._state
 
     def get_data(self):
-        return ({"id": self.id, "state": self._state, "config": self._config},)
+        return (
+            {**self._storage, "state": self._state.get_data(), "config": self._config.get_data()},
+        )
 
     async def start(self):
         """Start charging session"""
