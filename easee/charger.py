@@ -1,4 +1,5 @@
 import logging
+import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set, Union, cast
 
@@ -70,6 +71,12 @@ class Charger:
                 "chargerOpMode": STATUS[state["chargerOpMode"]],
             }
         return self._state
+
+    def toJSON(self):
+        return json.dumps(
+            {"name": self.name, "id": self.id, "state": self._state, "config": self._config},
+            indent=2,
+        )
 
     async def start(self):
         """Start charging session"""

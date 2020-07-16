@@ -65,7 +65,7 @@ class Easee:
         Make sure there is a valid token
         """
         if "accessToken" not in self.token:
-            await self._connect()
+            await self.connect()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
         if self.token["expires"] < datetime.now():
@@ -81,7 +81,7 @@ class Easee:
         now = datetime.now()
         self.token["expires"] = now + timedelta(0, expiresIn)
 
-    async def _connect(self):
+    async def connect(self):
         """
         Gets initial token
         """
