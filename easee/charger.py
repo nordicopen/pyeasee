@@ -44,6 +44,7 @@ class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any):
         super().__init__(entries)
         self.id: str = entries["id"]
+        self.name: str = entries["name"]
         self.easee = easee
         self._config: ChargerConfig({}, easee)
         self._state: ChargerState({}, easee)
