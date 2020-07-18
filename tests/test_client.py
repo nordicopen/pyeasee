@@ -21,9 +21,13 @@ def aioresponse():
         yield m
 
 
+@pytest.fixture
+async def aiosession():
+    return aiohttp.ClientSession()
+
+
 @pytest.mark.asyncio
-async def test_get_chargers(aioresponse):
-    session = aiohttp.ClientSession()
+async def test_get_chargers(aiosession, aioresponse):
 
     token_data = load_json_fixture("token.json")
     aioresponse.post(f"{BASE_URL}/api/accounts/token", payload=token_data)
@@ -31,7 +35,7 @@ async def test_get_chargers(aioresponse):
     chargers_data = load_json_fixture("chargers.json")
     aioresponse.get(f"{BASE_URL}/api/chargers", payload=chargers_data)
 
-    easee = Easee("+46070123456", "password", session)
+    easee = Easee("+46070123456", "password", aiosession)
     chargers = await easee.get_chargers()
     assert chargers[0].id == "EH12345"
 
