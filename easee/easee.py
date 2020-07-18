@@ -8,7 +8,7 @@ from .charger import Charger
 from .site import Site
 
 
-__VERSION__ = "0.7.4"
+__VERSION__ = "0.7.5"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ class Easee:
         Make sure there is a valid token
         """
         if "accessToken" not in self.token:
-            await self._connect()
+            await self.connect()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
         if self.token["expires"] < datetime.now():
@@ -81,7 +81,7 @@ class Easee:
         now = datetime.now()
         self.token["expires"] = now + timedelta(0, expiresIn)
 
-    async def _connect(self):
+    async def connect(self):
         """
         Gets initial token
         """
@@ -117,7 +117,7 @@ class Easee:
         """
         records = await (await self.get("/api/chargers")).json()
         _LOGGER.debug("Chargers:  %s", records)
-        return [Charger(k["id"], k["name"], self) for k in records]
+        return [Charger(k, self) for k in records]
 
     async def get_site(self, id: int) -> Site:
         """ get site by id """

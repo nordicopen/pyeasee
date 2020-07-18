@@ -14,7 +14,11 @@ You can install the libray from [PyPI](https://pypi.org/project/easee/):
 
 The library is tested on Python 3.7 and Python 3.8
 
-## Usage
+## Command line tool
+
+Run `python -m easee -h` for help.
+
+## Usage of the library
 
 Easee is the connection class and Charger
 

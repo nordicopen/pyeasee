@@ -29,3 +29,6 @@ class BaseDict(Mapping):
 
     def __len__(self):
         return len(self._storage)
+
+    def get_data(self):
+        return self._storage
