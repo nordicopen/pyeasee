@@ -52,9 +52,13 @@
     "buildingNumber": "buildingNumber",
     "zip": "zip",
     "area": "area",
-    "country": null,
-    "latitude": null,
-    "longitude": null,
-    "altitude": null
+    "country": {
+      "id": "countryid",
+      "name": "countryname",
+      "phonePrefix": 46
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "altitude": 0
   }
 }

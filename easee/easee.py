@@ -132,3 +132,12 @@ class Easee:
         sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
         return sites
 
+    async def get_active_countries(self) -> List[Any]:
+        records = await (await self.get("/api/resources/countries/active")).json()
+        _LOGGER.debug("Active countries:  %s", records)
+        return records
+
+    async def get_currencies(self) -> List[Any]:
+        records = await (await self.get("/api/resources/currencies")).json()
+        _LOGGER.debug("Currencies:  %s", records)
+        return records

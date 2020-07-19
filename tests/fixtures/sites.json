@@ -12,7 +12,7 @@
       "country": {
         "id": "countryid",
         "name": "countryname",
-        "phonePrefix": 0
+        "phonePrefix": 46
       },
       "latitude": 0,
       "longitude": 0,

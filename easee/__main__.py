@@ -21,6 +21,7 @@ def parse_arguments():
         "-c", "--chargers", help="Get chargers information", action="store_true",
     )
     parser.add_argument("-s", "--site", help="Get site information", action="store_true")
+    parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
         "--debug",
@@ -78,6 +79,10 @@ async def main():
             data.append(site.get_data())
 
         print(json.dumps(data, indent=2,))
+
+    if args.countries:
+        countries_active = await easee.get_active_countries()
+        print(json.dumps(countries_active, indent=2,))
 
     await easee.close()
 
