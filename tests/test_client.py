@@ -57,7 +57,7 @@ async def test_get_sites(aiosession, aioresponse):
     aioresponse.get(f"{BASE_URL}/api/sites", payload=sites_data)
 
     site_data = load_json_fixture("site.json")
-    aioresponse.get(f"{BASE_URL}/api/sites/55555", payload=site_data)
+    aioresponse.get(f"{BASE_URL}/api/sites/55555?detailed=true", payload=site_data)
 
     easee = Easee("+46070123456", "password", aiosession)
     sites = await easee.get_sites()
