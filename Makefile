@@ -1,5 +1,5 @@
 
-__VERSION__ = "0.7.6"
+__VERSION__ = "0.7.7"
 
 clean:
 	rm -rf easee.egg-info dist build
