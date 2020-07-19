@@ -25,3 +25,19 @@ class Site(BaseDict):
 
     def get_circuits(self) -> List[Circuit]:
         return [Circuit(c, self.easee) for c in self["circuits"]]
+
+    async def set_name(self, name: str):
+        """ Set name for the site """
+        json = {**self.get_data(), "name": name}
+        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+
+    async def set_name(self, name: str):
+        """ Set name for the site """
+        json = {**self.get_data(), "name": name}
+        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+
+    async def set_currency(self, currency: str):
+        """ Set currency for the site """
+        json = {**self.get_data(), "currencyId": currency}
+        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+

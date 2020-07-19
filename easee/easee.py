@@ -53,6 +53,13 @@ class Easee:
         await raise_for_status(response)
         return response
 
+    async def put(self, url, **kwargs):
+        _LOGGER.debug("put: %s (%s)", url, kwargs)
+        await self._verify_updated_token()
+        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs,)
+        await raise_for_status(response)
+        return response
+
     async def get(self, url, **kwargs):
         _LOGGER.debug("get: %s (%s)", url, kwargs)
         await self._verify_updated_token()
@@ -121,7 +128,7 @@ class Easee:
 
     async def get_site(self, id: int) -> Site:
         """ get site by id """
-        data = await (await self.get(f"/api/sites/{id}")).json()
+        data = await (await self.get(f"/api/sites/{id}?detailed=true")).json()
         _LOGGER.debug("Site:  %s", data)
         return Site(data, self)
 
