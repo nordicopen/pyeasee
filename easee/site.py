@@ -8,17 +8,19 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class Circuit(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any):
-        super().__init__(entries)
+    def __init__(self, data: Dict[str, Any], easee: Any):
+        super().__init__(data)
+        self.id: int = data["id"]
         self.easee = easee
 
     def get_chargers(self) -> List[Charger]:
-        return [Charger(c["id"], c["name"], self.easee) for c in self["chargers"]]
+        return [Charger(c, self.easee) for c in self["chargers"]]
 
 
 class Site(BaseDict):
     def __init__(self, data: Dict[str, Any], easee: Any):
         super().__init__(data)
+        self.id: int = data["id"]
         self.easee = easee
 
     def get_circuits(self) -> List[Circuit]:

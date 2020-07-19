@@ -1,62 +1,22 @@
 [
   {
-    "contactInfo": {
-      "installerName": null,
-      "installerPhoneNumber": null,
-      "ownerName": "John Doe",
-      "ownerPhoneNumber": "+46070123456",
-      "company": null
-    },
-    "costPerKWh": 0.0,
-    "vat": 0.0,
-    "costPerKwhExcludeVat": 0.0,
-    "currencyId": "SEK",
-    "partnerId": 1,
-    "siteType": null,
-    "ratedCurrent": 20.0,
-    "useDynamicMaster": false,
-    "circuits": [
-      {
-        "id": 12345,
-        "siteId": 54321,
-        "circuitPanelId": 1,
-        "panelName": "1",
-        "ratedCurrent": 16.0,
-        "chargers": [
-          {
-            "id": "ES12345",
-            "name": "Easee Home 12345",
-            "color": 1,
-            "createdOn": "2020-03-06T08:52:52.512105",
-            "updatedOn": "2020-07-03T17:34:35.390791",
-            "backPlate": {
-              "id": "backPlateId",
-              "masterBackPlateId": "masterBackPlateId"
-            },
-            "levelOfAccess": null,
-            "productCode": 1
-          }
-        ],
-        "masterBackplate": null,
-        "useDynamicMaster": false
-      }
-    ],
-    "equalizers": [],
-    "createdOn": "2020-04-06T11:59:53.135015",
-    "updatedOn": "2020-06-25T08:13:52.310928",
     "id": 55555,
     "siteKey": "WAFE-1234",
     "name": "M\u00e5nv\u00e4gen ",
-    "levelOfAccess": null,
+    "levelOfAccess": 1,
     "address": {
-      "street": "",
-      "buildingNumber": "",
-      "zip": "",
-      "area": "",
-      "country": null,
-      "latitude": null,
-      "longitude": null,
-      "altitude": null
+      "street": "street",
+      "buildingNumber": "buildingNumber",
+      "zip": "zip",
+      "area": "area",
+      "country": {
+        "id": "countryid",
+        "name": "countryname",
+        "phonePrefix": 0
+      },
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0
     }
   }
 ]
