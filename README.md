@@ -20,6 +20,12 @@ Run `python -m easee -h` for help.
 
 ## Usage of the library
 
+### Docs
+
+Read the API documentation [here](https://fondberg.github.io/easee/easee/)
+
+### Small example
+
 Easee is the connection class and Charger
 
 ```python

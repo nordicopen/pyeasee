@@ -20,7 +20,7 @@ def parse_arguments():
     parser.add_argument(
         "-c", "--chargers", help="Get chargers information", action="store_true",
     )
-    parser.add_argument("-s", "--site", help="Get site information", action="store_true")
+    parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
@@ -72,7 +72,7 @@ async def main():
 
         print(json.dumps(data, indent=2,))
 
-    if args.site:
+    if args.sites:
         sites: List[Site] = await easee.get_sites()
         data = []
         for site in sites:
