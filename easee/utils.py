@@ -21,7 +21,10 @@ class BaseDict(Mapping):
 
     def __getitem__(self, key):
         if type(self._storage[key]) == str and validate_iso8601(self._storage[key]):
-            return datetime.fromisoformat(self._storage[key])
+            try:
+                return datetime.fromisoformat(self._storage[key])
+            except:
+                return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ")
         return self._storage[key]
 
     def __iter__(self):
@@ -29,3 +32,6 @@ class BaseDict(Mapping):
 
     def __len__(self):
         return len(self._storage)
+
+    def get_data(self):
+        return self._storage

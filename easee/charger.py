@@ -1,6 +1,9 @@
 import logging
+import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set, Union, cast
+
+from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,13 +28,26 @@ PHASE_MODE = {
 }
 
 
-class Charger:
-    def __init__(self, id: str, name: str, easee: Any):
-        self.id: str = id
-        self.name: str = name
+class ChargerState(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
         self.easee = easee
-        self._state: Dict[str, Any] = {}
-        self._config: Dict[str, Any] = {}
+
+
+class ChargerConfig(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
+        self.easee = easee
+
+
+class Charger(BaseDict):
+    def __init__(self, entries: Dict[str, Any], easee: Any):
+        super().__init__(entries)
+        self.id: str = entries["id"]
+        self.name: str = entries["name"]
+        self.easee = easee
+        self._config: ChargerConfig({}, easee)
+        self._state: ChargerState({}, easee)
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
@@ -54,22 +70,29 @@ class Charger:
         """ get config for charger """
         if not from_cache:
             config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-            self._config = {
-                **config,
-                "localNodeType": NODE_TYPE[config["localNodeType"]],
-                "phaseMode": PHASE_MODE[config["phaseMode"]],
-            }
+            self._config = ChargerConfig(
+                {
+                    **config,
+                    "localNodeType": NODE_TYPE[config["localNodeType"]],
+                    "phaseMode": PHASE_MODE[config["phaseMode"]],
+                },
+                self.easee,
+            )
         return self._config
 
     async def get_state(self, from_cache=False):
         """ get state for charger """
         if not from_cache:
             state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-            self._state = {
-                **state,
-                "chargerOpMode": STATUS[state["chargerOpMode"]],
-            }
+            self._state = ChargerState(
+                {**state, "chargerOpMode": STATUS[state["chargerOpMode"]],}, self.easee
+            )
         return self._state
+
+    def get_data(self):
+        return (
+            {**self._storage, "state": self._state.get_data(), "config": self._config.get_data()},
+        )
 
     async def start(self):
         """Start charging session"""
@@ -133,5 +156,5 @@ class Charger:
         self._config = await self.get_config()
 
         _LOGGER.debug(
-            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.name, self._state, self._config
+            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.id, self._state, self._config
         )
