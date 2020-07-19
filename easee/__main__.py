@@ -78,7 +78,6 @@ async def main():
         for site in sites:
             data.append(site.get_data())
 
-        await sites[0].set_name("Månvägen Ny")
         print(json.dumps(data, indent=2,))
 
     if args.countries:
