@@ -1,3 +1,6 @@
+"""
+Main client for the Eesee account.
+"""
 import asyncio
 import aiohttp
 import logging
