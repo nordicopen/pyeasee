@@ -29,10 +29,10 @@ PHASE_MODE = {
 
 REASON_FOR_NO_CURRENT = {
     # Work-in-progress, must be taken with a pinch of salt, as per now just reverse engineering of observations until API properly documented
-    0: "No reason, charging or ready to charge",
-    50: "Secondary unit not requesting current or no car connected",
-    52: "Charger paused",
-    53: "Charger disabled",
+    0: "(0) No reason, charging or ready to charge",
+    50: "(50) Secondary unit not requesting current or no car connected",
+    52: "(52) Charger paused",
+    53: "(53) Charger disabled",
 }
 
 
