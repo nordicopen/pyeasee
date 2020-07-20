@@ -110,11 +110,13 @@ async def main():
                     await running_in_loop(c, header)
                     header = False
                     time.sleep(5)    
-        except:
+        except KeyboardInterrupt as ki:
             # Close connection on user interuption
             print("Interrupted")
             await easee.close()
-
+        except Exception as e:
+            print(e)
+            await easee.close()
     await easee.close()
 
 
@@ -123,31 +125,42 @@ async def running_in_loop(charger :Charger, header=False):
     await charger.async_update()
 
     if header:
-        print(f"{'NAME':15}", end=" ")
-        print(f"{'OPMODE':20}", end=" ")    
-        print(f"{'ONLINE':10}", end=" ")        
-        print(f"{'POWER':10}", end=" ")        
-        print(f"{'OUTCURR':10}", end=" ")        
-        print(f"{'IN_T2':10}", end=" ")        
-        print(f"{'IN_T3':10}", end=" ")        
-        print(f"{'IN_T4':10}", end=" ")        
-        print(f"{'VOLTAGE':10}", end=" ")        
-        print(f"{'REASON':15}", end=" ")        
+    if header:
+        print(f"{'NAME':<15}", end=" ")
+        print(f"{'OPMODE':<20}", end=" ")    
+        print(f"{'ONLINE':<7}", end=" ")        
+        print(f"{'POWER':<7}", end=" ")        
+        print(f"{'OUTCURR':<10}", end=" ")        
+        print(f"{'IN_T2':<10}", end=" ")        
+        print(f"{'IN_T3':<10}", end=" ")        
+        print(f"{'IN_T4':<10}", end=" ")        
+        print(f"{'VOLTAGE':<10}", end=" ")        
+        print(f"{'kWh':<10}", end=" ")        
+        print(f"{'RATE':<10}", end=" ")                
+        print(f"{'REASON':<25}", end=" ")        
         print(" ")
 
-    print(f"{charger.get_name():15}", end=" ")
-    print(f"{charger.get_cached_state_entry('chargerOpMode'):20}", end=" ")
-    print(f"{charger.get_cached_state_entry('isOnline'):10}", end=" ")
-    print(f"{round(charger.get_cached_state_entry('totalPower'),2):10}kW", end=" ")    
-    print(f"{round(charger.get_cached_state_entry('outputCurrent'),2):10}A", end=" ")    
-    print(f"{round(charger.get_cached_state_entry('inCurrentT2'),2):10}A", end=" ")    
-    print(f"{round(charger.get_cached_state_entry('inCurrentT3'),2):10}A", end=" ")    
-    print(f"{round(charger.get_cached_state_entry('inCurrentT4'),2):10}A", end=" ")    
-    print(f"{round(charger.get_cached_state_entry('voltage'),2):10}V", end=" ")    
-    print(f"{str(charger.get_cached_state_entry('reasonForNoCurrent')):15}", end=" ")    
+    print(printme(f"{charger.get_name()}",15), end=" ")
+    print(printme(f"{charger.get_cached_state_entry('chargerOpMode')}",20), end=" ")
+    print(printme(f"{charger.get_cached_state_entry('isOnline')}",7), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('totalPower'),2)}kW",7), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('outputCurrent'),1)}A",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('inCurrentT2'),1)}A",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('inCurrentT3'),1)}A",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('inCurrentT4'),1)}A",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('inCurrentT5'),1)}A",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('voltage'),2)}V",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('sessionEnergy'),2)}kWh",10), end=" ")
+    print(printme(f"{round(charger.get_cached_state_entry('energyPerHour'),2)}kWh/h",10), end=" ")
+    print(printme(f"{str(charger.get_cached_state_entry('reasonForNoCurrent'))}",25), end=" ")
     print(" ")
 
-
+def printme(myStr, length:int):
+    while len(myStr)<length:
+        myStr = myStr +" "
+    if len(myStr)>length:
+        myStr = myStr[0:length]
+    return myStr
 
 if __name__ == "__main__":
     import time
