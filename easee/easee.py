@@ -4,8 +4,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
 from enum import Enum
+
+from aiohttp.helpers import NO_EXTENSIONS
 from .charger import Charger
-from .site import Site
+from .site import Circuit, Site
 
 
 __VERSION__ = "0.7.6"
@@ -59,6 +61,10 @@ class Easee:
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
+        self.sites = [Site]
+        self.circuits = [Circuit]
+        self.chargers = [Charger]
+
         if session is None:
             self.session = aiohttp.ClientSession()
         else:
@@ -129,13 +135,8 @@ class Easee:
             await self.session.close()
             self.session = None
 
-    async def get_chargers(self) -> List[Charger]:
-        """
-        Retrieve all chargers
-        """
-        records = await (await self.get("/api/chargers")).json()
-        _LOGGER.debug("Chargers:  %s", records)
-        return [Charger(k, self) for k in records]
+    def get_chargers(self) -> List[Charger]:
+        return self.chargers
 
     async def get_site(self, id: int) -> Site:
         """ get site by id """
@@ -143,12 +144,11 @@ class Easee:
         _LOGGER.debug("Site:  %s", data)
         return Site(data, self)
 
-    async def get_sites(self) -> List[Site]:
-        """ Get all sites """
-        records = await (await self.get("/api/sites")).json()
-        _LOGGER.debug("Sites:  %s", records)
-        sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
-        return sites
+    def get_sites(self) -> List[Site]:
+        return self.sites
+
+    def get_circuits(self) -> List[Circuit]:
+        return self.circuits
 
     async def get_active_countries(self) -> List[Any]:
         records = await (await self.get("/api/resources/countries/active")).json()
@@ -159,3 +159,22 @@ class Easee:
         records = await (await self.get("/api/resources/currencies")).json()
         _LOGGER.debug("Currencies:  %s", records)
         return records
+
+    async def async_update(self):
+        self.populate()
+
+    async def populate(self):
+        """ Get all sites for logged in account and populate circuits and chargers """
+        self.sites.clear()
+        self.circuits.clear()
+        self.chargers.clear()
+
+        records = await (await self.get("/api/sites")).json()
+        _LOGGER.debug("Sites:  %s", records)
+        self.sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+        for site in self.sites:
+            for circuit in site.get_circuits():
+                self.circuits.append(circuit)
+                for charger in circuit.get_chargers():
+                    self.chargers.append(charger)
+        return self.sites

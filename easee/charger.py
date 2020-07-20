@@ -49,11 +49,12 @@ class ChargerConfig(BaseDict):
 
 
 class Charger(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any):
+    def __init__(self, entries: Dict[str, Any], circuit: Any, easee: Any):
         super().__init__(entries)
         self.id: str = entries["id"]
         self.name: str = entries["name"]
         self.easee = easee
+        self.circuit = circuit
         self._config: ChargerConfig({}, easee)
         self._state: ChargerState({}, easee)
 
@@ -65,6 +66,9 @@ class Charger(BaseDict):
             )
         ).text()
         return float(value)
+
+    def get_name(self):
+        return self.name
 
     def get_cached_config_entry(self, key):
         """ Get cached config entry """
@@ -96,7 +100,7 @@ class Charger(BaseDict):
                 {
                     **state,
                     "chargerOpMode": STATUS[state["chargerOpMode"]],
-                    "reasonForNoCurrent_desc": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
+                    "reasonForNoCurrent": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
                 },
                 self.easee,
             )
@@ -160,6 +164,14 @@ class Charger(BaseDict):
     async def update_firmware(self):
         """Update charger firmware"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
+
+    async def set_circuit_maxcurrent(self, maxCircuitCurrent):
+        """ Set max current settings for charger circuit """
+        return await self.circuit.set_circuit_maxcurrent(maxCircuitCurrent)
+
+    async def set_circuit_dynamicCurrent(self, dynamicCircuitCurrent):
+        """ Set dynamic current settings for charger circuit """
+        return await self.circuit.set_circuit_dynamicCurrent(dynamicCircuitCurrent)
 
     async def async_update(self):
         """ Convienient method to update both config and state """
