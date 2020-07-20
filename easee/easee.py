@@ -24,8 +24,26 @@ async def raise_for_status(response):
             e.message = str(data)
         else:
             data = await response.text()
-        _LOGGER.error("Error in request to Easee API: %s", data)
-        raise Exception(data) from e
+
+        if 400 == response.status:
+            _LOGGER.error(
+                "Bad request service " + f"({response.status}: {data} {response.url})"
+            )
+        elif 403 == response.status:
+            _LOGGER.error(
+                "Forbidden service " + f"({response.status}: {data} {response.url})"
+            )
+        elif 404 == response.status:
+            _LOGGER.error(
+                "Service not found " + f"({response.status}: {data} {response.url})"
+            )
+        else:
+            # raise Exception(data) from e
+            _LOGGER.error("Error in request to Easee API: %s", data)
+            raise Exception(data) from e
+        return False
+    else:
+        return True
 
 
 class Easee:

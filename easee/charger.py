@@ -27,6 +27,14 @@ PHASE_MODE = {
     3: "Locked to three phase",
 }
 
+REASON_FOR_NO_CURRENT = {
+    # Work-in-progress, must be taken with a pinch of salt, as per now just reverse engineering of observations until API properly documented
+    0: "(0) No reason, charging or ready to charge",
+    50: "(50) Secondary unit not requesting current or no car connected",
+    52: "(52) Charger paused",
+    53: "(53) Charger disabled",
+}
+
 
 class ChargerState(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any):
@@ -85,7 +93,12 @@ class Charger(BaseDict):
         if not from_cache:
             state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
             self._state = ChargerState(
-                {**state, "chargerOpMode": STATUS[state["chargerOpMode"]],}, self.easee
+                {
+                    **state,
+                    "chargerOpMode": STATUS[state["chargerOpMode"]],
+                    "reasonForNoCurrent": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
+                },
+                self.easee,
             )
         return self._state
 
@@ -126,9 +139,7 @@ class Charger(BaseDict):
             "chargeStopTime": chargeStopTime,
             "repeat": repeat,
         }
-        return await self.easee.post(
-            f"/api/chargers/{self.id}/commands/basic_charge_plan", json=json
-        )
+        return await self.easee.post(f"/api/chargers/{self.id}/commands/basic_charge_plan", json=json)
 
     async def delete_basic_charge_plan(self):
         """Delete charger basic charge plan setting from cloud """
