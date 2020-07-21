@@ -155,11 +155,13 @@ class Easee:
         return sites
 
     async def get_active_countries(self) -> List[Any]:
+        """ Get all active countries """
         records = await (await self.get("/api/resources/countries/active")).json()
         _LOGGER.debug("Active countries:  %s", records)
         return records
 
     async def get_currencies(self) -> List[Any]:
+        """ Get all currencies """
         records = await (await self.get("/api/resources/currencies")).json()
         _LOGGER.debug("Currencies:  %s", records)
         return records

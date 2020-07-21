@@ -62,7 +62,7 @@
 <div class="desc"><p>Get and return charger basic charge plan setting from cloud</p></div>
 </dd>
 <dt id="easee.charger.Charger.get_config"><code class="name flex">
-<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False)</span>
+<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False) ‑> <a title="easee.charger.ChargerConfig" href="#easee.charger.ChargerConfig">ChargerConfig</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get config for charger</p></div>
@@ -74,7 +74,7 @@
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
 <dt id="easee.charger.Charger.get_state"><code class="name flex">
-<span>async def <span class="ident">get_state</span></span>(<span>self)</span>
+<span>async def <span class="ident">get_state</span></span>(<span>self) ‑> <a title="easee.charger.ChargerState" href="#easee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get state for charger</p></div>
@@ -146,7 +146,7 @@
 <span>(</span><span>config: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Charger config with integer enum values converted to human readable string values</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
@@ -162,7 +162,7 @@
 <span>(</span><span>state: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Charger state with integer enum values converted to human readable string values</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
