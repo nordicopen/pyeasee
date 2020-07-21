@@ -36,6 +36,8 @@ REASON_FOR_NO_CURRENT = {
 
 
 class ChargerState(BaseDict):
+    """ Charger state with integer enum values converted to human readable string values"""
+
     def __init__(self, state: Dict[str, Any]):
         data = {
             **state,
@@ -46,6 +48,8 @@ class ChargerState(BaseDict):
 
 
 class ChargerConfig(BaseDict):
+    """ Charger config with integer enum values converted to human readable string values"""
+
     def __init__(self, config: Dict[str, Any]):
         data = {
             **config,
@@ -61,8 +65,6 @@ class Charger(BaseDict):
         self.id: str = entries["id"]
         self.name: str = entries["name"]
         self.easee = easee
-        self._config: ChargerConfig({}, easee)
-        self._state: ChargerState({}, easee)
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
@@ -71,12 +73,12 @@ class Charger(BaseDict):
         ).text()
         return float(value)
 
-    async def get_config(self, from_cache=False):
+    async def get_config(self, from_cache=False) -> ChargerConfig:
         """ get config for charger """
         config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
         return ChargerConfig(config)
 
-    async def get_state(self):
+    async def get_state(self) -> ChargerState:
         """ get state for charger """
         state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
         return ChargerState(state)
