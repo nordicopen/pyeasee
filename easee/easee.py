@@ -5,8 +5,7 @@ import asyncio
 import aiohttp
 import logging
 from datetime import datetime, timedelta
-from typing import Any, Callable, Dict, List, Optional, Set, Union, cast
-from enum import Enum
+from typing import Any, List
 from .charger import Charger
 from .site import Site
 
@@ -29,17 +28,11 @@ async def raise_for_status(response):
             data = await response.text()
 
         if 400 == response.status:
-            _LOGGER.error(
-                "Bad request service " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
         elif 403 == response.status:
-            _LOGGER.error(
-                "Forbidden service " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
         elif 404 == response.status:
-            _LOGGER.error(
-                "Service not found " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.error("Service not found " + f"({response.status}: {data} {response.url})")
         else:
             # raise Exception(data) from e
             _LOGGER.error("Error in request to Easee API: %s", data)
@@ -53,9 +46,10 @@ class Easee:
     def __init__(self, username, password, session: aiohttp.ClientSession = None):
         self.username = username
         self.password = password
+        self.external_session = True if session else False
+
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
-        _LOGGER.debug("user: '%s', pass: '%s'", username, password)
         self.base = "https://api.easee.cloud"
         self.token = {}
         self.headers = {
@@ -68,21 +62,21 @@ class Easee:
             self.session = session
 
     async def post(self, url, **kwargs):
-        _LOGGER.debug("post: %s (%s)", url, kwargs)
+        _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
         await raise_for_status(response)
         return response
 
     async def put(self, url, **kwargs):
-        _LOGGER.debug("put: %s (%s)", url, kwargs)
+        _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs,)
         await raise_for_status(response)
         return response
 
     async def get(self, url, **kwargs):
-        _LOGGER.debug("get: %s (%s)", url, kwargs)
+        _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
         await raise_for_status(response)
@@ -111,7 +105,7 @@ class Easee:
 
     async def connect(self):
         """
-        Gets initial token
+        Connect and gets initial token
         """
         data = {"userName": self.username, "password": self.password}
         _LOGGER.debug("getting token with creds: %s", data)
@@ -135,7 +129,7 @@ class Easee:
         """
         Close the underlying aiohttp session
         """
-        if self.session:
+        if self.session and self.external_session is False:
             await self.session.close()
             self.session = None
 
