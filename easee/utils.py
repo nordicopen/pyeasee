@@ -10,7 +10,7 @@ def validate_iso8601(str_val):
     try:
         if match_iso8601(str_val) is not None:
             return True
-    except:
+    except Exception:
         pass
     return False
 
@@ -23,7 +23,7 @@ class BaseDict(Mapping):
         if type(self._storage[key]) == str and validate_iso8601(self._storage[key]):
             try:
                 return datetime.fromisoformat(self._storage[key])
-            except:
+            except ValueError:
                 return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ")
         return self._storage[key]
 
