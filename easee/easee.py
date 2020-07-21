@@ -10,7 +10,7 @@ from .charger import Charger
 from .site import Site
 
 
-__VERSION__ = "0.7.9"
+__VERSION__ = "0.7.10"
 
 _LOGGER = logging.getLogger(__name__)
 
