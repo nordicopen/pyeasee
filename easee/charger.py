@@ -1,7 +1,6 @@
 import logging
-import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, Union, cast
+from typing import Any, Dict
 
 from .utils import BaseDict
 
@@ -37,15 +36,27 @@ REASON_FOR_NO_CURRENT = {
 
 
 class ChargerState(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any):
-        super().__init__(entries)
-        self.easee = easee
+    """ Charger state with integer enum values converted to human readable string values"""
+
+    def __init__(self, state: Dict[str, Any]):
+        data = {
+            **state,
+            "chargerOpMode": STATUS[state["chargerOpMode"]],
+            "reasonForNoCurrent": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
+        }
+        super().__init__(data)
 
 
 class ChargerConfig(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any):
-        super().__init__(entries)
-        self.easee = easee
+    """ Charger config with integer enum values converted to human readable string values"""
+
+    def __init__(self, config: Dict[str, Any]):
+        data = {
+            **config,
+            "localNodeType": NODE_TYPE[config["localNodeType"]],
+            "phaseMode": PHASE_MODE[config["phaseMode"]],
+        }
+        super().__init__(data)
 
 
 class Charger(BaseDict):
@@ -54,58 +65,23 @@ class Charger(BaseDict):
         self.id: str = entries["id"]
         self.name: str = entries["name"]
         self.easee = easee
-        self._config: ChargerConfig({}, easee)
-        self._state: ChargerState({}, easee)
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
         value = await (
-            await self.easee.get(
-                f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
-            )
+            await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
         ).text()
         return float(value)
 
-    def get_cached_config_entry(self, key):
-        """ Get cached config entry """
-        return self._config[key]
-
-    def get_cached_state_entry(self, key):
-        """ Get cached config entry """
-        return self._state[key]
-
-    async def get_config(self, from_cache=False):
+    async def get_config(self, from_cache=False) -> ChargerConfig:
         """ get config for charger """
-        if not from_cache:
-            config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-            self._config = ChargerConfig(
-                {
-                    **config,
-                    "localNodeType": NODE_TYPE[config["localNodeType"]],
-                    "phaseMode": PHASE_MODE[config["phaseMode"]],
-                },
-                self.easee,
-            )
-        return self._config
+        config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
+        return ChargerConfig(config)
 
-    async def get_state(self, from_cache=False):
+    async def get_state(self) -> ChargerState:
         """ get state for charger """
-        if not from_cache:
-            state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-            self._state = ChargerState(
-                {
-                    **state,
-                    "chargerOpMode": STATUS[state["chargerOpMode"]],
-                    "reasonForNoCurrent": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
-                },
-                self.easee,
-            )
-        return self._state
-
-    def get_data(self):
-        return (
-            {**self._storage, "state": self._state.get_data(), "config": self._config.get_data()},
-        )
+        state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
+        return ChargerState(state)
 
     async def start(self):
         """Start charging session"""
@@ -160,12 +136,3 @@ class Charger(BaseDict):
     async def update_firmware(self):
         """Update charger firmware"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
-
-    async def async_update(self):
-        """ Convienient method to update both config and state """
-        self._state = await self.get_state()
-        self._config = await self.get_config()
-
-        _LOGGER.debug(
-            "Charger:\n %s\n\nState:\n %s\n\nConfig: %s", self.id, self._state, self._config
-        )

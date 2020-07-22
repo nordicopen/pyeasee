@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List
 
-from .utils import BaseDict, validate_iso8601
+from .utils import BaseDict
 from .charger import Charger
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,3 +25,13 @@ class Site(BaseDict):
 
     def get_circuits(self) -> List[Circuit]:
         return [Circuit(c, self.easee) for c in self["circuits"]]
+
+    async def set_name(self, name: str):
+        """ Set name for the site """
+        json = {**self.get_data(), "name": name}
+        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+
+    async def set_currency(self, currency: str):
+        """ Set currency for the site """
+        json = {**self.get_data(), "currencyId": currency}
+        return await self.easee.put(f"/api/sites/{self.id}", json=json)

@@ -1,4 +1,3 @@
-import sys
 import asyncio
 import json
 import logging
@@ -20,7 +19,7 @@ def parse_arguments():
     parser.add_argument(
         "-c", "--chargers", help="Get chargers information", action="store_true",
     )
-    parser.add_argument("-s", "--site", help="Get site information", action="store_true")
+    parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
@@ -32,31 +31,27 @@ def parse_arguments():
         default=logging.WARNING,
     )
     parser.add_argument(
-        "-v",
-        "--verbose",
-        help="Be verbose",
-        action="store_const",
-        dest="loglevel",
-        const=logging.INFO,
+        "-v", "--verbose", help="Be verbose", action="store_const", dest="loglevel", const=logging.INFO,
     )
     args = parser.parse_args()
     logging.basicConfig(
-        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=args.loglevel
+        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=args.loglevel,
     )
     return args
 
 
-def token_read():
-    try:
-        with open(CACHED_TOKEN, "r") as token_file:
-            return json.load(token_file)
-    except FileNotFoundError:
-        return None
+# TODO: Add option to send in a cached token
+# def token_read():
+#     try:
+#         with open(CACHED_TOKEN, "r") as token_file:
+#             return json.load(token_file)
+#     except FileNotFoundError:
+#         return None
 
 
-def token_write(token):
-    with open(CACHED_TOKEN, "w") as token_file:
-        json.dump(token, token_file, indent=2)
+# def token_write(token):
+#     with open(CACHED_TOKEN, "w") as token_file:
+#         json.dump(token, token_file, indent=2)
 
 
 async def main():
@@ -67,12 +62,16 @@ async def main():
         chargers: List[Charger] = await easee.get_chargers()
         data = []
         for charger in chargers:
-            await charger.async_update()
-            data.append(charger.get_data())
+            state = await charger.get_state()
+            config = await charger.get_config()
+            ch = charger.get_data()
+            ch["state"] = state.get_data()
+            ch["config"] = config.get_data()
+            data.append(ch)
 
         print(json.dumps(data, indent=2,))
 
-    if args.site:
+    if args.sites:
         sites: List[Site] = await easee.get_sites()
         data = []
         for site in sites:
