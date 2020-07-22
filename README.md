@@ -1,4 +1,4 @@
-![Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
+![Maintenance](https://img.shields.io/maintenance/yes/2020.svg) ![Easee library](https://github.com/fondberg/easee/workflows/Easee%20library/badge.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/fondberg)
 
@@ -14,7 +14,17 @@ You can install the libray from [PyPI](https://pypi.org/project/easee/):
 
 The library is tested on Python 3.7 and Python 3.8
 
-## Usage
+## Command line tool
+
+Run `python -m easee -h` for help.
+
+## Usage of the library
+
+### Docs
+
+Read the API documentation [here](https://fondberg.github.io/easee/easee/)
+
+### Small example
 
 Easee is the connection class and Charger
 

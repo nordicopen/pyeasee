@@ -1,0 +1,22 @@
+[
+  {
+    "id": 55555,
+    "siteKey": "WAFE-1234",
+    "name": "M\u00e5nv\u00e4gen ",
+    "levelOfAccess": 1,
+    "address": {
+      "street": "street",
+      "buildingNumber": "buildingNumber",
+      "zip": "zip",
+      "area": "area",
+      "country": {
+        "id": "countryid",
+        "name": "countryname",
+        "phonePrefix": 46
+      },
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0
+    }
+  }
+]

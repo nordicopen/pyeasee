@@ -102,7 +102,7 @@ default_config = {
 @pytest.mark.asyncio
 async def test_get_correct_status():
     mock_easee = MockEasee(get_data=default_state)
-    charger = Charger("EH123456", "Easee Home 12345", mock_easee)
+    charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
     state = await charger.get_state()
     assert state["chargerOpMode"] == "CHARGING"
 
@@ -110,7 +110,7 @@ async def test_get_correct_status():
 @pytest.mark.asyncio
 async def test_get_correct_phase_mode():
     mock_easee = MockEasee(get_data=default_config)
-    charger = Charger("EH123456", "Easee Home 12345", mock_easee)
+    charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
     state = await charger.get_config()
     assert state["phaseMode"] == "Locked to three phase"
 
