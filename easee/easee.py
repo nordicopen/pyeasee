@@ -10,9 +10,13 @@ from .charger import Charger
 from .site import Site
 
 
-__VERSION__ = "0.7.10"
+__VERSION__ = "0.7.11"
 
 _LOGGER = logging.getLogger(__name__)
+
+
+class AuthorizationFailedException(Exception):
+    pass
 
 
 async def raise_for_status(response):
@@ -29,12 +33,14 @@ async def raise_for_status(response):
 
         if 400 == response.status:
             _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
+        elif 401 == response.status:
+            _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
+            raise AuthorizationFailedException(data)
         elif 403 == response.status:
             _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
         elif 404 == response.status:
             _LOGGER.error("Service not found " + f"({response.status}: {data} {response.url})")
         else:
-            # raise Exception(data) from e
             _LOGGER.error("Error in request to Easee API: %s", data)
             raise Exception(data) from e
         return False
@@ -122,8 +128,12 @@ class Easee:
             "refreshToken": self.token["refreshToken"],
         }
         _LOGGER.debug("Refreshing access token")
-        res = await self.post("/api/accounts/refresh_token", json=data)
-        await self._handle_token_response(res)
+        try:
+            res = await self.post("/api/accounts/refresh_token", json=data)
+            await self._handle_token_response(res)
+        except AuthorizationFailedException:
+            _LOGGER.debug("Could not get new access token from refresh token, getting new one")
+            await self.connect()
 
     async def close(self):
         """
