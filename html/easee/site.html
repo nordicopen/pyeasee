@@ -34,7 +34,7 @@
 <dl>
 <dt id="easee.site.Circuit"><code class="flex name class">
 <span>class <span class="ident">Circuit</span></span>
-<span>(</span><span>data: Dict[str, Any], easee: Any)</span>
+<span>(</span><span>data: Dict[str, Any], site_id: Any, easee: Any)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -51,6 +51,12 @@
 <dl>
 <dt id="easee.site.Circuit.get_chargers"><code class="name flex">
 <span>def <span class="ident">get_chargers</span></span>(<span>self) ‑> List[<a title="easee.charger.Charger" href="charger.html#easee.charger.Charger">Charger</a>]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="easee.site.Circuit.set_dynamic_current"><code class="name flex">
+<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int, currentP3: int)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -114,6 +120,7 @@
 <h4><code><a title="easee.site.Circuit" href="#easee.site.Circuit">Circuit</a></code></h4>
 <ul class="">
 <li><code><a title="easee.site.Circuit.get_chargers" href="#easee.site.Circuit.get_chargers">get_chargers</a></code></li>
+<li><code><a title="easee.site.Circuit.set_dynamic_current" href="#easee.site.Circuit.set_dynamic_current">set_dynamic_current</a></code></li>
 </ul>
 </li>
 <li>
