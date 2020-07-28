@@ -141,14 +141,14 @@ class Charger(BaseDict):
         return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
 
     async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Wrapper function to set circuit dynamic current for charger """
+        """ Set circuit dynamic current for charger """
         if self.circuit is not None:
             return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
         else:
             _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Wrapper function to set circuit max current for charger """
+        """ Set circuit max current for charger """
         if self.circuit is not None:
            return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
         else:
