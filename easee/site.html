@@ -34,7 +34,7 @@
 <dl>
 <dt id="easee.site.Circuit"><code class="flex name class">
 <span>class <span class="ident">Circuit</span></span>
-<span>(</span><span>data: Dict[str, Any], site_id: Any, easee: Any)</span>
+<span>(</span><span>data: Dict[str, Any], site: Any, easee: Any)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -56,10 +56,22 @@
 <div class="desc"></div>
 </dd>
 <dt id="easee.site.Circuit.set_dynamic_current"><code class="name flex">
-<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int, currentP3: int)</span>
+<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Set circuit dynamic current</p></div>
+</dd>
+<dt id="easee.site.Circuit.set_max_current"><code class="name flex">
+<span>async def <span class="ident">set_max_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit max current</p></div>
+</dd>
+<dt id="easee.site.Circuit.set_rated_current"><code class="name flex">
+<span>async def <span class="ident">set_rated_current</span></span>(<span>self, ratedCurrentFuseValue: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit rated current - requires elevated access (installers only)</p></div>
 </dd>
 </dl>
 </dd>
@@ -121,6 +133,8 @@
 <ul class="">
 <li><code><a title="easee.site.Circuit.get_chargers" href="#easee.site.Circuit.get_chargers">get_chargers</a></code></li>
 <li><code><a title="easee.site.Circuit.set_dynamic_current" href="#easee.site.Circuit.set_dynamic_current">set_dynamic_current</a></code></li>
+<li><code><a title="easee.site.Circuit.set_max_current" href="#easee.site.Circuit.set_max_current">set_max_current</a></code></li>
+<li><code><a title="easee.site.Circuit.set_rated_current" href="#easee.site.Circuit.set_rated_current">set_rated_current</a></code></li>
 </ul>
 </li>
 <li>
