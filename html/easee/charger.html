@@ -34,7 +34,7 @@
 <dl>
 <dt id="easee.charger.Charger"><code class="flex name class">
 <span>class <span class="ident">Charger</span></span>
-<span>(</span><span>entries: Dict[str, Any], easee: Any)</span>
+<span>(</span><span>entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -108,6 +108,18 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
+</dd>
+<dt id="easee.charger.Charger.set_dynamic_current"><code class="name flex">
+<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit dynamic current for charger</p></div>
+</dd>
+<dt id="easee.charger.Charger.set_max_current"><code class="name flex">
+<span>async def <span class="ident">set_max_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit max current for charger</p></div>
 </dd>
 <dt id="easee.charger.Charger.smart_charging"><code class="name flex">
 <span>async def <span class="ident">smart_charging</span></span>(<span>self)</span>
@@ -202,6 +214,8 @@
 <li><code><a title="easee.charger.Charger.reboot" href="#easee.charger.Charger.reboot">reboot</a></code></li>
 <li><code><a title="easee.charger.Charger.resume" href="#easee.charger.Charger.resume">resume</a></code></li>
 <li><code><a title="easee.charger.Charger.set_basic_charge_plan" href="#easee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
+<li><code><a title="easee.charger.Charger.set_dynamic_current" href="#easee.charger.Charger.set_dynamic_current">set_dynamic_current</a></code></li>
+<li><code><a title="easee.charger.Charger.set_max_current" href="#easee.charger.Charger.set_max_current">set_max_current</a></code></li>
 <li><code><a title="easee.charger.Charger.smart_charging" href="#easee.charger.Charger.smart_charging">smart_charging</a></code></li>
 <li><code><a title="easee.charger.Charger.start" href="#easee.charger.Charger.start">start</a></code></li>
 <li><code><a title="easee.charger.Charger.stop" href="#easee.charger.Charger.stop">stop</a></code></li>
