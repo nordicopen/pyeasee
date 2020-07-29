@@ -59,6 +59,19 @@ class ChargerConfig(BaseDict):
         }
         super().__init__(data)
 
+class ChargerSchedule(BaseDict):
+    """ Charger charging schedule/plan """
+
+    def __init__(self, schedule: Dict[str, Any]):
+        data = {
+            "id": schedule.get("id", False),
+            "chargeStartTime": schedule.get("chargeStartTime", False),
+            "chargeStopTime": schedule.get("chargeStopTime", False),
+            "repeat": schedule.get("repeat", False),
+        }
+        super().__init__(data)
+
+
 
 class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
@@ -106,23 +119,30 @@ class Charger(BaseDict):
         """Toggle charging session start/stop/pause/resume """
         return await self.easee.post(f"/api/chargers/{self.id}/commands/toggle_charging")
 
-    async def get_basic_charge_plan(self):
+    async def get_basic_charge_plan(self) -> ChargerSchedule:
         """Get and return charger basic charge plan setting from cloud """
-        return await self.easee.get(f"/api/chargers/{self.id}/commands/basic_charge_plan")
+        plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
+        try:
+            plan = await plan.json()
+            _LOGGER.debug(plan)
+        except:
+            plan = {"id": False}
+            _LOGGER.debug("No scheduled charge plan")
+        return ChargerSchedule(plan)
 
     async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
         """Set and post charger basic charge plan setting to cloud """
         json = {
             "id": id,
-            "chargeStartTime": chargeStartTime,
-            "chargeStopTime": chargeStopTime,
+            "chargeStartTime": str(chargeStartTime),
+            "chargeStopTime": str(chargeStopTime),
             "repeat": repeat,
         }
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/basic_charge_plan", json=json)
+        return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
 
     async def delete_basic_charge_plan(self):
         """Delete charger basic charge plan setting from cloud """
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/basic_charge_plan")
+        return await self.easee.delete(f"/api/chargers/{self.id}/basic_charge_plan")
 
     async def override_schedule(self):
         """Override scheduled charging and start charging"""

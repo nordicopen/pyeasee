@@ -39,7 +39,8 @@ async def raise_for_status(response):
         elif 403 == response.status:
             _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
         elif 404 == response.status:
-            _LOGGER.error("Service not found " + f"({response.status}: {data} {response.url})")
+            # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
+            _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
         else:
             _LOGGER.error("Error in request to Easee API: %s", data)
             raise Exception(data) from e
@@ -87,6 +88,15 @@ class Easee:
         response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
         await raise_for_status(response)
         return response
+
+    async def delete(self, url, **kwargs):
+        _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
+        await self._verify_updated_token()
+        response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
+        await raise_for_status(response)
+        return response
+
+
 
     async def _verify_updated_token(self):
         """
