@@ -28,10 +28,11 @@ PHASE_MODE = {
 
 REASON_FOR_NO_CURRENT = {
     # Work-in-progress, must be taken with a pinch of salt, as per now just reverse engineering of observations until API properly documented
-    0: "(0) No reason, charging or ready to charge",
-    50: "(50) Secondary unit not requesting current or no car connected",
-    52: "(52) Charger paused",
-    53: "(53) Charger disabled",
+    None: "No reason",
+    0: "No reason, charging or ready to charge",
+    50: "Secondary unit not requesting current or no car connected",
+    52: "Charger paused",
+    53: "Charger disabled",
 }
 
 
@@ -42,7 +43,7 @@ class ChargerState(BaseDict):
         data = {
             **state,
             "chargerOpMode": STATUS[state["chargerOpMode"]],
-            "reasonForNoCurrent": REASON_FOR_NO_CURRENT.get(state["reasonForNoCurrent"], "Unknown"),
+            "reasonForNoCurrent": f"({state['reasonForNoCurrent']}) {REASON_FOR_NO_CURRENT.get(state['reasonForNoCurrent'], 'Unknown')}",
         }
         super().__init__(data)
 
@@ -60,10 +61,12 @@ class ChargerConfig(BaseDict):
 
 
 class Charger(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any):
+    def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
         super().__init__(entries)
         self.id: str = entries["id"]
         self.name: str = entries["name"]
+        self.site = site
+        self.circuit = circuit
         self.easee = easee
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
@@ -136,3 +139,17 @@ class Charger(BaseDict):
     async def update_firmware(self):
         """Update charger firmware"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
+
+    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+        """ Set circuit dynamic current for charger """
+        if self.circuit is not None:
+            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
+        else:
+            _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
+
+    async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+        """ Set circuit max current for charger """
+        if self.circuit is not None:
+           return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
+        else:
+            _LOGGER.info("Circuit info must be initialized for max current to be set")
