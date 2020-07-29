@@ -33,6 +33,7 @@ REASON_FOR_NO_CURRENT = {
     50: "Secondary unit not requesting current or no car connected",
     52: "Charger paused",
     53: "Charger disabled",
+    54: "Waiting for schedule",
 }
 
 
