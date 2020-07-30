@@ -60,10 +60,12 @@ class ChargerConfig(BaseDict):
         }
         super().__init__(data)
 
+
 class ChargerSchedule(BaseDict):
     """ Charger charging schedule/plan """
 
     def __init__(self, schedule: Dict[str, Any]):
+        # Todo remove the False defaults. Either it is a schedule object or None
         data = {
             "id": schedule.get("id", False),
             "chargeStartTime": schedule.get("chargeStartTime", False),
@@ -71,7 +73,6 @@ class ChargerSchedule(BaseDict):
             "repeat": schedule.get("repeat", False),
         }
         super().__init__(data)
-
 
 
 class Charger(BaseDict):
@@ -127,10 +128,12 @@ class Charger(BaseDict):
             plan = await plan.json()
             _LOGGER.debug(plan)
         except:
+            # TODO: fix me. Should return None here instead of a ChargerSchedule with False as id
             plan = {"id": False}
             _LOGGER.debug("No scheduled charge plan")
         return ChargerSchedule(plan)
 
+    # TODO: document types
     async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
         """Set and post charger basic charge plan setting to cloud """
         json = {
@@ -171,6 +174,6 @@ class Charger(BaseDict):
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit max current for charger """
         if self.circuit is not None:
-           return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
+            return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
         else:
             _LOGGER.info("Circuit info must be initialized for max current to be set")
