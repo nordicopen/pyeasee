@@ -61,6 +61,19 @@ class ChargerConfig(BaseDict):
         }
         super().__init__(data)
 
+class ChargerSchedule(BaseDict):
+    """ Charger charging schedule/plan """
+
+    def __init__(self, schedule: Dict[str, Any]):
+        data = {
+            "id": schedule.get("id", False),
+            "chargeStartTime": schedule.get("chargeStartTime", False),
+            "chargeStopTime": schedule.get("chargeStopTime", False),
+            "repeat": schedule.get("repeat", False),
+        }
+        super().__init__(data)
+
+
 
 class ChargerSchedule(BaseDict):
     """ Charger charging schedule/plan """
