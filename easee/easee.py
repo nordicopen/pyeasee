@@ -10,7 +10,7 @@ from .charger import Charger
 from .site import Site
 
 
-__VERSION__ = "0.7.13"
+__VERSION__ = "0.7.14"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -95,8 +95,6 @@ class Easee:
         response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
         await raise_for_status(response)
         return response
-
-
 
     async def _verify_updated_token(self):
         """
