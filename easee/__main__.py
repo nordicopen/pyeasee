@@ -16,11 +16,17 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Read data from your Easee EV installation")
     parser.add_argument("-u", "--username", help="Username", required=True)
     parser.add_argument("-p", "--password", help="Password", required=True)
-    parser.add_argument("-c", "--chargers", help="Get chargers information", action="store_true",)
+    parser.add_argument(
+        "-c", "--chargers", help="Get chargers information", action="store_true",
+    )
     parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
     parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
-    parser.add_argument("-a", "--all", help="Get all sites, circuits and chargers information", action="store_true",)
-    parser.add_argument("-sum", "--summary", help="Get summary of sites, circuits and chargers information", action="store_true",)
+    parser.add_argument(
+        "-a", "--all", help="Get all sites, circuits and chargers information", action="store_true",
+    )
+    parser.add_argument(
+        "-sum", "--summary", help="Get summary of sites, circuits and chargers information", action="store_true",
+    )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
@@ -71,7 +77,7 @@ async def main():
     if args.circuits:
         sites: List[Site] = await easee.get_sites()
         for site in sites:
-            await circuits_info(circuits = site.get_circuits())
+            await circuits_info(circuits=site.get_circuits())
 
     if args.countries:
         countries_active = await easee.get_active_countries()
@@ -99,7 +105,8 @@ async def main():
                 f" (ID: {site.id}),"
                 f" {site.__getitem__('address')['street']},"
                 f" main fuse {site.__getitem__('ratedCurrent')}A"
-                f" ")
+                f" "
+            )
             circuits = site.get_circuits()
             for circuit in circuits:
                 print(
@@ -108,11 +115,12 @@ async def main():
                     f" {circuit.__getitem__('panelName')}"
                     f" (ID: {circuit.id})"
                     f" {circuit.__getitem__('ratedCurrent')}A"
-                    f" ")
+                    f" "
+                )
                 chargers = circuit.get_chargers()
                 for charger in chargers:
                     state = await charger.get_state()
-                    config = await charger.get_config()                        
+                    config = await charger.get_config()
                     print(
                         f"      "
                         f" Charger: {charger.__getitem__('name')}"
@@ -122,10 +130,10 @@ async def main():
                         f" version: {state.__getitem__('chargerFirmware')}"
                         f" voltage: {round(state.__getitem__('voltage'),1)}"
                         f" current: {round(state.__getitem__('outputCurrent'),1)}"
-                        f" ")
+                        f" "
+                    )
 
         print(f"\n\nFound {len(sites)} site(s), {len(circuits)} circuit(s) and {len(chargers)} charger(s).")
-
 
     if args.loop:
         sites: List[Site] = await easee.get_sites()
@@ -140,7 +148,7 @@ async def main():
                             await charger_loop(charger, header)
                             header = False
                             time.sleep(5)
-                except KeyboardInterrupt as e:
+                except KeyboardInterrupt as e:  # noqa
                     # Close connection on user interuption
                     print("Interrupted by user")
                     await easee.close()
@@ -187,22 +195,22 @@ async def charger_loop(charger: Charger, header=False):
     """Return the state attributes."""
     # await charger.async_update()
     state = await charger.get_state()
-    config = await charger.get_config()    
+    # config = await charger.get_config() # not used yet
 
     if header:
-        print(str_fixed_length('NAME', 15), end=" ")
-        print(str_fixed_length('OPMODE', 20), end=" ")
-        print(str_fixed_length('ONLINE', 7), end=" ")
-        print(str_fixed_length('POWER', 7), end=" ")
-        print(str_fixed_length('OUTCURR', 10), end=" ")
-        print(str_fixed_length('IN_T2', 10), end=" ")
-        print(str_fixed_length('IN_T3', 10), end=" ")
-        print(str_fixed_length('IN_T4', 10), end=" ")
-        print(str_fixed_length('IN_T5', 10), end=" ")
-        print(str_fixed_length('VOLTAGE', 10), end=" ")
-        print(str_fixed_length('kWh', 10), end=" ")
-        print(str_fixed_length('RATE', 10), end=" ")
-        print(str_fixed_length('REASON', 25), end=" ")
+        print(str_fixed_length("NAME", 15), end=" ")
+        print(str_fixed_length("OPMODE", 20), end=" ")
+        print(str_fixed_length("ONLINE", 7), end=" ")
+        print(str_fixed_length("POWER", 7), end=" ")
+        print(str_fixed_length("OUTCURR", 10), end=" ")
+        print(str_fixed_length("IN_T2", 10), end=" ")
+        print(str_fixed_length("IN_T3", 10), end=" ")
+        print(str_fixed_length("IN_T4", 10), end=" ")
+        print(str_fixed_length("IN_T5", 10), end=" ")
+        print(str_fixed_length("VOLTAGE", 10), end=" ")
+        print(str_fixed_length("kWh", 10), end=" ")
+        print(str_fixed_length("RATE", 10), end=" ")
+        print(str_fixed_length("REASON", 25), end=" ")
         print(" ")
 
     print(str_fixed_length(f"{charger.name}", 15), end=" ")
