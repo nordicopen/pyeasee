@@ -8,15 +8,11 @@ from datetime import datetime, timedelta
 from typing import Any, List
 from .charger import Charger
 from .site import Site
-
+from .exceptions import AuthorizationFailedException, NotFoundException
 
 __VERSION__ = "0.7.14"
 
 _LOGGER = logging.getLogger(__name__)
-
-
-class AuthorizationFailedException(Exception):
-    pass
 
 
 async def raise_for_status(response):
@@ -41,6 +37,7 @@ async def raise_for_status(response):
         elif 404 == response.status:
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
+            raise NotFoundException(data)
         else:
             _LOGGER.error("Error in request to Easee API: %s", data)
             raise Exception(data) from e

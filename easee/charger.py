@@ -2,6 +2,7 @@ import logging
 from datetime import datetime
 from typing import Any, Dict
 
+from .exceptions import NotFoundException
 from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
@@ -127,7 +128,7 @@ class Charger(BaseDict):
         try:
             plan = await plan.json()
             _LOGGER.debug(plan)
-        except:
+        except NotFoundException:
             # TODO: fix me. Should return None here instead of a ChargerSchedule with False as id
             plan = {"id": False}
             _LOGGER.debug("No scheduled charge plan")

@@ -34,11 +34,8 @@ class Circuit(BaseDict):
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
         """ Set circuit rated current - requires elevated access (installers only) """
-        json = {
-                "ratedCurrentFuseValue": ratedCurrentFuseValue
-        }
+        json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
-
 
     def get_chargers(self) -> List[Charger]:
         return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]

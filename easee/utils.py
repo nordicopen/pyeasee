@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from collections.abc import Mapping
 
 regex = r"^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$"
@@ -22,9 +22,9 @@ class BaseDict(Mapping):
     def __getitem__(self, key):
         if type(self._storage[key]) == str and validate_iso8601(self._storage[key]):
             try:
-                return datetime.fromisoformat(self._storage[key])
+                return datetime.fromisoformat(self._storage[key]).replace(tzinfo=timezone.utc)
             except ValueError:
-                return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ")
+                return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
         return self._storage[key]
 
     def __iter__(self):
