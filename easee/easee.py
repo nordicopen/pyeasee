@@ -10,7 +10,7 @@ from .charger import Charger
 from .site import Site
 from .exceptions import AuthorizationFailedException, NotFoundException
 
-__VERSION__ = "0.7.14"
+__VERSION__ = "0.7.15"
 
 _LOGGER = logging.getLogger(__name__)
 
