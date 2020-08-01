@@ -6,7 +6,7 @@ from setuptools import setup
 # This call to setup() does all the work
 setup(
     name="easee",
-    version="0.7.13",
+    version="0.7.15",
     description="Easee EV charger APi library",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

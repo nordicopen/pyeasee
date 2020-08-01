@@ -56,7 +56,7 @@
 <div class="desc"><p>Delete charger basic charge plan setting from cloud</p></div>
 </dd>
 <dt id="easee.charger.Charger.get_basic_charge_plan"><code class="name flex">
-<span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self)</span>
+<span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self) ‑> <a title="easee.charger.ChargerSchedule" href="#easee.charger.ChargerSchedule">ChargerSchedule</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get and return charger basic charge plan setting from cloud</p></div>
@@ -169,6 +169,22 @@
 <li>collections.abc.Container</li>
 </ul>
 </dd>
+<dt id="easee.charger.ChargerSchedule"><code class="flex name class">
+<span>class <span class="ident">ChargerSchedule</span></span>
+<span>(</span><span>schedule: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Charger charging schedule/plan</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li>collections.abc.Mapping</li>
+<li>collections.abc.Collection</li>
+<li>collections.abc.Sized</li>
+<li>collections.abc.Iterable</li>
+<li>collections.abc.Container</li>
+</ul>
+</dd>
 <dt id="easee.charger.ChargerState"><code class="flex name class">
 <span>class <span class="ident">ChargerState</span></span>
 <span>(</span><span>state: Dict[str, Any])</span>
@@ -225,6 +241,9 @@
 </li>
 <li>
 <h4><code><a title="easee.charger.ChargerConfig" href="#easee.charger.ChargerConfig">ChargerConfig</a></code></h4>
+</li>
+<li>
+<h4><code><a title="easee.charger.ChargerSchedule" href="#easee.charger.ChargerSchedule">ChargerSchedule</a></code></h4>
 </li>
 <li>
 <h4><code><a title="easee.charger.ChargerState" href="#easee.charger.ChargerState">ChargerState</a></code></h4>

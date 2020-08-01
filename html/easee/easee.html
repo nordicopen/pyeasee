@@ -42,18 +42,6 @@
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="easee.easee.AuthorizationFailedException"><code class="flex name class">
-<span>class <span class="ident">AuthorizationFailedException</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
 <dt id="easee.easee.Easee"><code class="flex name class">
 <span>class <span class="ident">Easee</span></span>
 <span>(</span><span>username, password, session: aiohttp.client.ClientSession = None)</span>
@@ -73,6 +61,12 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Connect and gets initial token</p></div>
+</dd>
+<dt id="easee.easee.Easee.delete"><code class="name flex">
+<span>async def <span class="ident">delete</span></span>(<span>self, url, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="easee.easee.Easee.get"><code class="name flex">
 <span>async def <span class="ident">get</span></span>(<span>self, url, **kwargs)</span>
@@ -146,13 +140,11 @@
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="easee.easee.AuthorizationFailedException" href="#easee.easee.AuthorizationFailedException">AuthorizationFailedException</a></code></h4>
-</li>
-<li>
 <h4><code><a title="easee.easee.Easee" href="#easee.easee.Easee">Easee</a></code></h4>
 <ul class="">
 <li><code><a title="easee.easee.Easee.close" href="#easee.easee.Easee.close">close</a></code></li>
 <li><code><a title="easee.easee.Easee.connect" href="#easee.easee.Easee.connect">connect</a></code></li>
+<li><code><a title="easee.easee.Easee.delete" href="#easee.easee.Easee.delete">delete</a></code></li>
 <li><code><a title="easee.easee.Easee.get" href="#easee.easee.Easee.get">get</a></code></li>
 <li><code><a title="easee.easee.Easee.get_active_countries" href="#easee.easee.Easee.get_active_countries">get_active_countries</a></code></li>
 <li><code><a title="easee.easee.Easee.get_chargers" href="#easee.easee.Easee.get_chargers">get_chargers</a></code></li>

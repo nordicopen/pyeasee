@@ -45,6 +45,7 @@ async def test_get_chargers(aiosession, aioresponse):
     state = await chargers[0].get_state()
     assert state["chargerOpMode"] == "PAUSED"
     await easee.close()
+    await aiosession.close()
 
 
 @pytest.mark.asyncio
@@ -73,3 +74,6 @@ async def test_get_sites(aiosession, aioresponse):
     chargers = circuits[0].get_chargers()
 
     assert chargers[0].id == "ES12345"
+    await easee.close()
+    await aiosession.close()
+
