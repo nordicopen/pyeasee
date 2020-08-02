@@ -34,11 +34,8 @@ class Circuit(BaseDict):
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
         """ Set circuit rated current - requires elevated access (installers only) """
-        json = {
-                "ratedCurrentFuseValue": ratedCurrentFuseValue
-        }
+        json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
-
 
     def get_chargers(self) -> List[Charger]:
         return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]
@@ -62,3 +59,32 @@ class Site(BaseDict):
         """ Set currency for the site """
         json = {**self.get_data(), "currencyId": currency}
         return await self.easee.put(f"/api/sites/{self.id}", json=json)
+
+    async def set_price(
+        self, costPerKWh: float, vat: float = None, currency: str = None, costPerKwhExcludeVat: float = None,
+    ):
+        """ Set price per kWh for the site """
+
+        json = {
+            "costPerKWh": costPerKWh,
+        }
+
+        if vat is None:
+            vat = self.__getitem__("vat")
+
+        if currency is None:
+            currency = self.__getitem__("currencyId")
+
+        if costPerKwhExcludeVat is None:
+            costPerKwhExcludeVat = costPerKWh / (100.0 + vat) * 100.0
+
+        json = {
+            "currencyId": currency,
+            "costPerKWh": costPerKWh,
+            "vat": vat,
+            "costPerKwhExcludeVat": costPerKwhExcludeVat,
+        }
+
+        print(json)
+
+        return await self.easee.post(f"/api/sites/{self.id}/price", json=json)

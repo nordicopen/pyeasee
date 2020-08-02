@@ -96,8 +96,6 @@ class Easee:
         await raise_for_status(response)
         return response
 
-
-
     async def _verify_updated_token(self):
         """
         Make sure there is a valid token
