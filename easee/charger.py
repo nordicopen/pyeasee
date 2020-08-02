@@ -89,6 +89,20 @@ class ChargerSchedule(BaseDict):
         super().__init__(data)
 
 
+class ChargerSchedule(BaseDict):
+    """ Charger charging schedule/plan """
+
+    def __init__(self, schedule: Dict[str, Any]):
+        # Todo remove the False defaults. Either it is a schedule object or None
+        data = {
+            "id": schedule.get("id", False),
+            "chargeStartTime": schedule.get("chargeStartTime", False),
+            "chargeStopTime": schedule.get("chargeStopTime", False),
+            "repeat": schedule.get("repeat", False),
+        }
+        super().__init__(data)
+
+
 class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
         super().__init__(entries)
