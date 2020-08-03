@@ -145,6 +145,31 @@ class Charger(BaseDict):
         }
         return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
 
+    async def enable_charger(self, enable: bool):
+        """Enable and disable charger in charger settings """
+        json = {"enabled": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def enable_idle_current(self, enable: bool):
+        """Enable and disable idle current in charger settings """
+        json = {"enableIdleCurrent": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def limitToSinglePhaseCharging(self, enable: bool):
+        """Limit to single phase charging in charger settings """
+        json = {"limitToSinglePhaseCharging": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def lockCablePermanently(self, enable: bool):
+        """Lock and unlock cable permanently in charger settings """
+        json = {"lockCablePermanently": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def smartButtonEnabled(self, enable: bool):
+        """Enable and disable smart button in charger settings """
+        json = {"smartButtonEnabled": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
     async def delete_basic_charge_plan(self):
         """Delete charger basic charge plan setting from cloud """
         return await self.easee.delete(f"/api/chargers/{self.id}/basic_charge_plan")
