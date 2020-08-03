@@ -190,16 +190,26 @@ class Charger(BaseDict):
         """Update charger firmware"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
 
-    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit dynamic current for charger """
         if self.circuit is not None:
             return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
         else:
             _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
 
-    async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+    async def set_max_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit max current for charger """
         if self.circuit is not None:
             return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
         else:
             _LOGGER.info("Circuit info must be initialized for max current to be set")
+
+    async def set_dynamic_charger_current(self, current: int):
+        """ Set charger dynamic current """
+        json = {"dynamicChargerCurrent": current}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def set_max_charger_current(self, current: int):
+        """ Set charger max current """
+        json = {"maxChargerCurrent": current}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
