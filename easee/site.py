@@ -70,10 +70,10 @@ class Site(BaseDict):
         }
 
         if vat is None:
-            vat = self.__getitem__("vat")
+            vat = self.get("vat")
 
         if currency is None:
-            currency = self.__getitem__("currencyId")
+            currency = self.get("currencyId")
 
         if costPerKwhExcludeVat is None:
             costPerKwhExcludeVat = costPerKWh / (100.0 + vat) * 100.0
@@ -84,7 +84,5 @@ class Site(BaseDict):
             "vat": vat,
             "costPerKwhExcludeVat": costPerKwhExcludeVat,
         }
-
-        print(json)
 
         return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
