@@ -66,12 +66,11 @@ class ChargerSchedule(BaseDict):
     """ Charger charging schedule/plan """
 
     def __init__(self, schedule: Dict[str, Any]):
-        # Todo remove the False defaults. Either it is a schedule object or None
         data = {
-            "id": schedule.get("id", False),
-            "chargeStartTime": schedule.get("chargeStartTime", False),
-            "chargeStopTime": schedule.get("chargeStopTime", False),
-            "repeat": schedule.get("repeat", False),
+            "id": schedule.get("id"),
+            "chargeStartTime": schedule.get("chargeStartTime"),
+            "chargeStopTime": schedule.get("chargeStopTime"),
+            "repeat": schedule.get("repeat"),
         }
         super().__init__(data)
 
@@ -124,15 +123,14 @@ class Charger(BaseDict):
 
     async def get_basic_charge_plan(self) -> ChargerSchedule:
         """Get and return charger basic charge plan setting from cloud """
-        plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
         try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
             plan = await plan.json()
             _LOGGER.debug(plan)
-        except NotFoundException:
-            # TODO: fix me. Should return None here instead of a ChargerSchedule with False as id
-            plan = {"id": False}
+            return ChargerSchedule(plan)
+        except (NotFoundException):
             _LOGGER.debug("No scheduled charge plan")
-        return ChargerSchedule(plan)
+            return None
 
     # TODO: document types
     async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
