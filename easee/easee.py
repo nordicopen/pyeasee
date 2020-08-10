@@ -69,29 +69,41 @@ class Easee:
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await raise_for_status(response)
+        await self.check_status(response)
         return response
 
     async def put(self, url, **kwargs):
         _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs,)
-        await raise_for_status(response)
+        await self.check_status(response)
         return response
 
     async def get(self, url, **kwargs):
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await raise_for_status(response)
+        await self.check_status(response)
         return response
 
     async def delete(self, url, **kwargs):
         _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await raise_for_status(response)
+        await self.check_status(response)
         return response
+
+    # TODO: Quick fix for the auth fail errors due to something wrong with refresh token logic
+    async def check_status(self, response):
+        try:
+            await raise_for_status(response)
+        except AuthorizationFailedException:
+            _LOGGER.debug("Re authorizing due to 401")
+            await self.connect()
+            # rethrow it
+            await raise_for_status(response)
+        except:
+            raise
 
     async def _verify_updated_token(self):
         """
@@ -101,6 +113,12 @@ class Easee:
             await self.connect()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
+        _LOGGER.debug(
+            "verify_updated_token: %s, %s, %s",
+            self.token["expires"],
+            datetime.now(),
+            self.token["expires"] < datetime.now(),
+        )
         if self.token["expires"] < datetime.now():
             self._refresh_token()
 
@@ -127,6 +145,7 @@ class Easee:
     async def _refresh_token(self):
         """
         Refresh token
+        TODO: seems not to work. Debug later
         """
         data = {
             "accessToken": self.token["accessToken"],
