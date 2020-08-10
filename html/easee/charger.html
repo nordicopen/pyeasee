@@ -55,6 +55,18 @@
 <dd>
 <div class="desc"><p>Delete charger basic charge plan setting from cloud</p></div>
 </dd>
+<dt id="easee.charger.Charger.enable_charger"><code class="name flex">
+<span>async def <span class="ident">enable_charger</span></span>(<span>self, enable: bool)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enable and disable charger in charger settings</p></div>
+</dd>
+<dt id="easee.charger.Charger.enable_idle_current"><code class="name flex">
+<span>async def <span class="ident">enable_idle_current</span></span>(<span>self, enable: bool)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enable and disable idle current in charger settings</p></div>
+</dd>
 <dt id="easee.charger.Charger.get_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self) ‑> <a title="easee.charger.ChargerSchedule" href="#easee.charger.ChargerSchedule">ChargerSchedule</a></span>
 </code></dt>
@@ -78,6 +90,18 @@
 </code></dt>
 <dd>
 <div class="desc"><p>get state for charger</p></div>
+</dd>
+<dt id="easee.charger.Charger.limitToSinglePhaseCharging"><code class="name flex">
+<span>async def <span class="ident">limitToSinglePhaseCharging</span></span>(<span>self, enable: bool)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Limit to single phase charging in charger settings</p></div>
+</dd>
+<dt id="easee.charger.Charger.lockCablePermanently"><code class="name flex">
+<span>async def <span class="ident">lockCablePermanently</span></span>(<span>self, enable: bool)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Lock and unlock cable permanently in charger settings</p></div>
 </dd>
 <dt id="easee.charger.Charger.override_schedule"><code class="name flex">
 <span>async def <span class="ident">override_schedule</span></span>(<span>self)</span>
@@ -109,17 +133,35 @@
 <dd>
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_dynamic_current"><code class="name flex">
-<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+<dt id="easee.charger.Charger.set_dynamic_charger_circuit_current"><code class="name flex">
+<span>async def <span class="ident">set_dynamic_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit dynamic current for charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_max_current"><code class="name flex">
-<span>async def <span class="ident">set_max_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+<dt id="easee.charger.Charger.set_dynamic_charger_current"><code class="name flex">
+<span>async def <span class="ident">set_dynamic_charger_current</span></span>(<span>self, current: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set charger dynamic current</p></div>
+</dd>
+<dt id="easee.charger.Charger.set_max_charger_circuit_current"><code class="name flex">
+<span>async def <span class="ident">set_max_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit max current for charger</p></div>
+</dd>
+<dt id="easee.charger.Charger.set_max_charger_current"><code class="name flex">
+<span>async def <span class="ident">set_max_charger_current</span></span>(<span>self, current: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set charger max current</p></div>
+</dd>
+<dt id="easee.charger.Charger.smartButtonEnabled"><code class="name flex">
+<span>async def <span class="ident">smartButtonEnabled</span></span>(<span>self, enable: bool)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enable and disable smart button in charger settings</p></div>
 </dd>
 <dt id="easee.charger.Charger.smart_charging"><code class="name flex">
 <span>async def <span class="ident">smart_charging</span></span>(<span>self)</span>
@@ -221,17 +263,24 @@
 <h4><code><a title="easee.charger.Charger" href="#easee.charger.Charger">Charger</a></code></h4>
 <ul class="">
 <li><code><a title="easee.charger.Charger.delete_basic_charge_plan" href="#easee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
+<li><code><a title="easee.charger.Charger.enable_charger" href="#easee.charger.Charger.enable_charger">enable_charger</a></code></li>
+<li><code><a title="easee.charger.Charger.enable_idle_current" href="#easee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
 <li><code><a title="easee.charger.Charger.get_basic_charge_plan" href="#easee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="easee.charger.Charger.get_config" href="#easee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="easee.charger.Charger.get_consumption_between_dates" href="#easee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
 <li><code><a title="easee.charger.Charger.get_state" href="#easee.charger.Charger.get_state">get_state</a></code></li>
+<li><code><a title="easee.charger.Charger.limitToSinglePhaseCharging" href="#easee.charger.Charger.limitToSinglePhaseCharging">limitToSinglePhaseCharging</a></code></li>
+<li><code><a title="easee.charger.Charger.lockCablePermanently" href="#easee.charger.Charger.lockCablePermanently">lockCablePermanently</a></code></li>
 <li><code><a title="easee.charger.Charger.override_schedule" href="#easee.charger.Charger.override_schedule">override_schedule</a></code></li>
 <li><code><a title="easee.charger.Charger.pause" href="#easee.charger.Charger.pause">pause</a></code></li>
 <li><code><a title="easee.charger.Charger.reboot" href="#easee.charger.Charger.reboot">reboot</a></code></li>
 <li><code><a title="easee.charger.Charger.resume" href="#easee.charger.Charger.resume">resume</a></code></li>
 <li><code><a title="easee.charger.Charger.set_basic_charge_plan" href="#easee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
-<li><code><a title="easee.charger.Charger.set_dynamic_current" href="#easee.charger.Charger.set_dynamic_current">set_dynamic_current</a></code></li>
-<li><code><a title="easee.charger.Charger.set_max_current" href="#easee.charger.Charger.set_max_current">set_max_current</a></code></li>
+<li><code><a title="easee.charger.Charger.set_dynamic_charger_circuit_current" href="#easee.charger.Charger.set_dynamic_charger_circuit_current">set_dynamic_charger_circuit_current</a></code></li>
+<li><code><a title="easee.charger.Charger.set_dynamic_charger_current" href="#easee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
+<li><code><a title="easee.charger.Charger.set_max_charger_circuit_current" href="#easee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
+<li><code><a title="easee.charger.Charger.set_max_charger_current" href="#easee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
+<li><code><a title="easee.charger.Charger.smartButtonEnabled" href="#easee.charger.Charger.smartButtonEnabled">smartButtonEnabled</a></code></li>
 <li><code><a title="easee.charger.Charger.smart_charging" href="#easee.charger.Charger.smart_charging">smart_charging</a></code></li>
 <li><code><a title="easee.charger.Charger.start" href="#easee.charger.Charger.start">start</a></code></li>
 <li><code><a title="easee.charger.Charger.stop" href="#easee.charger.Charger.stop">stop</a></code></li>
