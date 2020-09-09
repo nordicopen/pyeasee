@@ -147,7 +147,7 @@ async def main():
                         for charger in chargers:
                             await charger_loop(charger, header)
                             header = False
-                            time.sleep(5)
+                            await asyncio.sleep(5)
                 except KeyboardInterrupt as e:  # noqa
                     # Close connection on user interuption
                     print("Interrupted by user")
