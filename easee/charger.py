@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 from .exceptions import NotFoundException
 from .utils import BaseDict
@@ -211,3 +211,19 @@ class Charger(BaseDict):
         """ Set charger max current """
         json = {"maxChargerCurrent": current}
         return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def set_access(self, access: Union[int, str]):
+        """ Set the level of access for a changer """
+        json = {1: 1,
+                2: 2,
+                3: 3,
+                "open_for_all": 1,
+                "easee_account_required": 2,
+                "whitelist": 3
+        }
+
+        return await self.easee.put(f"/api/chargers/{self.id}/access", json=json[access])
+
+    async def delete_access(self):
+        """ Revert permissions overridden on a charger level"""
+        return await self.easee.delete(f"/api/chargers/{self.id}/access"
