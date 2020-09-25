@@ -113,4 +113,3 @@ async def test_get_correct_phase_mode():
     charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
     state = await charger.get_config()
     assert state["phaseMode"] == "Locked to three phase"
-

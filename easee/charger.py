@@ -16,16 +16,9 @@ STATUS = {
     6: "CAR_CONNECTED",
 }
 
-NODE_TYPE = {
-    1: "Master",
-    2: "Extender",
-}
+NODE_TYPE = {1: "Master", 2: "Extender"}
 
-PHASE_MODE = {
-    1: "Locked to single phase",
-    2: "Auto",
-    3: "Locked to three phase",
-}
+PHASE_MODE = {1: "Locked to single phase", 2: "Auto", 3: "Locked to three phase"}
 
 REASON_FOR_NO_CURRENT = {
     # Work-in-progress, must be taken with a pinch of salt, as per now just reverse engineering of observations until API properly documented
@@ -76,7 +69,9 @@ class ChargerSchedule(BaseDict):
 
 
 class Charger(BaseDict):
-    def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
+    def __init__(
+        self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None
+    ):
         super().__init__(entries)
         self.id: str = entries["id"]
         self.name: str = entries["name"]
@@ -87,7 +82,9 @@ class Charger(BaseDict):
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
         value = await (
-            await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
+            await self.easee.get(
+                f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
+            )
         ).text()
         return float(value)
 
@@ -111,7 +108,9 @@ class Charger(BaseDict):
 
     async def resume(self):
         """Resume charging session"""
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/resume_charging")
+        return await self.easee.post(
+            f"/api/chargers/{self.id}/commands/resume_charging"
+        )
 
     async def stop(self):
         """Stop charging session"""
@@ -119,7 +118,9 @@ class Charger(BaseDict):
 
     async def toggle(self):
         """Toggle charging session start/stop/pause/resume """
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/toggle_charging")
+        return await self.easee.post(
+            f"/api/chargers/{self.id}/commands/toggle_charging"
+        )
 
     async def get_basic_charge_plan(self) -> ChargerSchedule:
         """Get and return charger basic charge plan setting from cloud """
@@ -133,7 +134,9 @@ class Charger(BaseDict):
             return None
 
     # TODO: document types
-    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
+    async def set_basic_charge_plan(
+        self, id, chargeStartTime, chargeStopTime, repeat=True
+    ):
         """Set and post charger basic charge plan setting to cloud """
         json = {
             "id": id,
@@ -141,7 +144,9 @@ class Charger(BaseDict):
             "chargeStopTime": str(chargeStopTime),
             "repeat": repeat,
         }
-        return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
+        return await self.easee.post(
+            f"/api/chargers/{self.id}/basic_charge_plan", json=json
+        )
 
     async def enable_charger(self, enable: bool):
         """Enable and disable charger in charger settings """
@@ -174,7 +179,9 @@ class Charger(BaseDict):
 
     async def override_schedule(self):
         """Override scheduled charging and start charging"""
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/override_schedule")
+        return await self.easee.post(
+            f"/api/chargers/{self.id}/commands/override_schedule"
+        )
 
     async def smart_charging(self):
         """Set charger smart charging setting"""
@@ -186,16 +193,26 @@ class Charger(BaseDict):
 
     async def update_firmware(self):
         """Update charger firmware"""
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
+        return await self.easee.post(
+            f"/api/chargers/{self.id}/commands/update_firmware"
+        )
 
-    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+    async def set_dynamic_charger_circuit_current(
+        self, currentP1: int, currentP2: int = None, currentP3: int = None
+    ):
         """ Set circuit dynamic current for charger """
         if self.circuit is not None:
-            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
+            return await self.circuit.set_dynamic_current(
+                currentP1, currentP2, currentP3
+            )
         else:
-            _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
+            _LOGGER.info(
+                "Circuit info must be initialized for dynamic current to be set"
+            )
 
-    async def set_max_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+    async def set_max_charger_circuit_current(
+        self, currentP1: int, currentP2: int = None, currentP3: int = None
+    ):
         """ Set circuit max current for charger """
         if self.circuit is not None:
             return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
@@ -214,16 +231,19 @@ class Charger(BaseDict):
 
     async def set_access(self, access: Union[int, str]):
         """ Set the level of access for a changer """
-        json = {1: 1,
-                2: 2,
-                3: 3,
-                "open_for_all": 1,
-                "easee_account_required": 2,
-                "whitelist": 3
+        json = {
+            1: 1,
+            2: 2,
+            3: 3,
+            "open_for_all": 1,
+            "easee_account_required": 2,
+            "whitelist": 3,
         }
 
-        return await self.easee.put(f"/api/chargers/{self.id}/access", json=json[access])
+        return await self.easee.put(
+            f"/api/chargers/{self.id}/access", json=json[access]
+        )
 
     async def delete_access(self):
         """ Revert permissions overridden on a charger level"""
-        return await self.easee.delete(f"/api/chargers/{self.id}/access"
+        return await self.easee.delete(f"/api/chargers/{self.id}/access")
