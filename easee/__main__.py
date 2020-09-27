@@ -4,7 +4,7 @@ import logging
 import argparse
 from typing import List
 
-from . import Easee, Charger, Site, Circuit
+from . import Easee, Charger, Site, Circuit, Equalizer
 
 
 CACHED_TOKEN = "easee-token.json"
@@ -21,11 +21,12 @@ def parse_arguments():
     )
     parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
     parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
+    parser.add_argument("-e", "--equalizers", help="Get equalizers information", action="store_true")
     parser.add_argument(
-        "-a", "--all", help="Get all sites, circuits and chargers information", action="store_true",
+        "-a", "--all", help="Get all sites, circuits, equalizers and chargers information", action="store_true",
     )
     parser.add_argument(
-        "-sum", "--summary", help="Get summary of sites, circuits and chargers information", action="store_true",
+        "-sum", "--summary", help="Get summary of sites, circuits, equalizers and chargers information", action="store_true",
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
@@ -79,6 +80,11 @@ async def main():
         for site in sites:
             await circuits_info(circuits=site.get_circuits())
 
+    if args.equalizers:
+        sites: List[Site] = await easee.get_sites()
+        for site in sites:
+            await equalizers_info(equalizers=site.get_equalizers())
+
     if args.countries:
         countries_active = await easee.get_active_countries()
         print(json.dumps(countries_active, indent=2,))
@@ -87,6 +93,8 @@ async def main():
         sites: List[Site] = await easee.get_sites()
         await sites_info(sites)
         for site in sites:
+            equalizers = site.get_equalizers()
+            await equalizers_info(equalizers)
             circuits = site.get_circuits()
             await circuits_info(circuits)
             for circuit in circuits:
@@ -97,7 +105,8 @@ async def main():
         sites: List[Site] = await easee.get_sites()
         circuits = List[Circuit]
         chargers = List[Charger]
-
+        equalizers = List[Equalizer]
+        
         for site in sites:
             print(
                 f"  "
@@ -107,6 +116,16 @@ async def main():
                 f" main fuse {site.__getitem__('ratedCurrent')}A"
                 f" "
             )
+            equalizers = site.get_equalizers()
+            for equalizer in equalizers:
+                print(
+                    f"    "
+                    f" Equaliser: #{equalizer.__getitem__('name')}"
+                    f" (ID: {equalizer.id})"
+                    f" SiteID: #{equalizer.__getitem__('siteId')}"
+                    f" CircuitID: #{equalizer.__getitem__('circuitId')}"
+                    f" "
+                )
             circuits = site.get_circuits()
             for circuit in circuits:
                 print(
@@ -190,6 +209,16 @@ async def circuits_info(circuits: List[Circuit]):
 
     print(json.dumps(data, indent=2,))
 
+async def equalizers_info(equalizers: List[Equalizer]):
+    print("\n\n****************\nEQUALIZERS\n****************")
+    data = []
+    for equalizer in equalizers:
+        eq = equalizer.get_data()
+        state = equalizer.get_state()
+        eq["state"] = state
+        data.append(eq)
+
+    print(json.dumps(data, indent=2,))
 
 async def charger_loop(charger: Charger, header=False):
     """Return the state attributes."""
