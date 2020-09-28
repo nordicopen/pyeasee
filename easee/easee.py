@@ -18,10 +18,7 @@ _LOGGER = logging.getLogger(__name__)
 async def raise_for_status(response):
     if 400 <= response.status:
         e = aiohttp.ClientResponseError(
-            response.request_info,
-            response.history,
-            code=response.status,
-            headers=response.headers,
+            response.request_info, response.history, code=response.status, headers=response.headers,
         )
 
         if "json" in response.headers.get("CONTENT-TYPE", ""):
@@ -31,18 +28,12 @@ async def raise_for_status(response):
             data = await response.text()
 
         if 400 == response.status:
-            _LOGGER.error(
-                "Bad request service " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
         elif 401 == response.status:
-            _LOGGER.debug(
-                "Unautorized " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
             raise AuthorizationFailedException(data)
         elif 403 == response.status:
-            _LOGGER.error(
-                "Forbidden service " + f"({response.status}: {data} {response.url})"
-            )
+            _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
         elif 404 == response.status:
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
@@ -77,36 +68,28 @@ class Easee:
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.post(
-            f"{self.base}{url}", headers=self.headers, **kwargs
-        )
+        response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def put(self, url, **kwargs):
         _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.put(
-            f"{self.base}{url}", headers=self.headers, **kwargs
-        )
+        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def get(self, url, **kwargs):
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.get(
-            f"{self.base}{url}", headers=self.headers, **kwargs
-        )
+        response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def delete(self, url, **kwargs):
         _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.delete(
-            f"{self.base}{url}", headers=self.headers, **kwargs
-        )
+        response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
@@ -119,8 +102,9 @@ class Easee:
             await self.connect()
             # rethrow it
             await raise_for_status(response)
-        except:
-            raise
+        except Exception as ex:
+            _LOGGER.error("Got other exception from status")
+            raise Exception(ex) from ex
 
     async def _verify_updated_token(self):
         """
@@ -173,9 +157,7 @@ class Easee:
             res = await self.post("/api/accounts/refresh_token", json=data)
             await self._handle_token_response(res)
         except AuthorizationFailedException:
-            _LOGGER.debug(
-                "Could not get new access token from refresh token, getting new one"
-            )
+            _LOGGER.debug("Could not get new access token from refresh token, getting new one")
             await self.connect()
 
     async def close(self):

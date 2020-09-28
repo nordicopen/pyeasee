@@ -22,13 +22,9 @@ class BaseDict(Mapping):
     def __getitem__(self, key):
         if type(self._storage[key]) == str and validate_iso8601(self._storage[key]):
             try:
-                return datetime.fromisoformat(self._storage[key]).replace(
-                    tzinfo=timezone.utc
-                )
+                return datetime.fromisoformat(self._storage[key]).replace(tzinfo=timezone.utc)
             except ValueError:
-                return datetime.strptime(
-                    self._storage[key], "%Y-%m-%dT%H:%M:%SZ"
-                ).replace(tzinfo=timezone.utc)
+                return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
         return self._storage[key]
 
     def __iter__(self):

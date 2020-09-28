@@ -13,38 +13,20 @@ _LOGGER = logging.getLogger(__file__)
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(
-        description="Read data from your Easee EV installation"
-    )
+    parser = argparse.ArgumentParser(description="Read data from your Easee EV installation")
     parser.add_argument("-u", "--username", help="Username", required=True)
     parser.add_argument("-p", "--password", help="Password", required=True)
+    parser.add_argument("-c", "--chargers", help="Get chargers information", action="store_true")
+    parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
+    parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
     parser.add_argument(
-        "-c", "--chargers", help="Get chargers information", action="store_true"
+        "-a", "--all", help="Get all sites, circuits and chargers information", action="store_true",
     )
     parser.add_argument(
-        "-s", "--sites", help="Get sites information", action="store_true"
+        "-sum", "--summary", help="Get summary of sites, circuits and chargers information", action="store_true",
     )
-    parser.add_argument(
-        "-ci", "--circuits", help="Get circuits information", action="store_true"
-    )
-    parser.add_argument(
-        "-a",
-        "--all",
-        help="Get all sites, circuits and chargers information",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-sum",
-        "--summary",
-        help="Get summary of sites, circuits and chargers information",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-l", "--loop", help="Loop charger data every 5 seconds", action="store_true"
-    )
-    parser.add_argument(
-        "--countries", help="Get active countries information", action="store_true"
-    )
+    parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
+    parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
         "--debug",
@@ -55,17 +37,11 @@ def parse_arguments():
         default=logging.WARNING,
     )
     parser.add_argument(
-        "-v",
-        "--verbose",
-        help="Be verbose",
-        action="store_const",
-        dest="loglevel",
-        const=logging.INFO,
+        "-v", "--verbose", help="Be verbose", action="store_const", dest="loglevel", const=logging.INFO,
     )
     args = parser.parse_args()
     logging.basicConfig(
-        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s",
-        level=args.loglevel,
+        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=args.loglevel,
     )
     return args
 
@@ -155,9 +131,7 @@ async def main():
                         f" "
                     )
 
-        print(
-            f"\n\nFound {len(sites)} site(s), {len(circuits)} circuit(s) and {len(chargers)} charger(s)."
-        )
+        print(f"\n\nFound {len(sites)} site(s), {len(circuits)} circuit(s) and {len(chargers)} charger(s).")
 
     if args.loop:
         sites: List[Site] = await easee.get_sites()
@@ -241,33 +215,19 @@ async def charger_loop(charger: Charger, header=False):
     print(str_fixed_length(f"{state.__getitem__('chargerOpMode')}", 20), end=" ")
     print(str_fixed_length(f"{state.__getitem__('isOnline')}", 7), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('totalPower'),2)}kW", 7), end=" ")
-    print(
-        str_fixed_length(f"{round(state.__getitem__('outputCurrent'),1)}A", 10), end=" "
-    )
-    print(
-        str_fixed_length(f"{round(state.__getitem__('inCurrentT2'),1)}A", 10), end=" "
-    )
-    print(
-        str_fixed_length(f"{round(state.__getitem__('inCurrentT3'),1)}A", 10), end=" "
-    )
-    print(
-        str_fixed_length(f"{round(state.__getitem__('inCurrentT4'),1)}A", 10), end=" "
-    )
-    print(
-        str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" "
-    )
+    print(str_fixed_length(f"{round(state.__getitem__('outputCurrent'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT2'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT3'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT4'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('voltage'),1)}V", 10), end=" ")
     print(
-        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10),
-        end=" ",
+        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10), end=" ",
     )
     print(
-        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10),
-        end=" ",
+        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10), end=" ",
     )
-    print(
-        str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" "
-    )
+    print(str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" ")
     print(" ")
 
 
