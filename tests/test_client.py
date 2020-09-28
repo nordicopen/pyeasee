@@ -40,7 +40,9 @@ async def test_get_chargers(aiosession, aioresponse):
     assert chargers[0].id == "EH12345"
 
     chargers_state_data = load_json_fixture("charger-state.json")
-    aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data)
+    aioresponse.get(
+        f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data
+    )
 
     state = await chargers[0].get_state()
     assert state["chargerOpMode"] == "PAUSED"
@@ -76,4 +78,3 @@ async def test_get_sites(aiosession, aioresponse):
     assert chargers[0].id == "ES12345"
     await easee.close()
     await aiosession.close()
-
