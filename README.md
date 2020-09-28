@@ -48,3 +48,13 @@ async def main():
 
     await easee.close()
 ```
+
+
+
+## Development
+
+This project uses `black` for code formatting and `flake8` for linting. Two errors should be ignored when running flake8 so run it with
+
+```
+flake8 --ignore=E501,E231
+```
