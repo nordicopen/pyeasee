@@ -48,3 +48,11 @@ async def main():
 
     await easee.close()
 ```
+
+## Development
+
+This project uses `black` for code formatting and `flake8` for linting. To autoformat and run lint run
+
+```
+make lint
+```

@@ -10,7 +10,7 @@ from .charger import Charger
 from .site import Site
 from .exceptions import AuthorizationFailedException, NotFoundException
 
-__VERSION__ = "0.7.16"
+__VERSION__ = "0.7.17"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -75,7 +75,7 @@ class Easee:
     async def put(self, url, **kwargs):
         _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs,)
+        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
@@ -102,8 +102,9 @@ class Easee:
             await self.connect()
             # rethrow it
             await raise_for_status(response)
-        except:
-            raise
+        except Exception as ex:
+            _LOGGER.error("Got other exception from status")
+            raise Exception(ex) from ex
 
     async def _verify_updated_token(self):
         """

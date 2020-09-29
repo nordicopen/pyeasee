@@ -81,9 +81,7 @@ class Site(BaseDict):
     ):
         """ Set price per kWh for the site """
 
-        json = {
-            "costPerKWh": costPerKWh,
-        }
+        json = {"costPerKWh": costPerKWh}
 
         if vat is None:
             vat = self.get("vat")

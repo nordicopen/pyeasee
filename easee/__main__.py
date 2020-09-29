@@ -16,9 +16,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Read data from your Easee EV installation")
     parser.add_argument("-u", "--username", help="Username", required=True)
     parser.add_argument("-p", "--password", help="Password", required=True)
-    parser.add_argument(
-        "-c", "--chargers", help="Get chargers information", action="store_true",
-    )
+    parser.add_argument("-c", "--chargers", help="Get chargers information", action="store_true")
     parser.add_argument("-s", "--sites", help="Get sites information", action="store_true")
     parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
     parser.add_argument("-e", "--equalizers", help="Get equalizers information", action="store_true")
@@ -87,7 +85,7 @@ async def main():
 
     if args.countries:
         countries_active = await easee.get_active_countries()
-        print(json.dumps(countries_active, indent=2,))
+        print(json.dumps(countries_active, indent=2))
 
     if args.all:
         sites: List[Site] = await easee.get_sites()
@@ -189,7 +187,7 @@ async def chargers_info(chargers: List[Charger]):
         ch["config"] = config.get_data()
         data.append(ch)
 
-    print(json.dumps(data, indent=2,))
+    print(json.dumps(data, indent=2))
 
 
 async def sites_info(sites: List[Site]):
@@ -198,7 +196,7 @@ async def sites_info(sites: List[Site]):
     for site in sites:
         data.append(site.get_data())
 
-    print(json.dumps(data, indent=2,))
+    print(json.dumps(data, indent=2))
 
 
 async def circuits_info(circuits: List[Circuit]):
@@ -207,7 +205,7 @@ async def circuits_info(circuits: List[Circuit]):
     for circuit in circuits:
         data.append(circuit.get_data())
 
-    print(json.dumps(data, indent=2,))
+    print(json.dumps(data, indent=2))
 
 async def equalizers_info(equalizers: List[Equalizer]):
     print("\n\n****************\nEQUALIZERS\n****************")
@@ -252,8 +250,12 @@ async def charger_loop(charger: Charger, header=False):
     print(str_fixed_length(f"{round(state.__getitem__('inCurrentT4'),1)}A", 10), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('voltage'),1)}V", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10), end=" ")
+    print(
+        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10), end=" ",
+    )
+    print(
+        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10), end=" ",
+    )
     print(str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" ")
     print(" ")
 
