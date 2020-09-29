@@ -24,7 +24,10 @@ def parse_arguments():
         "-a", "--all", help="Get all sites, circuits, equalizers and chargers information", action="store_true",
     )
     parser.add_argument(
-        "-sum", "--summary", help="Get summary of sites, circuits, equalizers and chargers information", action="store_true",
+        "-sum",
+        "--summary",
+        help="Get summary of sites, circuits, equalizers and chargers information",
+        action="store_true",
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
@@ -104,7 +107,7 @@ async def main():
         circuits = List[Circuit]
         chargers = List[Charger]
         equalizers = List[Equalizer]
-        
+
         for site in sites:
             print(
                 f"  "
@@ -207,6 +210,7 @@ async def circuits_info(circuits: List[Circuit]):
 
     print(json.dumps(data, indent=2))
 
+
 async def equalizers_info(equalizers: List[Equalizer]):
     print("\n\n****************\nEQUALIZERS\n****************")
     data = []
@@ -217,6 +221,7 @@ async def equalizers_info(equalizers: List[Equalizer]):
         data.append(eq)
 
     print(json.dumps(data, indent=2,))
+
 
 async def charger_loop(charger: Charger, header=False):
     """Return the state attributes."""
