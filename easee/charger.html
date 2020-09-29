@@ -49,6 +49,12 @@
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="easee.charger.Charger.delete_access"><code class="name flex">
+<span>async def <span class="ident">delete_access</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Revert permissions overridden on a charger level</p></div>
+</dd>
 <dt id="easee.charger.Charger.delete_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">delete_basic_charge_plan</span></span>(<span>self)</span>
 </code></dt>
@@ -126,6 +132,12 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Resume charging session</p></div>
+</dd>
+<dt id="easee.charger.Charger.set_access"><code class="name flex">
+<span>async def <span class="ident">set_access</span></span>(<span>self, access: Union[int, str])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the level of access for a changer</p></div>
 </dd>
 <dt id="easee.charger.Charger.set_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime, repeat=True)</span>
@@ -262,6 +274,7 @@
 <li>
 <h4><code><a title="easee.charger.Charger" href="#easee.charger.Charger">Charger</a></code></h4>
 <ul class="">
+<li><code><a title="easee.charger.Charger.delete_access" href="#easee.charger.Charger.delete_access">delete_access</a></code></li>
 <li><code><a title="easee.charger.Charger.delete_basic_charge_plan" href="#easee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
 <li><code><a title="easee.charger.Charger.enable_charger" href="#easee.charger.Charger.enable_charger">enable_charger</a></code></li>
 <li><code><a title="easee.charger.Charger.enable_idle_current" href="#easee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
@@ -275,6 +288,7 @@
 <li><code><a title="easee.charger.Charger.pause" href="#easee.charger.Charger.pause">pause</a></code></li>
 <li><code><a title="easee.charger.Charger.reboot" href="#easee.charger.Charger.reboot">reboot</a></code></li>
 <li><code><a title="easee.charger.Charger.resume" href="#easee.charger.Charger.resume">resume</a></code></li>
+<li><code><a title="easee.charger.Charger.set_access" href="#easee.charger.Charger.set_access">set_access</a></code></li>
 <li><code><a title="easee.charger.Charger.set_basic_charge_plan" href="#easee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
 <li><code><a title="easee.charger.Charger.set_dynamic_charger_circuit_current" href="#easee.charger.Charger.set_dynamic_charger_circuit_current">set_dynamic_charger_circuit_current</a></code></li>
 <li><code><a title="easee.charger.Charger.set_dynamic_charger_current" href="#easee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
