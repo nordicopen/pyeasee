@@ -7,6 +7,17 @@ from .charger import Charger
 _LOGGER = logging.getLogger(__name__)
 
 
+class Equalizer(BaseDict):
+    def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
+        super().__init__(data)
+        self.id: int = data["id"]
+        self.site = site
+        self.easee = easee
+
+    async def get_state(self):
+        """ Get Equalizer state """
+        return await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
+
 class Circuit(BaseDict):
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
         super().__init__(data)
@@ -48,7 +59,12 @@ class Site(BaseDict):
         self.easee = easee
 
     def get_circuits(self) -> List[Circuit]:
+        """ Get circuits for the site """
         return [Circuit(c, self, self.easee) for c in self["circuits"]]
+
+    def get_equalizers(self) -> List[Equalizer]:
+        """ Get equalizers for the site """
+        return [Equalizer(e, self, self.easee) for e in self["equalizers"]]
 
     async def set_name(self, name: str):
         """ Set name for the site """
