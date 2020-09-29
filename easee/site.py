@@ -16,7 +16,7 @@ class Equalizer(BaseDict):
 
     async def get_state(self):
         """ Get Equalizer state """
-        return await self.easee.get(f"/api/equalizers/{self.id}/state", json=json)
+        return await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
 
 class Circuit(BaseDict):
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):

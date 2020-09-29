@@ -120,10 +120,10 @@ async def main():
             for equalizer in equalizers:
                 print(
                     f"    "
-                    f" Equaliser: #{equalizer.__getitem__('name')}"
+                    f" Equalizer: #{equalizer.__getitem__('name')}"
                     f" (ID: {equalizer.id})"
                     f" SiteID: #{equalizer.__getitem__('siteId')}"
-                    f" CircuitID: #{equalizer.__getitem__('circuitId')}"
+                    f" CircuitId: #{equalizer.__getitem__('circuitId')}"
                     f" "
                 )
             circuits = site.get_circuits()
@@ -214,7 +214,7 @@ async def equalizers_info(equalizers: List[Equalizer]):
     data = []
     for equalizer in equalizers:
         eq = equalizer.get_data()
-        state = equalizer.get_state()
+        state = await equalizer.get_state()
         eq["state"] = state
         data.append(eq)
 
