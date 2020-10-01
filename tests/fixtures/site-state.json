@@ -1,0 +1,175 @@
+{
+  "circuitStates": [
+    {
+      "circuit": {
+        "id": 12345,
+        "siteId": 54321,
+        "circuitPanelId": 1,
+        "panelName": "1",
+        "ratedCurrent": 16,
+        "chargers": [
+          {
+            "id": "EH123497",
+            "name": "Easee Home 12349",
+            "color": 1,
+            "createdOn": "2020-03-06T08:52:52.512105",
+            "updatedOn": "2020-07-03T17:34:35.390791",
+            "backPlate": {
+              "id": "ABCD1234567890",
+              "masterBackPlateId": "ABCD1234567890"
+            },
+            "levelOfAccess": null,
+            "productCode": 1
+          }
+        ],
+        "masterBackplate": null,
+        "useDynamicMaster": false,
+        "parentCircuitId": null
+      },
+      "chargerStates": [
+        {
+          "chargerID": "EH123497",
+          "chargerConfig": {
+            "isEnabled": true,
+            "lockCablePermanently": false,
+            "authorizationRequired": false,
+            "remoteStartRequired": true,
+            "smartButtonEnabled": false,
+            "wiFiSSID": "wifi ssid",
+            "detectedPowerGridType": 1,
+            "offlineChargingMode": 0,
+            "circuitMaxCurrentP1": 16,
+            "circuitMaxCurrentP2": 16,
+            "circuitMaxCurrentP3": 16,
+            "enableIdleCurrent": false,
+            "limitToSinglePhaseCharging": null,
+            "phaseMode": 2,
+            "localNodeType": 1,
+            "localAuthorizationRequired": false,
+            "localRadioChannel": 6,
+            "localShortAddress": 0,
+            "localParentAddrOrNumOfNodes": 0,
+            "localPreAuthorizeEnabled": true,
+            "localAuthorizeOfflineEnabled": true,
+            "allowOfflineTxForUnknownId": true,
+            "maxChargerCurrent": 32,
+            "ledStripBrightness": null
+          },
+          "chargerState": {
+            "smartCharging": false,
+            "cableLocked": false,
+            "chargerOpMode": 1,
+            "totalPower": 0,
+            "sessionEnergy": 4.34719800949097,
+            "energyPerHour": 0,
+            "wiFiRSSI": -51,
+            "cellRSSI": -68,
+            "localRSSI": null,
+            "outputPhase": 0,
+            "dynamicCircuitCurrentP1": 40,
+            "dynamicCircuitCurrentP2": 40,
+            "dynamicCircuitCurrentP3": 40,
+            "latestPulse": "2020-10-01T08:30:55Z",
+            "chargerFirmware": 230,
+            "latestFirmware": 240,
+            "voltage": 239.75,
+            "chargerRAT": 1,
+            "lockCablePermanently": false,
+            "inCurrentT2": 0,
+            "inCurrentT3": 0,
+            "inCurrentT4": 0,
+            "inCurrentT5": 0,
+            "outputCurrent": 0,
+            "isOnline": true,
+            "inVoltageT1T2": 3.065999984741211,
+            "inVoltageT1T3": 239.41700744628906,
+            "inVoltageT1T4": 234.70700073242188,
+            "inVoltageT1T5": 231.13099670410156,
+            "inVoltageT2T3": 239.75,
+            "inVoltageT2T4": 237.23899841308594,
+            "inVoltageT2T5": 228.4029998779297,
+            "inVoltageT3T4": 405.15301513671875,
+            "inVoltageT3T5": 410.27398681640625,
+            "inVoltageT4T5": 405.8890075683594,
+            "ledMode": 18,
+            "cableRating": 20000,
+            "dynamicChargerCurrent": 32,
+            "circuitTotalAllocatedPhaseConductorCurrentL1": null,
+            "circuitTotalAllocatedPhaseConductorCurrentL2": null,
+            "circuitTotalAllocatedPhaseConductorCurrentL3": null,
+            "circuitTotalPhaseConductorCurrentL1": null,
+            "circuitTotalPhaseConductorCurrentL2": null,
+            "circuitTotalPhaseConductorCurrentL3": null,
+            "reasonForNoCurrent": null,
+            "wiFiAPEnabled": false
+          }
+        }
+      ]
+    }
+  ],
+  "site": {
+    "contactInfo": {
+      "installerName": null,
+      "installerPhoneNumber": null,
+      "ownerName": "Niklas Fondberg",
+      "ownerPhoneNumber": "+460701234567",
+      "company": null
+    },
+    "costPerKWh": 0,
+    "vat": 0,
+    "costPerKwhExcludeVat": 0,
+    "currencyId": "SEK",
+    "partnerId": 1,
+    "siteType": 1,
+    "ratedCurrent": 20,
+    "useDynamicMaster": false,
+    "circuits": [
+      {
+        "id": 12345,
+        "siteId": 54321,
+        "circuitPanelId": 1,
+        "panelName": "1",
+        "ratedCurrent": 16,
+        "chargers": [
+          {
+            "id": "EH123497",
+            "name": "Easee Home 12349",
+            "color": 1,
+            "createdOn": "2020-03-06T08:52:52.512105",
+            "updatedOn": "2020-07-03T17:34:35.390791",
+            "backPlate": {
+              "id": "ABCD1234567890",
+              "masterBackPlateId": "ABCD1234567890"
+            },
+            "levelOfAccess": null,
+            "productCode": 1
+          }
+        ],
+        "masterBackplate": null,
+        "useDynamicMaster": false,
+        "parentCircuitId": null
+      }
+    ],
+    "equalizers": [],
+    "createdOn": "2020-04-06T11:59:53.135015",
+    "updatedOn": "2020-08-14T02:12:29.215533",
+    "id": 54321,
+    "siteKey": "WAFE-1234",
+    "name": "Site name",
+    "levelOfAccess": null,
+    "address": {
+      "street": "Streetname",
+      "buildingNumber": "1a",
+      "zip": "12345",
+      "area": "Stockholm",
+      "country": {
+        "id": "SE",
+        "name": "Sweden",
+        "phonePrefix": 0
+      },
+      "latitude": null,
+      "longitude": null,
+      "altitude": null
+    }
+  }
+}

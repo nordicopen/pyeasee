@@ -2,7 +2,7 @@ import logging
 from typing import Any, Dict, List
 
 from .utils import BaseDict
-from .charger import Charger
+from .charger import Charger, ChargerConfig, ChargerState
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -20,6 +20,8 @@ class Equalizer(BaseDict):
 
 
 class Circuit(BaseDict):
+    """ Represents a Circuit """
+
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
         super().__init__(data)
         self.id: int = data["id"]
@@ -53,7 +55,34 @@ class Circuit(BaseDict):
         return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]
 
 
+class SiteState(BaseDict):
+    """ Represents the site state as received through /sites/<id>/state """
+
+    def __init__(self, data: Dict[str, Any]):
+        super().__init__(data)
+
+    def get_charger_config(self, charger_id: str) -> ChargerConfig:
+        """ get config for charger from the instance data"""
+        for circuit in self["circuitStates"]:
+            for charger_data in circuit["chargerStates"]:
+                if charger_data["chargerID"] == charger_id:
+                    return ChargerConfig(charger_data["chargerConfig"])
+
+        return None
+
+    def get_charger_state(self, charger_id: str) -> ChargerState:
+        """ get state for charger from the instance data"""
+        for circuit in self["circuitStates"]:
+            for charger_data in circuit["chargerStates"]:
+                if charger_data["chargerID"] == charger_id:
+                    return ChargerState(charger_data["chargerState"])
+
+        return None
+
+
 class Site(BaseDict):
+    """ Represents a Site """
+
     def __init__(self, data: Dict[str, Any], easee: Any):
         super().__init__(data)
         self.id: int = data["id"]

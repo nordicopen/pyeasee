@@ -40,9 +40,7 @@ async def test_get_chargers(aiosession, aioresponse):
     assert chargers[0].id == "EH12345"
 
     chargers_state_data = load_json_fixture("charger-state.json")
-    aioresponse.get(
-        f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data
-    )
+    aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data)
 
     state = await chargers[0].get_state()
     assert state["chargerOpMode"] == "PAUSED"
@@ -76,5 +74,27 @@ async def test_get_sites(aiosession, aioresponse):
     chargers = circuits[0].get_chargers()
 
     assert chargers[0].id == "ES12345"
+    await easee.close()
+    await aiosession.close()
+
+
+@pytest.mark.asyncio
+async def test_get_site_state(aiosession, aioresponse):
+
+    token_data = load_json_fixture("token.json")
+    aioresponse.post(f"{BASE_URL}/api/accounts/token", payload=token_data)
+
+    site_state_data = load_json_fixture("site-state.json")
+    aioresponse.get(f"{BASE_URL}/api/sites/54321/state", payload=site_state_data)
+
+    easee = Easee("+46070123456", "password", aiosession)
+    site_state = await easee.get_site_state("54321")
+
+    charger_config = site_state.get_charger_config("EH123497")
+    assert charger_config["localNodeType"] == "Master"
+
+    charger_config = site_state.get_charger_state("EH123497")
+    assert charger_config["chargerOpMode"] == "STANDBY"
+
     await easee.close()
     await aiosession.close()
