@@ -77,7 +77,7 @@ default_config = {
     "authorizationRequired": False,
     "remoteStartRequired": True,
     "smartButtonEnabled": False,
-    "wiFiSSID": "fondberg mesh 1",
+    "wiFiSSID": "wifi ssid",
     "detectedPowerGridType": 1,
     "offlineChargingMode": 0,
     "circuitMaxCurrentP1": 16.0,

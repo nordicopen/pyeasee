@@ -7,7 +7,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, List
 from .charger import Charger
-from .site import Site
+from .site import Site, SiteState
 from .exceptions import AuthorizationFailedException, NotFoundException
 
 __VERSION__ = "0.7.18"
@@ -103,8 +103,8 @@ class Easee:
             # rethrow it
             await raise_for_status(response)
         except Exception as ex:
-            _LOGGER.error("Got other exception from status")
-            raise Exception(ex) from ex
+            _LOGGER.error("Got other exception from status: %s", ex)
+            raise
 
     async def _verify_updated_token(self):
         """
@@ -188,6 +188,11 @@ class Easee:
         _LOGGER.debug("Sites:  %s", records)
         sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
         return sites
+
+    async def get_site_state(self, id: str) -> SiteState:
+        """ Get site state """
+        state = await (await self.get(f"/api/sites/{id}/state")).json()
+        return SiteState(state)
 
     async def get_active_countries(self) -> List[Any]:
         """ Get all active countries """
