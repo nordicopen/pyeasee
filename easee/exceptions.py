@@ -4,3 +4,7 @@ class AuthorizationFailedException(Exception):
 
 class NotFoundException(Exception):
     pass
+
+
+class TooManyRequestsException(Exception):
+    pass

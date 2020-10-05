@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from typing import Any, List
 from .charger import Charger
 from .site import Site, SiteState
-from .exceptions import AuthorizationFailedException, NotFoundException
+from .exceptions import AuthorizationFailedException, NotFoundException, TooManyRequestsException
 
 __VERSION__ = "0.7.19"
 
@@ -38,6 +38,9 @@ async def raise_for_status(response):
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
             raise NotFoundException(data)
+        elif 429 == response.status:
+            _LOGGER.debug("Too many requests " + f"({response.status}: {data} {response.url})")
+            raise TooManyRequestsException(data)
         else:
             _LOGGER.error("Error in request to Easee API: %s", data)
             raise Exception(data) from e
@@ -103,7 +106,7 @@ class Easee:
             # rethrow it
             await raise_for_status(response)
         except Exception as ex:
-            _LOGGER.error("Got other exception from status: %s", ex)
+            _LOGGER.error("Got other exception from status: %s", type(ex).__name__)
             raise
 
     async def _verify_updated_token(self):
