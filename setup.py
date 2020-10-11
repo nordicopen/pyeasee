@@ -5,12 +5,12 @@ from setuptools import setup
 
 # This call to setup() does all the work
 setup(
-    name="easee",
+    name="pyeasee",
     version="0.7.20",
-    description="Easee EV charger APi library",
+    description="Easee EV charger API library",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/fondberg/easee",
+    url="https://github.com/fondberg/pyeasee",
     author="Niklas Fondberg",
     author_email="niklas.fondberg@gmail.com",
     license="MIT",
@@ -22,5 +22,5 @@ setup(
     packages=["easee"],
     include_package_data=True,
     install_requires=["aiohttp"],
-    entry_points={"console_scripts": ["easee=easee.__main__:main"]},
+    entry_points={"console_scripts": ["pyeasee=pyeasee.__main__:main"]},
 )

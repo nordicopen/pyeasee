@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.4" />
-<title>easee.exceptions API documentation</title>
+<title>pyeasee.utils API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>easee.exceptions</code></h1>
+<h1 class="title">Module <code>pyeasee.utils</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -28,45 +28,59 @@
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pyeasee.utils.match_iso8601"><code class="name flex">
+<span>def <span class="ident">match_iso8601</span></span>(<span>string, pos=0, endpos=9223372036854775807)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Matches zero or more characters at the beginning of the string.</p></div>
+</dd>
+<dt id="pyeasee.utils.validate_iso8601"><code class="name flex">
+<span>def <span class="ident">validate_iso8601</span></span>(<span>str_val)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="easee.exceptions.AuthorizationFailedException"><code class="flex name class">
-<span>class <span class="ident">AuthorizationFailedException</span></span>
-<span>(</span><span>...)</span>
+<dt id="pyeasee.utils.BaseDict"><code class="flex name class">
+<span>class <span class="ident">BaseDict</span></span>
+<span>(</span><span>entries)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
+<li>collections.abc.Mapping</li>
+<li>collections.abc.Collection</li>
+<li>collections.abc.Sized</li>
+<li>collections.abc.Iterable</li>
+<li>collections.abc.Container</li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pyeasee.charger.Charger" href="charger.html#pyeasee.charger.Charger">Charger</a></li>
+<li><a title="pyeasee.charger.ChargerConfig" href="charger.html#pyeasee.charger.ChargerConfig">ChargerConfig</a></li>
+<li><a title="pyeasee.charger.ChargerSchedule" href="charger.html#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></li>
+<li><a title="pyeasee.charger.ChargerState" href="charger.html#pyeasee.charger.ChargerState">ChargerState</a></li>
+<li><a title="pyeasee.site.Circuit" href="site.html#pyeasee.site.Circuit">Circuit</a></li>
+<li><a title="pyeasee.site.Equalizer" href="site.html#pyeasee.site.Equalizer">Equalizer</a></li>
+<li><a title="pyeasee.site.Site" href="site.html#pyeasee.site.Site">Site</a></li>
+<li><a title="pyeasee.site.SiteState" href="site.html#pyeasee.site.SiteState">SiteState</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pyeasee.utils.BaseDict.get_data"><code class="name flex">
+<span>def <span class="ident">get_data</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
-<dt id="easee.exceptions.NotFoundException"><code class="flex name class">
-<span>class <span class="ident">NotFoundException</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
-<dt id="easee.exceptions.TooManyRequestsException"><code class="flex name class">
-<span>class <span class="ident">TooManyRequestsException</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
+</dl>
 </dd>
 </dl>
 </section>
@@ -79,19 +93,22 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="easee" href="index.html">easee</a></code></li>
+<li><code><a title="pyeasee" href="index.html">pyeasee</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pyeasee.utils.match_iso8601" href="#pyeasee.utils.match_iso8601">match_iso8601</a></code></li>
+<li><code><a title="pyeasee.utils.validate_iso8601" href="#pyeasee.utils.validate_iso8601">validate_iso8601</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="easee.exceptions.AuthorizationFailedException" href="#easee.exceptions.AuthorizationFailedException">AuthorizationFailedException</a></code></h4>
-</li>
-<li>
-<h4><code><a title="easee.exceptions.NotFoundException" href="#easee.exceptions.NotFoundException">NotFoundException</a></code></h4>
-</li>
-<li>
-<h4><code><a title="easee.exceptions.TooManyRequestsException" href="#easee.exceptions.TooManyRequestsException">TooManyRequestsException</a></code></h4>
+<h4><code><a title="pyeasee.utils.BaseDict" href="#pyeasee.utils.BaseDict">BaseDict</a></code></h4>
+<ul class="">
+<li><code><a title="pyeasee.utils.BaseDict.get_data" href="#pyeasee.utils.BaseDict.get_data">get_data</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

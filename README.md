@@ -4,32 +4,32 @@
 
 # Easee EV Charger library
 
-This library is a thin wrapper around [Easee's Rest API](https://api.easee.cloud/index.html)
+This library is an async thin wrapper around [Easee's Rest API](https://api.easee.cloud/index.html)
 
 ## Installation
 
-You can install the libray from [PyPI](https://pypi.org/project/easee/):
+You can install the libray from [PyPI](https://pypi.org/project/pyeasee/):
 
-    pip install easee
+    pip install pyeasee
 
 The library is tested on Python 3.7 and Python 3.8
 
 ## Command line tool
 
-Run `python -m easee -h` for help.
+Run `python -m pyeasee -h` for help.
 
 ## Usage of the library
 
 ### Docs
 
-Read the API documentation [here](https://fondberg.github.io/easee/easee/)
+Read the API documentation [here](https://fondberg.github.io/pyeasee/pyeasee/)
 
 ### Small example
 
 Easee is the connection class and Charger
 
 ```python
-from easee import Easee, Charger, Site
+from pyeasee import Easee, Charger, Site
 
 async def main():
     _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])

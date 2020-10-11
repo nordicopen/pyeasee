@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.4" />
-<title>easee.site API documentation</title>
+<title>pyeasee.site API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>easee.site</code></h1>
+<h1 class="title">Module <code>pyeasee.site</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -32,7 +32,7 @@
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="easee.site.Circuit"><code class="flex name class">
+<dt id="pyeasee.site.Circuit"><code class="flex name class">
 <span>class <span class="ident">Circuit</span></span>
 <span>(</span><span>data: Dict[str, Any], site: Any, easee: Any)</span>
 </code></dt>
@@ -40,7 +40,7 @@
 <div class="desc"><p>Represents a Circuit</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -49,25 +49,25 @@
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="easee.site.Circuit.get_chargers"><code class="name flex">
-<span>def <span class="ident">get_chargers</span></span>(<span>self) ‑> List[<a title="easee.charger.Charger" href="charger.html#easee.charger.Charger">Charger</a>]</span>
+<dt id="pyeasee.site.Circuit.get_chargers"><code class="name flex">
+<span>def <span class="ident">get_chargers</span></span>(<span>self) ‑> List[<a title="pyeasee.charger.Charger" href="charger.html#pyeasee.charger.Charger">Charger</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt id="easee.site.Circuit.set_dynamic_current"><code class="name flex">
+<dt id="pyeasee.site.Circuit.set_dynamic_current"><code class="name flex">
 <span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit dynamic current</p></div>
 </dd>
-<dt id="easee.site.Circuit.set_max_current"><code class="name flex">
+<dt id="pyeasee.site.Circuit.set_max_current"><code class="name flex">
 <span>async def <span class="ident">set_max_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit max current</p></div>
 </dd>
-<dt id="easee.site.Circuit.set_rated_current"><code class="name flex">
+<dt id="pyeasee.site.Circuit.set_rated_current"><code class="name flex">
 <span>async def <span class="ident">set_rated_current</span></span>(<span>self, ratedCurrentFuseValue: int)</span>
 </code></dt>
 <dd>
@@ -75,7 +75,7 @@
 </dd>
 </dl>
 </dd>
-<dt id="easee.site.Equalizer"><code class="flex name class">
+<dt id="pyeasee.site.Equalizer"><code class="flex name class">
 <span>class <span class="ident">Equalizer</span></span>
 <span>(</span><span>data: Dict[str, Any], site: Any, easee: Any)</span>
 </code></dt>
@@ -83,7 +83,7 @@
 <div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -92,7 +92,7 @@
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="easee.site.Equalizer.get_state"><code class="name flex">
+<dt id="pyeasee.site.Equalizer.get_state"><code class="name flex">
 <span>async def <span class="ident">get_state</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -100,7 +100,7 @@
 </dd>
 </dl>
 </dd>
-<dt id="easee.site.Site"><code class="flex name class">
+<dt id="pyeasee.site.Site"><code class="flex name class">
 <span>class <span class="ident">Site</span></span>
 <span>(</span><span>data: Dict[str, Any], easee: Any)</span>
 </code></dt>
@@ -108,7 +108,7 @@
 <div class="desc"><p>Represents a Site</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -117,31 +117,31 @@
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="easee.site.Site.get_circuits"><code class="name flex">
-<span>def <span class="ident">get_circuits</span></span>(<span>self) ‑> List[<a title="easee.site.Circuit" href="#easee.site.Circuit">Circuit</a>]</span>
+<dt id="pyeasee.site.Site.get_circuits"><code class="name flex">
+<span>def <span class="ident">get_circuits</span></span>(<span>self) ‑> List[<a title="pyeasee.site.Circuit" href="#pyeasee.site.Circuit">Circuit</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get circuits for the site</p></div>
 </dd>
-<dt id="easee.site.Site.get_equalizers"><code class="name flex">
-<span>def <span class="ident">get_equalizers</span></span>(<span>self) ‑> List[<a title="easee.site.Equalizer" href="#easee.site.Equalizer">Equalizer</a>]</span>
+<dt id="pyeasee.site.Site.get_equalizers"><code class="name flex">
+<span>def <span class="ident">get_equalizers</span></span>(<span>self) ‑> List[<a title="pyeasee.site.Equalizer" href="#pyeasee.site.Equalizer">Equalizer</a>]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get equalizers for the site</p></div>
 </dd>
-<dt id="easee.site.Site.set_currency"><code class="name flex">
+<dt id="pyeasee.site.Site.set_currency"><code class="name flex">
 <span>async def <span class="ident">set_currency</span></span>(<span>self, currency: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set currency for the site</p></div>
 </dd>
-<dt id="easee.site.Site.set_name"><code class="name flex">
+<dt id="pyeasee.site.Site.set_name"><code class="name flex">
 <span>async def <span class="ident">set_name</span></span>(<span>self, name: str)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set name for the site</p></div>
 </dd>
-<dt id="easee.site.Site.set_price"><code class="name flex">
+<dt id="pyeasee.site.Site.set_price"><code class="name flex">
 <span>async def <span class="ident">set_price</span></span>(<span>self, costPerKWh: float, vat: float = None, currency: str = None, costPerKwhExcludeVat: float = None)</span>
 </code></dt>
 <dd>
@@ -149,7 +149,7 @@
 </dd>
 </dl>
 </dd>
-<dt id="easee.site.SiteState"><code class="flex name class">
+<dt id="pyeasee.site.SiteState"><code class="flex name class">
 <span>class <span class="ident">SiteState</span></span>
 <span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
@@ -157,7 +157,7 @@
 <div class="desc"><p>Represents the site state as received through /sites/<id>/state</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -166,14 +166,14 @@
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="easee.site.SiteState.get_charger_config"><code class="name flex">
-<span>def <span class="ident">get_charger_config</span></span>(<span>self, charger_id: str) ‑> <a title="easee.charger.ChargerConfig" href="charger.html#easee.charger.ChargerConfig">ChargerConfig</a></span>
+<dt id="pyeasee.site.SiteState.get_charger_config"><code class="name flex">
+<span>def <span class="ident">get_charger_config</span></span>(<span>self, charger_id: str) ‑> <a title="pyeasee.charger.ChargerConfig" href="charger.html#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get config for charger from the instance data</p></div>
 </dd>
-<dt id="easee.site.SiteState.get_charger_state"><code class="name flex">
-<span>def <span class="ident">get_charger_state</span></span>(<span>self, charger_id: str) ‑> <a title="easee.charger.ChargerState" href="charger.html#easee.charger.ChargerState">ChargerState</a></span>
+<dt id="pyeasee.site.SiteState.get_charger_state"><code class="name flex">
+<span>def <span class="ident">get_charger_state</span></span>(<span>self, charger_id: str) ‑> <a title="pyeasee.charger.ChargerState" href="charger.html#pyeasee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get state for charger from the instance data</p></div>
@@ -191,41 +191,41 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="easee" href="index.html">easee</a></code></li>
+<li><code><a title="pyeasee" href="index.html">pyeasee</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="easee.site.Circuit" href="#easee.site.Circuit">Circuit</a></code></h4>
+<h4><code><a title="pyeasee.site.Circuit" href="#pyeasee.site.Circuit">Circuit</a></code></h4>
 <ul class="">
-<li><code><a title="easee.site.Circuit.get_chargers" href="#easee.site.Circuit.get_chargers">get_chargers</a></code></li>
-<li><code><a title="easee.site.Circuit.set_dynamic_current" href="#easee.site.Circuit.set_dynamic_current">set_dynamic_current</a></code></li>
-<li><code><a title="easee.site.Circuit.set_max_current" href="#easee.site.Circuit.set_max_current">set_max_current</a></code></li>
-<li><code><a title="easee.site.Circuit.set_rated_current" href="#easee.site.Circuit.set_rated_current">set_rated_current</a></code></li>
+<li><code><a title="pyeasee.site.Circuit.get_chargers" href="#pyeasee.site.Circuit.get_chargers">get_chargers</a></code></li>
+<li><code><a title="pyeasee.site.Circuit.set_dynamic_current" href="#pyeasee.site.Circuit.set_dynamic_current">set_dynamic_current</a></code></li>
+<li><code><a title="pyeasee.site.Circuit.set_max_current" href="#pyeasee.site.Circuit.set_max_current">set_max_current</a></code></li>
+<li><code><a title="pyeasee.site.Circuit.set_rated_current" href="#pyeasee.site.Circuit.set_rated_current">set_rated_current</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="easee.site.Equalizer" href="#easee.site.Equalizer">Equalizer</a></code></h4>
+<h4><code><a title="pyeasee.site.Equalizer" href="#pyeasee.site.Equalizer">Equalizer</a></code></h4>
 <ul class="">
-<li><code><a title="easee.site.Equalizer.get_state" href="#easee.site.Equalizer.get_state">get_state</a></code></li>
+<li><code><a title="pyeasee.site.Equalizer.get_state" href="#pyeasee.site.Equalizer.get_state">get_state</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="easee.site.Site" href="#easee.site.Site">Site</a></code></h4>
+<h4><code><a title="pyeasee.site.Site" href="#pyeasee.site.Site">Site</a></code></h4>
 <ul class="">
-<li><code><a title="easee.site.Site.get_circuits" href="#easee.site.Site.get_circuits">get_circuits</a></code></li>
-<li><code><a title="easee.site.Site.get_equalizers" href="#easee.site.Site.get_equalizers">get_equalizers</a></code></li>
-<li><code><a title="easee.site.Site.set_currency" href="#easee.site.Site.set_currency">set_currency</a></code></li>
-<li><code><a title="easee.site.Site.set_name" href="#easee.site.Site.set_name">set_name</a></code></li>
-<li><code><a title="easee.site.Site.set_price" href="#easee.site.Site.set_price">set_price</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_circuits" href="#pyeasee.site.Site.get_circuits">get_circuits</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_equalizers" href="#pyeasee.site.Site.get_equalizers">get_equalizers</a></code></li>
+<li><code><a title="pyeasee.site.Site.set_currency" href="#pyeasee.site.Site.set_currency">set_currency</a></code></li>
+<li><code><a title="pyeasee.site.Site.set_name" href="#pyeasee.site.Site.set_name">set_name</a></code></li>
+<li><code><a title="pyeasee.site.Site.set_price" href="#pyeasee.site.Site.set_price">set_price</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="easee.site.SiteState" href="#easee.site.SiteState">SiteState</a></code></h4>
+<h4><code><a title="pyeasee.site.SiteState" href="#pyeasee.site.SiteState">SiteState</a></code></h4>
 <ul class="">
-<li><code><a title="easee.site.SiteState.get_charger_config" href="#easee.site.SiteState.get_charger_config">get_charger_config</a></code></li>
-<li><code><a title="easee.site.SiteState.get_charger_state" href="#easee.site.SiteState.get_charger_state">get_charger_state</a></code></li>
+<li><code><a title="pyeasee.site.SiteState.get_charger_config" href="#pyeasee.site.SiteState.get_charger_config">get_charger_config</a></code></li>
+<li><code><a title="pyeasee.site.SiteState.get_charger_state" href="#pyeasee.site.SiteState.get_charger_state">get_charger_state</a></code></li>
 </ul>
 </li>
 </ul>

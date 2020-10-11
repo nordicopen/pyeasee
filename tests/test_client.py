@@ -5,7 +5,7 @@ import asyncio
 import aiohttp
 from aioresponses import aioresponses
 
-from easee import Easee, Charger
+from pyeasee import Easee, Charger
 
 BASE_URL = "https://api.easee.cloud"
 

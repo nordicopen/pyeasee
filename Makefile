@@ -2,11 +2,11 @@
 __VERSION__ = "0.7.20"
 
 clean:
-	rm -rf easee.egg-info dist build
+	rm -rf pyeasee.egg-info dist build
 
 lint:
-	black easee --line-length 120
-	flake8 --ignore=E501,E231,F403 easee
+	black pyeasee --line-length 120
+	flake8 --ignore=E501,E231,F403 pyeasee
 
 install_dev:
 	pip install -r requirements-dev.txt
@@ -15,11 +15,11 @@ test:
 	pytest -s -v
 
 bump:
-	bump2version --current-version $(__VERSION__) patch Makefile setup.py setup.py easee/easee.py
+	bump2version --current-version $(__VERSION__) patch Makefile setup.py setup.py pyeasee/easee.py
 
 doc:
 	rm -rf html
-	pdoc --html --config show_source_code=False easee
+	pdoc --html --config show_source_code=False pyeasee
 
 publish_docs: doc
 	git subtree push --prefix html origin gh-pages
