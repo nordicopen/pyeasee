@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.4" />
-<title>easee.charger API documentation</title>
+<title>pyeasee.charger API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>easee.charger</code></h1>
+<h1 class="title">Module <code>pyeasee.charger</code></h1>
 </header>
 <section id="section-intro">
 </section>
@@ -32,7 +32,7 @@
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="easee.charger.Charger"><code class="flex name class">
+<dt id="pyeasee.charger.Charger"><code class="flex name class">
 <span>class <span class="ident">Charger</span></span>
 <span>(</span><span>entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None)</span>
 </code></dt>
@@ -40,7 +40,7 @@
 <div class="desc"></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -49,157 +49,157 @@
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="easee.charger.Charger.delete_access"><code class="name flex">
+<dt id="pyeasee.charger.Charger.delete_access"><code class="name flex">
 <span>async def <span class="ident">delete_access</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Revert permissions overridden on a charger level</p></div>
 </dd>
-<dt id="easee.charger.Charger.delete_basic_charge_plan"><code class="name flex">
+<dt id="pyeasee.charger.Charger.delete_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">delete_basic_charge_plan</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Delete charger basic charge plan setting from cloud</p></div>
 </dd>
-<dt id="easee.charger.Charger.enable_charger"><code class="name flex">
+<dt id="pyeasee.charger.Charger.enable_charger"><code class="name flex">
 <span>async def <span class="ident">enable_charger</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Enable and disable charger in charger settings</p></div>
 </dd>
-<dt id="easee.charger.Charger.enable_idle_current"><code class="name flex">
+<dt id="pyeasee.charger.Charger.enable_idle_current"><code class="name flex">
 <span>async def <span class="ident">enable_idle_current</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Enable and disable idle current in charger settings</p></div>
 </dd>
-<dt id="easee.charger.Charger.get_basic_charge_plan"><code class="name flex">
-<span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self) ‑> <a title="easee.charger.ChargerSchedule" href="#easee.charger.ChargerSchedule">ChargerSchedule</a></span>
+<dt id="pyeasee.charger.Charger.get_basic_charge_plan"><code class="name flex">
+<span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerSchedule" href="#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get and return charger basic charge plan setting from cloud</p></div>
 </dd>
-<dt id="easee.charger.Charger.get_config"><code class="name flex">
-<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False) ‑> <a title="easee.charger.ChargerConfig" href="#easee.charger.ChargerConfig">ChargerConfig</a></span>
+<dt id="pyeasee.charger.Charger.get_config"><code class="name flex">
+<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get config for charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.get_consumption_between_dates"><code class="name flex">
+<dt id="pyeasee.charger.Charger.get_consumption_between_dates"><code class="name flex">
 <span>async def <span class="ident">get_consumption_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
-<dt id="easee.charger.Charger.get_state"><code class="name flex">
-<span>async def <span class="ident">get_state</span></span>(<span>self) ‑> <a title="easee.charger.ChargerState" href="#easee.charger.ChargerState">ChargerState</a></span>
+<dt id="pyeasee.charger.Charger.get_state"><code class="name flex">
+<span>async def <span class="ident">get_state</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get state for charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.limitToSinglePhaseCharging"><code class="name flex">
+<dt id="pyeasee.charger.Charger.limitToSinglePhaseCharging"><code class="name flex">
 <span>async def <span class="ident">limitToSinglePhaseCharging</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Limit to single phase charging in charger settings</p></div>
 </dd>
-<dt id="easee.charger.Charger.lockCablePermanently"><code class="name flex">
+<dt id="pyeasee.charger.Charger.lockCablePermanently"><code class="name flex">
 <span>async def <span class="ident">lockCablePermanently</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Lock and unlock cable permanently in charger settings</p></div>
 </dd>
-<dt id="easee.charger.Charger.override_schedule"><code class="name flex">
+<dt id="pyeasee.charger.Charger.override_schedule"><code class="name flex">
 <span>async def <span class="ident">override_schedule</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Override scheduled charging and start charging</p></div>
 </dd>
-<dt id="easee.charger.Charger.pause"><code class="name flex">
+<dt id="pyeasee.charger.Charger.pause"><code class="name flex">
 <span>async def <span class="ident">pause</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Pause charging session</p></div>
 </dd>
-<dt id="easee.charger.Charger.reboot"><code class="name flex">
+<dt id="pyeasee.charger.Charger.reboot"><code class="name flex">
 <span>async def <span class="ident">reboot</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Reboot charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.resume"><code class="name flex">
+<dt id="pyeasee.charger.Charger.resume"><code class="name flex">
 <span>async def <span class="ident">resume</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Resume charging session</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_access"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_access"><code class="name flex">
 <span>async def <span class="ident">set_access</span></span>(<span>self, access: Union[int, str])</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set the level of access for a changer</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_basic_charge_plan"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime, repeat=True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_dynamic_charger_circuit_current"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_dynamic_charger_circuit_current"><code class="name flex">
 <span>async def <span class="ident">set_dynamic_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit dynamic current for charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_dynamic_charger_current"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_dynamic_charger_current"><code class="name flex">
 <span>async def <span class="ident">set_dynamic_charger_current</span></span>(<span>self, current: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set charger dynamic current</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_max_charger_circuit_current"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_max_charger_circuit_current"><code class="name flex">
 <span>async def <span class="ident">set_max_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit max current for charger</p></div>
 </dd>
-<dt id="easee.charger.Charger.set_max_charger_current"><code class="name flex">
+<dt id="pyeasee.charger.Charger.set_max_charger_current"><code class="name flex">
 <span>async def <span class="ident">set_max_charger_current</span></span>(<span>self, current: int)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set charger max current</p></div>
 </dd>
-<dt id="easee.charger.Charger.smartButtonEnabled"><code class="name flex">
+<dt id="pyeasee.charger.Charger.smartButtonEnabled"><code class="name flex">
 <span>async def <span class="ident">smartButtonEnabled</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Enable and disable smart button in charger settings</p></div>
 </dd>
-<dt id="easee.charger.Charger.smart_charging"><code class="name flex">
+<dt id="pyeasee.charger.Charger.smart_charging"><code class="name flex">
 <span>async def <span class="ident">smart_charging</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set charger smart charging setting</p></div>
 </dd>
-<dt id="easee.charger.Charger.start"><code class="name flex">
+<dt id="pyeasee.charger.Charger.start"><code class="name flex">
 <span>async def <span class="ident">start</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Start charging session</p></div>
 </dd>
-<dt id="easee.charger.Charger.stop"><code class="name flex">
+<dt id="pyeasee.charger.Charger.stop"><code class="name flex">
 <span>async def <span class="ident">stop</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Stop charging session</p></div>
 </dd>
-<dt id="easee.charger.Charger.toggle"><code class="name flex">
+<dt id="pyeasee.charger.Charger.toggle"><code class="name flex">
 <span>async def <span class="ident">toggle</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Toggle charging session start/stop/pause/resume</p></div>
 </dd>
-<dt id="easee.charger.Charger.update_firmware"><code class="name flex">
+<dt id="pyeasee.charger.Charger.update_firmware"><code class="name flex">
 <span>async def <span class="ident">update_firmware</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -207,7 +207,7 @@
 </dd>
 </dl>
 </dd>
-<dt id="easee.charger.ChargerConfig"><code class="flex name class">
+<dt id="pyeasee.charger.ChargerConfig"><code class="flex name class">
 <span>class <span class="ident">ChargerConfig</span></span>
 <span>(</span><span>config: Dict[str, Any])</span>
 </code></dt>
@@ -215,7 +215,7 @@
 <div class="desc"><p>Charger config with integer enum values converted to human readable string values</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -223,7 +223,7 @@
 <li>collections.abc.Container</li>
 </ul>
 </dd>
-<dt id="easee.charger.ChargerSchedule"><code class="flex name class">
+<dt id="pyeasee.charger.ChargerSchedule"><code class="flex name class">
 <span>class <span class="ident">ChargerSchedule</span></span>
 <span>(</span><span>schedule: Dict[str, Any])</span>
 </code></dt>
@@ -231,7 +231,7 @@
 <div class="desc"><p>Charger charging schedule/plan</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -239,7 +239,7 @@
 <li>collections.abc.Container</li>
 </ul>
 </dd>
-<dt id="easee.charger.ChargerState"><code class="flex name class">
+<dt id="pyeasee.charger.ChargerState"><code class="flex name class">
 <span>class <span class="ident">ChargerState</span></span>
 <span>(</span><span>state: Dict[str, Any])</span>
 </code></dt>
@@ -247,7 +247,7 @@
 <div class="desc"><p>Charger state with integer enum values converted to human readable string values</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="easee.utils.BaseDict" href="utils.html#easee.utils.BaseDict">BaseDict</a></li>
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
 <li>collections.abc.Mapping</li>
 <li>collections.abc.Collection</li>
 <li>collections.abc.Sized</li>
@@ -266,50 +266,50 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="easee" href="index.html">easee</a></code></li>
+<li><code><a title="pyeasee" href="index.html">pyeasee</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="easee.charger.Charger" href="#easee.charger.Charger">Charger</a></code></h4>
+<h4><code><a title="pyeasee.charger.Charger" href="#pyeasee.charger.Charger">Charger</a></code></h4>
 <ul class="">
-<li><code><a title="easee.charger.Charger.delete_access" href="#easee.charger.Charger.delete_access">delete_access</a></code></li>
-<li><code><a title="easee.charger.Charger.delete_basic_charge_plan" href="#easee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
-<li><code><a title="easee.charger.Charger.enable_charger" href="#easee.charger.Charger.enable_charger">enable_charger</a></code></li>
-<li><code><a title="easee.charger.Charger.enable_idle_current" href="#easee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
-<li><code><a title="easee.charger.Charger.get_basic_charge_plan" href="#easee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
-<li><code><a title="easee.charger.Charger.get_config" href="#easee.charger.Charger.get_config">get_config</a></code></li>
-<li><code><a title="easee.charger.Charger.get_consumption_between_dates" href="#easee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
-<li><code><a title="easee.charger.Charger.get_state" href="#easee.charger.Charger.get_state">get_state</a></code></li>
-<li><code><a title="easee.charger.Charger.limitToSinglePhaseCharging" href="#easee.charger.Charger.limitToSinglePhaseCharging">limitToSinglePhaseCharging</a></code></li>
-<li><code><a title="easee.charger.Charger.lockCablePermanently" href="#easee.charger.Charger.lockCablePermanently">lockCablePermanently</a></code></li>
-<li><code><a title="easee.charger.Charger.override_schedule" href="#easee.charger.Charger.override_schedule">override_schedule</a></code></li>
-<li><code><a title="easee.charger.Charger.pause" href="#easee.charger.Charger.pause">pause</a></code></li>
-<li><code><a title="easee.charger.Charger.reboot" href="#easee.charger.Charger.reboot">reboot</a></code></li>
-<li><code><a title="easee.charger.Charger.resume" href="#easee.charger.Charger.resume">resume</a></code></li>
-<li><code><a title="easee.charger.Charger.set_access" href="#easee.charger.Charger.set_access">set_access</a></code></li>
-<li><code><a title="easee.charger.Charger.set_basic_charge_plan" href="#easee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
-<li><code><a title="easee.charger.Charger.set_dynamic_charger_circuit_current" href="#easee.charger.Charger.set_dynamic_charger_circuit_current">set_dynamic_charger_circuit_current</a></code></li>
-<li><code><a title="easee.charger.Charger.set_dynamic_charger_current" href="#easee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
-<li><code><a title="easee.charger.Charger.set_max_charger_circuit_current" href="#easee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
-<li><code><a title="easee.charger.Charger.set_max_charger_current" href="#easee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
-<li><code><a title="easee.charger.Charger.smartButtonEnabled" href="#easee.charger.Charger.smartButtonEnabled">smartButtonEnabled</a></code></li>
-<li><code><a title="easee.charger.Charger.smart_charging" href="#easee.charger.Charger.smart_charging">smart_charging</a></code></li>
-<li><code><a title="easee.charger.Charger.start" href="#easee.charger.Charger.start">start</a></code></li>
-<li><code><a title="easee.charger.Charger.stop" href="#easee.charger.Charger.stop">stop</a></code></li>
-<li><code><a title="easee.charger.Charger.toggle" href="#easee.charger.Charger.toggle">toggle</a></code></li>
-<li><code><a title="easee.charger.Charger.update_firmware" href="#easee.charger.Charger.update_firmware">update_firmware</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.delete_access" href="#pyeasee.charger.Charger.delete_access">delete_access</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.delete_basic_charge_plan" href="#pyeasee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.enable_charger" href="#pyeasee.charger.Charger.enable_charger">enable_charger</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.enable_idle_current" href="#pyeasee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.limitToSinglePhaseCharging" href="#pyeasee.charger.Charger.limitToSinglePhaseCharging">limitToSinglePhaseCharging</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.lockCablePermanently" href="#pyeasee.charger.Charger.lockCablePermanently">lockCablePermanently</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.override_schedule" href="#pyeasee.charger.Charger.override_schedule">override_schedule</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.pause" href="#pyeasee.charger.Charger.pause">pause</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.reboot" href="#pyeasee.charger.Charger.reboot">reboot</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.resume" href="#pyeasee.charger.Charger.resume">resume</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_access" href="#pyeasee.charger.Charger.set_access">set_access</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_basic_charge_plan" href="#pyeasee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_dynamic_charger_circuit_current" href="#pyeasee.charger.Charger.set_dynamic_charger_circuit_current">set_dynamic_charger_circuit_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_dynamic_charger_current" href="#pyeasee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_max_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_max_charger_current" href="#pyeasee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.smartButtonEnabled" href="#pyeasee.charger.Charger.smartButtonEnabled">smartButtonEnabled</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.smart_charging" href="#pyeasee.charger.Charger.smart_charging">smart_charging</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.start" href="#pyeasee.charger.Charger.start">start</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.stop" href="#pyeasee.charger.Charger.stop">stop</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.toggle" href="#pyeasee.charger.Charger.toggle">toggle</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.update_firmware" href="#pyeasee.charger.Charger.update_firmware">update_firmware</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="easee.charger.ChargerConfig" href="#easee.charger.ChargerConfig">ChargerConfig</a></code></h4>
+<h4><code><a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></code></h4>
 </li>
 <li>
-<h4><code><a title="easee.charger.ChargerSchedule" href="#easee.charger.ChargerSchedule">ChargerSchedule</a></code></h4>
+<h4><code><a title="pyeasee.charger.ChargerSchedule" href="#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></code></h4>
 </li>
 <li>
-<h4><code><a title="easee.charger.ChargerState" href="#easee.charger.ChargerState">ChargerState</a></code></h4>
+<h4><code><a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></code></h4>
 </li>
 </ul>
 </li>
