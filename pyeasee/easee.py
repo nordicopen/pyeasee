@@ -10,7 +10,7 @@ from .charger import Charger
 from .site import Site, SiteState
 from .exceptions import AuthorizationFailedException, NotFoundException, TooManyRequestsException, ServerFailureException
 
-__VERSION__ = "0.7.22"
+__VERSION__ = "0.7.23"
 
 _LOGGER = logging.getLogger(__name__)
 
