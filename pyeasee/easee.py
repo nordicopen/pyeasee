@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 from typing import Any, List
 from .charger import Charger
 from .site import Site, SiteState
-from .exceptions import AuthorizationFailedException, NotFoundException, TooManyRequestsException
+from .exceptions import AuthorizationFailedException, NotFoundException, TooManyRequestsException, ServerFailureException
 
-__VERSION__ = "0.7.22"
+__VERSION__ = "0.7.21"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,6 +41,9 @@ async def raise_for_status(response):
         elif 429 == response.status:
             _LOGGER.debug("Too many requests " + f"({response.status}: {data} {response.url})")
             raise TooManyRequestsException(data)
+        elif response.status > 500:
+            _LOGGER.error("Server failure" + f"({response.status}: {data} {response.url})")
+            raise ServerFailureException(data)
         else:
             _LOGGER.error("Error in request to Easee API: %s", data)
             raise Exception(data) from e
