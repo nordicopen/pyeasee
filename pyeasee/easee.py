@@ -28,6 +28,7 @@ async def raise_for_status(response):
             data = await response.text()
 
         if 400 == response.status:
+            raise AuthorizationFailedException(data)
             _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
         elif 401 == response.status:
             _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
