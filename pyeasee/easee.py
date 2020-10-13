@@ -106,7 +106,7 @@ class Easee:
             # rethrow it
             await raise_for_status(response)
         except Exception as ex:
-            _LOGGER.error("Got other exception from status: %s", type(ex).__name__)
+            _LOGGER.debug("Got other exception from status: %s", type(ex).__name__)
             raise
 
     async def _verify_updated_token(self):
