@@ -12,7 +12,7 @@ STATUS = {
     2: "PAUSED",
     3: "CHARGING",
     4: "READY_TO_CHARGE",
-    5: "UNKNOWN",
+    5: "ERROR",
     6: "CAR_CONNECTED",
 }
 
