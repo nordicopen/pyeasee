@@ -1,3 +1,4 @@
+
 import asyncio
 import json
 import logging
@@ -31,6 +32,7 @@ def parse_arguments():
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
+    parser.add_argument("-q", "--amqp", help="Get connection details for AMQP stream", action="store_true")
     parser.add_argument(
         "-d",
         "--debug",
@@ -89,6 +91,11 @@ async def main():
     if args.countries:
         countries_active = await easee.get_active_countries()
         print(json.dumps(countries_active, indent=2))
+
+    if args.amqp:
+        amqp_details = await easee.get_amqp()
+        print(json.dumps(amqp_details, indent=2))
+        
 
     if args.all:
         sites: List[Site] = await easee.get_sites()

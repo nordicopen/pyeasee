@@ -212,3 +212,9 @@ class Easee:
         records = await (await self.get("/api/resources/currencies")).json()
         _LOGGER.debug("Currencies:  %s", records)
         return records
+
+    async def get_amqp(self):
+        """ Get AMPQ connection details """
+        records = await (await self.get("/api/streams/amqp")).json()
+        _LOGGER.debug("AMPQ details:  %s", records)
+        return records
