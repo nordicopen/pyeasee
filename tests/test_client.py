@@ -95,10 +95,11 @@ async def test_get_site_state(aiosession, aioresponse):
     assert charger_config["localNodeType"] == "Master"
 
     charger_state = site_state.get_charger_state("EH123497")
-    assert charger_state["chargerOpMode"] == "STANDBY"
+    assert charger_state["chargerOpMode"] == 1
+    assert charger_state["status"] == "DISCONNECTED"
 
     charger_state = site_state.get_charger_state("NOTEXIST")
-    assert charger_state == None
+    assert charger_state is None
 
     await easee.close()
     await aiosession.close()
