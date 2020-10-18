@@ -7,13 +7,15 @@ from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
 
+
 STATUS = {
-    1: "STANDBY",
-    2: "PAUSED",
+    0: "OFFLINE",
+    1: "DISCONNECTED",
+    2: "AWAITING_START",
     3: "CHARGING",
-    4: "READY_TO_CHARGE",
-    5: "UNKNOWN",
-    6: "CAR_CONNECTED",
+    4: "COMPLETED",
+    5: "ERROR",
+    6: "READY_TO_CHARGE",
 }
 
 NODE_TYPE = {1: "Master", 2: "Extender"}
@@ -24,10 +26,19 @@ REASON_FOR_NO_CURRENT = {
     # Work-in-progress, must be taken with a pinch of salt, as per now just reverse engineering of observations until API properly documented
     None: "No reason",
     0: "No reason, charging or ready to charge",
+    1: "Charger paused",
+    2: "Charger paused",
+    3: "Charger paused",
+    4: "Charger paused",
+    5: "Charger paused",
+    6: "Charger paused",
+    9: "Error no current",
     50: "Secondary unit not requesting current or no car connected",
+    51: "Charger paused",
     52: "Charger paused",
     53: "Charger disabled",
-    54: "Waiting for schedule",
+    54: "Waiting for schedule/auth",
+    55: "Pending auth"
 }
 
 
@@ -37,7 +48,7 @@ class ChargerState(BaseDict):
     def __init__(self, state: Dict[str, Any]):
         data = {
             **state,
-            "chargerOpMode": STATUS[state["chargerOpMode"]],
+            "status": STATUS[state["chargerOpMode"]],
             "reasonForNoCurrent": f"({state['reasonForNoCurrent']}) {REASON_FOR_NO_CURRENT.get(state['reasonForNoCurrent'], 'Unknown')}",
         }
         super().__init__(data)
