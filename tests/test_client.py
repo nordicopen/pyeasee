@@ -1,11 +1,11 @@
-import os
-import json
-import pytest
 import asyncio
-import aiohttp
-from aioresponses import aioresponses
+import json
+import os
 
-from pyeasee import Easee, Charger
+import aiohttp
+import pytest
+from aioresponses import aioresponses
+from pyeasee import Charger, Easee
 
 BASE_URL = "https://api.easee.cloud"
 
@@ -43,7 +43,8 @@ async def test_get_chargers(aiosession, aioresponse):
     aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data)
 
     state = await chargers[0].get_state()
-    assert state["chargerOpMode"] == "PAUSED"
+    assert state["chargerOpMode"] == 2
+    assert state["status"] == "AWAITING_START"
     await easee.close()
     await aiosession.close()
 

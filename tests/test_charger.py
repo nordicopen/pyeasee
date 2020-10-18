@@ -104,7 +104,8 @@ async def test_get_correct_status():
     mock_easee = MockEasee(get_data=default_state)
     charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
     state = await charger.get_state()
-    assert state["chargerOpMode"] == "CHARGING"
+    assert state["chargerOpMode"] == 3
+    assert state["status"] == "CHARGING"
 
 
 @pytest.mark.asyncio
