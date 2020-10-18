@@ -28,8 +28,8 @@ async def raise_for_status(response):
             data = await response.text()
 
         if 400 == response.status:
-            raise AuthorizationFailedException(data)
             _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
+            raise AuthorizationFailedException(data)
         elif 401 == response.status:
             _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
             raise AuthorizationFailedException(data)
@@ -43,7 +43,7 @@ async def raise_for_status(response):
             _LOGGER.debug("Too many requests " + f"({response.status}: {data} {response.url})")
             raise TooManyRequestsException(data)
         elif response.status > 500:
-            _LOGGER.error("Server failure" + f"({response.status}: {data} {response.url})")
+            _LOGGER.warning("Server failure" + f"({response.status}: {response.url})")
             raise ServerFailureException(data)
         else:
             _LOGGER.error("Error in request to Easee API: %s", data)
