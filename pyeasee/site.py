@@ -10,7 +10,8 @@ _LOGGER = logging.getLogger(__name__)
 class Equalizer(BaseDict):
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
         super().__init__(data)
-        self.id: int = data["id"]
+        self.id: str = data["id"]
+        self.name: str = data["name"]
         self.site = site
         self.easee = easee
 
@@ -86,6 +87,7 @@ class Site(BaseDict):
     def __init__(self, data: Dict[str, Any], easee: Any):
         super().__init__(data)
         self.id: int = data["id"]
+        self.name: str = data["name"]
         self.easee = easee
 
     def get_circuits(self) -> List[Circuit]:
