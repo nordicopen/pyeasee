@@ -7,7 +7,9 @@ from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
 
+
 STATUS = {
+    0: "OFFLINE",
     1: "DISCONNECTED",
     2: "AWAITING_START",
     3: "CHARGING",
@@ -35,8 +37,8 @@ REASON_FOR_NO_CURRENT = {
     51: "Charger paused",
     52: "Charger paused",
     53: "Charger disabled",
-    54: "Waiting for schedule",
-    55: "Pending auth",
+    54: "Waiting for schedule/auth",
+    55: "Pending auth"
 }
 
 

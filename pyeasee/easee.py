@@ -2,13 +2,16 @@
 Main client for the Eesee account.
 """
 import asyncio
-import aiohttp
 import logging
 from datetime import datetime, timedelta
 from typing import Any, List
+
+import aiohttp
+
 from .charger import Charger
+from .exceptions import (AuthorizationFailedException, NotFoundException,
+                         ServerFailureException, TooManyRequestsException)
 from .site import Site, SiteState
-from .exceptions import AuthorizationFailedException, NotFoundException, TooManyRequestsException, ServerFailureException
 
 __VERSION__ = "0.7.26"
 
