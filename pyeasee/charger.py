@@ -45,24 +45,30 @@ REASON_FOR_NO_CURRENT = {
 class ChargerState(BaseDict):
     """ Charger state with integer enum values converted to human readable string values"""
 
-    def __init__(self, state: Dict[str, Any]):
-        data = {
-            **state,
-            "status": STATUS[state["chargerOpMode"]],
-            "reasonForNoCurrent": f"({state['reasonForNoCurrent']}) {REASON_FOR_NO_CURRENT.get(state['reasonForNoCurrent'], 'Unknown')}",
-        }
+    def __init__(self, state: Dict[str, Any], raw=False):
+        if not raw:
+            data = {
+                **state,
+                "chargerOpMode": STATUS[state["chargerOpMode"]],
+                "reasonForNoCurrent": f"({state['reasonForNoCurrent']}) {REASON_FOR_NO_CURRENT.get(state['reasonForNoCurrent'], 'Unknown')}",
+            }
+        else:
+            data = {**state, "reasonForNoCurrent": "none" if state['reasonForNoCurrent'] is None else state['reasonForNoCurrent']}
         super().__init__(data)
 
 
 class ChargerConfig(BaseDict):
     """ Charger config with integer enum values converted to human readable string values"""
 
-    def __init__(self, config: Dict[str, Any]):
-        data = {
-            **config,
-            "localNodeType": NODE_TYPE[config["localNodeType"]],
-            "phaseMode": PHASE_MODE[config["phaseMode"]],
-        }
+    def __init__(self, config: Dict[str, Any], raw=False):
+        if not raw:
+            data = {
+                **config,
+                "localNodeType": NODE_TYPE[config["localNodeType"]],
+                "phaseMode": PHASE_MODE[config["phaseMode"]],
+            }
+        else:
+            data = {**config}
         super().__init__(data)
 
 
@@ -95,15 +101,15 @@ class Charger(BaseDict):
         ).text()
         return float(value)
 
-    async def get_config(self, from_cache=False) -> ChargerConfig:
+    async def get_config(self, from_cache=False, raw=False) -> ChargerConfig:
         """ get config for charger """
         config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-        return ChargerConfig(config)
+        return ChargerConfig(config, raw)
 
-    async def get_state(self) -> ChargerState:
+    async def get_state(self, raw=False) -> ChargerState:
         """ get state for charger """
         state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-        return ChargerState(state)
+        return ChargerState(state, raw)
 
     async def start(self):
         """Start charging session"""

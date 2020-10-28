@@ -62,21 +62,21 @@ class SiteState(BaseDict):
     def __init__(self, data: Dict[str, Any]):
         super().__init__(data)
 
-    def get_charger_config(self, charger_id: str) -> ChargerConfig:
+    def get_charger_config(self, charger_id: str, raw=False) -> ChargerConfig:
         """ get config for charger from the instance data"""
         for circuit in self["circuitStates"]:
             for charger_data in circuit["chargerStates"]:
                 if charger_data["chargerID"] == charger_id:
-                    return ChargerConfig(charger_data["chargerConfig"])
+                    return ChargerConfig(charger_data["chargerConfig"], raw)
 
         return None
 
-    def get_charger_state(self, charger_id: str) -> ChargerState:
+    def get_charger_state(self, charger_id: str, raw=False) -> ChargerState:
         """ get state for charger from the instance data"""
         for circuit in self["circuitStates"]:
             for charger_data in circuit["chargerStates"]:
                 if charger_data["chargerID"] == charger_id:
-                    return ChargerState(charger_data["chargerState"])
+                    return ChargerState(charger_data["chargerState"], raw)
 
         return None
 

@@ -43,8 +43,10 @@ async def test_get_chargers(aiosession, aioresponse):
     aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data)
 
     state = await chargers[0].get_state()
+
     assert state["chargerOpMode"] == 2
     assert state["status"] == "AWAITING_START"
+
     await easee.close()
     await aiosession.close()
 
@@ -95,8 +97,10 @@ async def test_get_site_state(aiosession, aioresponse):
     assert charger_config["localNodeType"] == "Master"
 
     charger_state = site_state.get_charger_state("EH123497")
+
     assert charger_state["chargerOpMode"] == 1
     assert charger_state["status"] == "DISCONNECTED"
+
 
     charger_state = site_state.get_charger_state("NOTEXIST")
     assert charger_state is None
