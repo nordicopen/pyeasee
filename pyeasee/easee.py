@@ -9,8 +9,12 @@ from typing import Any, List
 import aiohttp
 
 from .charger import Charger
-from .exceptions import (AuthorizationFailedException, NotFoundException,
-                         ServerFailureException, TooManyRequestsException)
+from .exceptions import (
+    AuthorizationFailedException,
+    NotFoundException,
+    ServerFailureException,
+    TooManyRequestsException,
+)
 from .site import Site, SiteState
 
 __VERSION__ = "0.7.26"

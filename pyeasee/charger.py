@@ -38,7 +38,7 @@ REASON_FOR_NO_CURRENT = {
     52: "Charger paused",
     53: "Charger disabled",
     54: "Waiting for schedule/auth",
-    55: "Pending auth"
+    55: "Pending auth",
 }
 
 
@@ -53,7 +53,10 @@ class ChargerState(BaseDict):
                 "reasonForNoCurrent": f"({state['reasonForNoCurrent']}) {REASON_FOR_NO_CURRENT.get(state['reasonForNoCurrent'], 'Unknown')}",
             }
         else:
-            data = {**state, "reasonForNoCurrent": "none" if state['reasonForNoCurrent'] is None else state['reasonForNoCurrent']}
+            data = {
+                **state,
+                "reasonForNoCurrent": "none" if state["reasonForNoCurrent"] is None else state["reasonForNoCurrent"],
+            }
         super().__init__(data)
 
 

@@ -9,5 +9,6 @@ class NotFoundException(Exception):
 class TooManyRequestsException(Exception):
     pass
 
+
 class ServerFailureException(Exception):
     pass
