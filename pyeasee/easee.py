@@ -17,7 +17,7 @@ from .exceptions import (
 )
 from .site import Site, SiteState
 
-__VERSION__ = "0.7.26"
+__VERSION__ = "0.7.27"
 
 _LOGGER = logging.getLogger(__name__)
 
