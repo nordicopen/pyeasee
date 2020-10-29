@@ -84,6 +84,8 @@ class Easee:
         self.sr_subscriptions = {}
         self.sr_connection = None
         self.sr_connected = False
+
+        self.running_loop = None
         
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
@@ -199,26 +201,33 @@ class Easee:
             accessToken = self.token["accessToken"]
         return accessToken
 
-    def _sr_open(self):
+    def _sr_open_cb(self):
         _LOGGER.debug("SingnalR stream connected")
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
             self.sr_connection.send("SubscribeWithCurrentState", [id, True])
         self.sr_connected = True
 
-    def _sr_close(self):
+    def _sr_close_cb(self):
         _LOGGER.debug("SingnalR stream disconnected")
         self.sr_connected = False
 
-    def _sr_product_update(self, stuff: list):
-        print(f"SR product update {stuff}")
+    def _sr_product_update_cb(self, stuff: list):
+        if self.running_loop is not None:
+            asyncio.run_coroutine_threadsafe(self._sr_print_stuff(stuff), self.running_loop)
         
-    def _sr_charger_update(self, stuff: list):
-        print(f"SR charger update {stuff}")
+    def _sr_charger_update_cb(self, stuff: list):
+        if self.running_loop is not None:
+            asyncio.run_coroutine_threadsafe(self._sr_print_stuff(stuff), self.running_loop)
+
+    async def _sr_print_stuff(self, stuff: list):
+        print(f"SR Update: {stuff}")
         
     async def _sr_connect(self):
         if self.sr_connection is not None:
             return
+
+        self.running_loop = asyncio.get_running_loop()
         
         options = {"access_token_factory": self._sr_token}
         self.sr_connection = HubConnectionBuilder().with_url(self.sr_base, options)\
@@ -229,10 +238,10 @@ class Easee:
                                 "reconnect_interval": 5,
                                 "max_attempts": 5
                             }).build()
-        self.sr_connection.on_open(lambda: self._sr_open())
-        self.sr_connection.on_close(lambda: self._sr_close())
-        self.sr_connection.on("ProductUpdate", self._sr_product_update)
-        self.sr_connection.on("ChargerUpdate", self._sr_charger_update)
+        self.sr_connection.on_open(lambda: self._sr_open_cb())
+        self.sr_connection.on_close(lambda: self._sr_close_cb())
+        self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
+        self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
         self.sr_connection.start()
@@ -248,9 +257,10 @@ class Easee:
         else:
             self._sr_connect()
             
-    async def sr_unsubscribe(self, id):
-        if id in self.sr_subscriptions:
-            self.sr_subscriptions.remove(id)
+    async def sr_unsubscribe(self, product):
+        if product.id in self.sr_subscriptions:
+            self.sr_subscriptions.remove(product.id)
+        self._sr_disconnect()
 # Is there a way to unsubcribe?
 #            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
 

@@ -2,6 +2,8 @@ import asyncio
 import json
 import logging
 import argparse
+import threading
+import sys
 from typing import List
 
 from . import Easee, Charger, Site, Circuit, Equalizer
@@ -11,7 +13,9 @@ CACHED_TOKEN = "easee-token.json"
 
 _LOGGER = logging.getLogger(__file__)
 
-
+def add_input(queue):
+    queue.put_nowait(sys.stdin.read(1))
+    
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Read data from your Easee EV installation")
     parser.add_argument("-u", "--username", help="Username", required=True)
@@ -190,7 +194,17 @@ async def main():
         for equalizer in equalizers:
             await easee.sr_subscribe(equalizer)
 
-        input("Press enter to abort...")
+        queue = asyncio.Queue(1)
+        input_thread = threading.Thread(target=add_input, args=(queue,))
+        input_thread.daemon = True
+        input_thread.start()
+
+        while True:
+            await asyncio.sleep(1)
+
+            if queue.empty() is False:
+#                print "\ninput:", input_queue.get()
+                break
 
         await easee.close()
 
