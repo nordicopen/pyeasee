@@ -5,6 +5,7 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 from typing import Any, List
+from signalrcore.hub_connection_builder import HubConnectionBuilder
 
 import aiohttp
 
@@ -69,6 +70,7 @@ class Easee:
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
         self.base = "https://api.easee.cloud"
+        self.sr_base = "https://api.easee.cloud/hubs/chargers"
         self.token = {}
         self.headers = {
             "Accept": "application/json",
@@ -78,7 +80,11 @@ class Easee:
             self.session = aiohttp.ClientSession()
         else:
             self.session = session
-
+            
+        self.sr_subscriptions = {}
+        self.sr_connection = None
+        self.sr_connected = False
+        
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
@@ -156,6 +162,7 @@ class Easee:
         response = await self.session.post(f"{self.base}/api/accounts/token", json=data)
         await raise_for_status(response)
         await self._handle_token_response(response)
+        await self._sr_connect()
 
     async def _refresh_token(self):
         """
@@ -181,6 +188,76 @@ class Easee:
         if self.session and self.external_session is False:
             await self.session.close()
             self.session = None
+
+        await self._sr_disconnect()
+
+    def _sr_token(self):
+        asyncio.create_task(self._verify_updated_token())
+        if "accessToken" not in self.token:
+            accessToken = ""
+        else:
+            accessToken = self.token["accessToken"]
+        return accessToken
+
+    def _sr_open(self):
+        _LOGGER.debug("SingnalR stream connected")
+        for id in self.sr_subscriptions:
+            _LOGGER.debug("Subscribing to %s", id)
+            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+        self.sr_connected = True
+
+    def _sr_close(self):
+        _LOGGER.debug("SingnalR stream disconnected")
+        self.sr_connected = False
+
+    def _sr_product_update(self, stuff: list):
+        print(f"SR product update {stuff}")
+        
+    def _sr_charger_update(self, stuff: list):
+        print(f"SR charger update {stuff}")
+        
+    async def _sr_connect(self):
+        if self.sr_connection is not None:
+            return
+        
+        options = {"access_token_factory": self._sr_token}
+        self.sr_connection = HubConnectionBuilder().with_url(self.sr_base, options)\
+                            .configure_logging(logging.ERROR)\
+                            .with_automatic_reconnect({
+                                "type": "raw",
+                                "keep_alive_interval": 10,
+                                "reconnect_interval": 5,
+                                "max_attempts": 5
+                            }).build()
+        self.sr_connection.on_open(lambda: self._sr_open())
+        self.sr_connection.on_close(lambda: self._sr_close())
+        self.sr_connection.on("ProductUpdate", self._sr_product_update)
+        self.sr_connection.on("ChargerUpdate", self._sr_charger_update)
+
+        await self._verify_updated_token()
+        self.sr_connection.start()
+
+    async def sr_subscribe(self, product):
+        if product.id in self.sr_subscriptions:
+            return
+            
+        _LOGGER.debug("Subscribing to %s", product.id)
+        self.sr_subscriptions[product.id] = product
+        if self.sr_connected is True:
+            self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+        else:
+            self._sr_connect()
+            
+    async def sr_unsubscribe(self, id):
+        if id in self.sr_subscriptions:
+            self.sr_subscriptions.remove(id)
+# Is there a way to unsubcribe?
+#            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+
+    async def _sr_disconnect(self):
+        if self.sr_connection is not None:
+            self.sr_connection.stop()
+            self.sr_connection = None
 
     async def get_chargers(self) -> List[Charger]:
         """

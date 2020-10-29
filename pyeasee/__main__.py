@@ -30,6 +30,7 @@ def parse_arguments():
         action="store_true",
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
+    parser.add_argument("-r", "--signalr", help="Listen to signalr stream", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
@@ -176,7 +177,22 @@ async def main():
                     print(e)
                     await easee.close()
 
-    await easee.close()
+    if args.signalr:
+        chargers: List[Charger] = await easee.get_chargers()
+        equalizers = []
+        sites: List[Site] = await easee.get_sites()
+        for site in sites:
+            equalizers_site = site.get_equalizers()
+            for equalizer in equalizers_site:
+                 equalizers.append(equalizer)
+        for charger in chargers:
+            await easee.sr_subscribe(charger)
+        for equalizer in equalizers:
+            await easee.sr_subscribe(equalizer)
+
+        input("Press enter to abort...")
+
+        await easee.close()
 
 
 async def chargers_info(chargers: List[Charger]):
