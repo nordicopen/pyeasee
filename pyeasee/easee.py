@@ -197,6 +197,9 @@ class Easee:
         await self._sr_disconnect()
 
     def _sr_token(self):
+        """
+        Return access token to signalr library, called from signalr thread, internal use only
+        """
         if self.running_loop is not None:
             asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.running_loop)
         if "accessToken" not in self.token:
@@ -206,6 +209,9 @@ class Easee:
         return accessToken
 
     def _sr_open_cb(self):
+        """
+        Signalr connected callbaxk - called from signalr thread, internal use only
+        """
         _LOGGER.debug("SingnalR stream connected")
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
@@ -213,20 +219,32 @@ class Easee:
         self.sr_connected = True
 
     def _sr_close_cb(self):
+        """
+        Signalr disconnected callbaxk - called from signalr thread, internal use only
+        """
         _LOGGER.debug("SingnalR stream disconnected")
         self.sr_connected = False
 
     def _sr_product_update_cb(self, stuff: list):
+        """
+        Signalr new data rrcieved callbaxk - called from signalr thread, internal use only
+        """
         if self.running_loop is not None:
             for data in stuff:
                 asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
 
     def _sr_charger_update_cb(self, stuff: list):
+        """
+        Signalr new data rrcieved callbaxk - called from signalr thread, internal use only
+        """
         if self.running_loop is not None:
             for data in stuff:
                 asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
 
     async def _sr_callback(self, stuff: list):
+        """
+        Signalr callbaxk handler - internal use only
+        """
         if stuff["mid"] in self.sr_subscriptions:
             callback = self.sr_subscriptions[stuff["mid"]]
             _LOGGER.debug("Calling callback %s", callback)
@@ -235,6 +253,9 @@ class Easee:
             _LOGGER.debug("No callback found for %s", stuff["mid"])
 
     async def _sr_connect(self):
+        """
+        Signalr connect - internal use only
+        """
         if self.sr_connection is not None:
             return
 
@@ -256,7 +277,8 @@ class Easee:
         self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
-        self.sr_connection.start()
+        """ The start function does blocking I/O, so can not be called directly """
+        self.running_loop.run_in_executor(None, self.sr_connection.start)
 
     async def sr_subscribe(self, product, callback):
         """
@@ -270,7 +292,7 @@ class Easee:
         if self.sr_connected is True:
             self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
         else:
-            self._sr_connect()
+            await self._sr_connect()
 
     async def sr_unsubscribe(self, product):
         """
@@ -278,12 +300,14 @@ class Easee:
         """
         if product.id in self.sr_subscriptions:
             self.sr_subscriptions.remove(product.id)
-        self._sr_disconnect()
-        self._sr_connect()
-
-    # Is there a way to unsubcribe without disconnect/reconnect?
+            # Is there a way to unsubcribe without disconnect/reconnect?
+            await self._sr_disconnect()
+            await self._sr_connect()
 
     async def _sr_disconnect(self):
+        """
+        Disconnect the signalr stream - internal use only
+        """
         if self.sr_connection is not None:
             self.sr_connection.stop()
             self.sr_connection = None
