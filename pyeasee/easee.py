@@ -201,7 +201,8 @@ class Easee:
         Return access token to signalr library, called from signalr thread, internal use only
         """
         if self.running_loop is not None:
-            asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.running_loop)
+            future = asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.running_loop)
+            future.result()
         if "accessToken" not in self.token:
             accessToken = ""
         else:
