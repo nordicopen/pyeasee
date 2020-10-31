@@ -26,7 +26,10 @@ _LOGGER = logging.getLogger(__name__)
 async def raise_for_status(response):
     if 400 <= response.status:
         e = aiohttp.ClientResponseError(
-            response.request_info, response.history, code=response.status, headers=response.headers,
+            response.request_info,
+            response.history,
+            code=response.status,
+            headers=response.headers,
         )
 
         if "json" in response.headers.get("CONTENT-TYPE", ""):
@@ -80,13 +83,13 @@ class Easee:
             self.session = aiohttp.ClientSession()
         else:
             self.session = session
-            
+
         self.sr_subscriptions = {}
         self.sr_connection = None
         self.sr_connected = False
 
         self.running_loop = None
-        
+
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
@@ -194,7 +197,8 @@ class Easee:
         await self._sr_disconnect()
 
     def _sr_token(self):
-        asyncio.create_task(self._verify_updated_token())
+        if self.running_loop is not None:
+            asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.running_loop)
         if "accessToken" not in self.token:
             accessToken = ""
         else:
@@ -214,30 +218,38 @@ class Easee:
 
     def _sr_product_update_cb(self, stuff: list):
         if self.running_loop is not None:
-            asyncio.run_coroutine_threadsafe(self._sr_print_stuff(stuff), self.running_loop)
-        
+            for data in stuff:
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
+
     def _sr_charger_update_cb(self, stuff: list):
         if self.running_loop is not None:
-            asyncio.run_coroutine_threadsafe(self._sr_print_stuff(stuff), self.running_loop)
+            for data in stuff:
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
 
-    async def _sr_print_stuff(self, stuff: list):
-        print(f"SR Update: {stuff}")
-        
+    async def _sr_callback(self, stuff: list):
+        if stuff["mid"] in self.sr_subscriptions:
+            callback = self.sr_subscriptions[stuff["mid"]]
+            _LOGGER.debug("Calling callback %s", callback)
+            await callback(stuff["mid"], stuff["dataType"], stuff["id"], stuff["value"])
+        else:
+            _LOGGER.debug("No callback found for %s", stuff["mid"])
+
     async def _sr_connect(self):
         if self.sr_connection is not None:
             return
 
         self.running_loop = asyncio.get_running_loop()
-        
+
         options = {"access_token_factory": self._sr_token}
-        self.sr_connection = HubConnectionBuilder().with_url(self.sr_base, options)\
-                            .configure_logging(logging.ERROR)\
-                            .with_automatic_reconnect({
-                                "type": "raw",
-                                "keep_alive_interval": 10,
-                                "reconnect_interval": 5,
-                                "max_attempts": 5
-                            }).build()
+        self.sr_connection = (
+            HubConnectionBuilder()
+            .with_url(self.sr_base, options)
+            .configure_logging(logging.ERROR)
+            .with_automatic_reconnect(
+                {"type": "raw", "keep_alive_interval": 10, "reconnect_interval": 5, "max_attempts": 5}
+            )
+            .build()
+        )
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
         self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
@@ -246,23 +258,30 @@ class Easee:
         await self._verify_updated_token()
         self.sr_connection.start()
 
-    async def sr_subscribe(self, product):
+    async def sr_subscribe(self, product, callback):
+        """
+        Subscribe to signalr events for product, callback will be called as async callback(product_id, data_type, data_id, value)
+        """
         if product.id in self.sr_subscriptions:
             return
-            
+
         _LOGGER.debug("Subscribing to %s", product.id)
-        self.sr_subscriptions[product.id] = product
+        self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
             self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
         else:
             self._sr_connect()
-            
+
     async def sr_unsubscribe(self, product):
+        """
+        Unsubscribe from signalr events for product
+        """
         if product.id in self.sr_subscriptions:
             self.sr_subscriptions.remove(product.id)
         self._sr_disconnect()
-# Is there a way to unsubcribe?
-#            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+        self._sr_connect()
+
+    # Is there a way to unsubcribe without disconnect/reconnect?
 
     async def _sr_disconnect(self):
         if self.sr_connection is not None:

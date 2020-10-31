@@ -13,9 +13,15 @@ CACHED_TOKEN = "easee-token.json"
 
 _LOGGER = logging.getLogger(__file__)
 
+
 def add_input(queue):
     queue.put_nowait(sys.stdin.read(1))
-    
+
+
+async def print_signalr(id, data_type, data_id, value):
+    print(f"SR: {id} data type {data_type} data id {data_id} value {value}")
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Read data from your Easee EV installation")
     parser.add_argument("-u", "--username", help="Username", required=True)
@@ -25,7 +31,10 @@ def parse_arguments():
     parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
     parser.add_argument("-e", "--equalizers", help="Get equalizers information", action="store_true")
     parser.add_argument(
-        "-a", "--all", help="Get all sites, circuits, equalizers and chargers information", action="store_true",
+        "-a",
+        "--all",
+        help="Get all sites, circuits, equalizers and chargers information",
+        action="store_true",
     )
     parser.add_argument(
         "-sum",
@@ -46,11 +55,17 @@ def parse_arguments():
         default=logging.WARNING,
     )
     parser.add_argument(
-        "-v", "--verbose", help="Be verbose", action="store_const", dest="loglevel", const=logging.INFO,
+        "-v",
+        "--verbose",
+        help="Be verbose",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
     )
     args = parser.parse_args()
     logging.basicConfig(
-        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=args.loglevel,
+        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s",
+        level=args.loglevel,
     )
     return args
 
@@ -188,11 +203,11 @@ async def main():
         for site in sites:
             equalizers_site = site.get_equalizers()
             for equalizer in equalizers_site:
-                 equalizers.append(equalizer)
+                equalizers.append(equalizer)
         for charger in chargers:
-            await easee.sr_subscribe(charger)
+            await easee.sr_subscribe(charger, print_signalr)
         for equalizer in equalizers:
-            await easee.sr_subscribe(equalizer)
+            await easee.sr_subscribe(equalizer, print_signalr)
 
         queue = asyncio.Queue(1)
         input_thread = threading.Thread(target=add_input, args=(queue,))
@@ -203,7 +218,7 @@ async def main():
             await asyncio.sleep(1)
 
             if queue.empty() is False:
-#                print "\ninput:", input_queue.get()
+                #                print "\ninput:", input_queue.get()
                 break
 
         await easee.close()
@@ -250,7 +265,12 @@ async def equalizers_info(equalizers: List[Equalizer]):
         eq["state"] = state
         data.append(eq)
 
-    print(json.dumps(data, indent=2,))
+    print(
+        json.dumps(
+            data,
+            indent=2,
+        )
+    )
 
 
 async def charger_loop(charger: Charger, header=False):
@@ -286,10 +306,12 @@ async def charger_loop(charger: Charger, header=False):
     print(str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('voltage'),1)}V", 10), end=" ")
     print(
-        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10), end=" ",
+        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10),
+        end=" ",
     )
     print(
-        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10), end=" ",
+        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10),
+        end=" ",
     )
     print(str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" ")
     print(" ")

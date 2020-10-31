@@ -109,7 +109,11 @@ class Site(BaseDict):
         return await self.easee.put(f"/api/sites/{self.id}", json=json)
 
     async def set_price(
-        self, costPerKWh: float, vat: float = None, currency: str = None, costPerKwhExcludeVat: float = None,
+        self,
+        costPerKWh: float,
+        vat: float = None,
+        currency: str = None,
+        costPerKwhExcludeVat: float = None,
     ):
         """ Set price per kWh for the site """
 
