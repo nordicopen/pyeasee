@@ -211,7 +211,7 @@ class Easee:
 
     def _sr_open_cb(self):
         """
-        Signalr connected callbaxk - called from signalr thread, internal use only
+        Signalr connected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SingnalR stream connected")
         for id in self.sr_subscriptions:
@@ -221,14 +221,14 @@ class Easee:
 
     def _sr_close_cb(self):
         """
-        Signalr disconnected callbaxk - called from signalr thread, internal use only
+        Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SingnalR stream disconnected")
         self.sr_connected = False
 
     def _sr_product_update_cb(self, stuff: list):
         """
-        Signalr new data rrcieved callbaxk - called from signalr thread, internal use only
+        Signalr new data recieved callback - called from signalr thread, internal use only
         """
         if self.running_loop is not None:
             for data in stuff:
@@ -236,7 +236,7 @@ class Easee:
 
     def _sr_charger_update_cb(self, stuff: list):
         """
-        Signalr new data rrcieved callbaxk - called from signalr thread, internal use only
+        Signalr new data recieved callback - called from signalr thread, internal use only
         """
         if self.running_loop is not None:
             for data in stuff:
@@ -244,7 +244,7 @@ class Easee:
 
     async def _sr_callback(self, stuff: list):
         """
-        Signalr callbaxk handler - internal use only
+        Signalr callback handler - internal use only
         """
         if stuff["mid"] in self.sr_subscriptions:
             callback = self.sr_subscriptions[stuff["mid"]]
