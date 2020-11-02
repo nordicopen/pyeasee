@@ -22,6 +22,7 @@ __VERSION__ = "0.7.27"
 
 _LOGGER = logging.getLogger(__name__)
 
+SR_RECONNECT_TIMEOUT = 60
 
 async def raise_for_status(response):
     if 400 <= response.status:
@@ -87,7 +88,7 @@ class Easee:
         self.sr_subscriptions = {}
         self.sr_connection = None
         self.sr_connected = False
-
+        self.sr_connect_in_progress = False
         self.running_loop = None
 
     async def post(self, url, **kwargs):
@@ -257,18 +258,28 @@ class Easee:
         """
         Signalr connect - internal use only
         """
+        self.running_loop = asyncio.get_running_loop()
+
+        if self.sr_connect_in_progress == False:
+            self.sr_connect_in_progress = True
+            asyncio.ensure_future(self._sr_connect_loop())
+
+    async def _sr_connect_loop(self):
+        """
+        Signalr connect loop - internal use only
+        """
         if self.sr_connection is not None:
             return
 
-        self.running_loop = asyncio.get_running_loop()
+        _LOGGER.debug("SR connect loop")
 
         options = {"access_token_factory": self._sr_token}
         self.sr_connection = (
             HubConnectionBuilder()
             .with_url(self.sr_base, options)
-            .configure_logging(logging.ERROR)
+            .configure_logging(logging.CRITICAL)
             .with_automatic_reconnect(
-                {"type": "raw", "keep_alive_interval": 10, "reconnect_interval": 5, "max_attempts": 5}
+                {"type": "raw", "keep_alive_interval": 10, "reconnect_interval": SR_RECONNECT_TIMEOUT}
             )
             .build()
         )
@@ -278,8 +289,18 @@ class Easee:
         self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
-        """ The start function does blocking I/O, so can not be called directly """
-        self.running_loop.run_in_executor(None, self.sr_connection.start)
+        while True:
+            """ The siglarcore lib start function does blocking I/O, so can not be called directly """
+            try:
+                result = await self.running_loop.run_in_executor(None, self.sr_connection.start)
+            except Exception as ex:
+                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
+                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                continue
+
+            break
+        
+        self.sr_connect_in_progress = False
 
     async def sr_subscribe(self, product, callback):
         """
