@@ -6,7 +6,7 @@ import threading
 import sys
 from typing import List
 
-from . import Easee, Charger, Site, Circuit, Equalizer
+from . import Easee, Charger, Site, Circuit, Equalizer, ChargerStreamData, EqualizerStreamData, DatatypesStreamData
 
 
 CACHED_TOKEN = "easee-token.json"
@@ -19,7 +19,15 @@ def add_input(queue):
 
 
 async def print_signalr(id, data_type, data_id, value):
-    print(f"SR: {id} data type {data_type} data id {data_id} value {value}")
+
+    type_str = DatatypesStreamData(data_type).name
+    if id[0] == "Q":
+        data_str = EqualizerStreamData(data_id).name
+    else:
+        data_str = ChargerStreamData(data_id).name
+
+#    test = ChargerStreamData(3)
+    print(f"SR: {id} data type {data_type} {type_str} data id {data_id} {data_str} value {value}")
 
 
 def parse_arguments():
