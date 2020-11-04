@@ -5,8 +5,9 @@ import argparse
 import threading
 import sys
 from typing import List
+from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
 
-from . import Easee, Charger, Site, Circuit, Equalizer, ChargerStreamData, EqualizerStreamData, DatatypesStreamData
+from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData
 
 
 CACHED_TOKEN = "easee-token.json"
@@ -22,11 +23,10 @@ async def print_signalr(id, data_type, data_id, value):
 
     type_str = DatatypesStreamData(data_type).name
     if id[0] == "Q":
-        data_str = EqualizerStreamData(data_id).name
+        data_str = lookup_equalizer_stream_id(data_id)
     else:
-        data_str = ChargerStreamData(data_id).name
+        data_str = lookup_charger_stream_id(data_id)
 
-#    test = ChargerStreamData(3)
     print(f"SR: {id} data type {data_type} {type_str} data id {data_id} {data_str} value {value}")
 
 

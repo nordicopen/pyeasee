@@ -17,12 +17,14 @@ from .exceptions import (
     TooManyRequestsException,
 )
 from .site import Site, SiteState
+from .utils import convert_stream_data
 
 __VERSION__ = "0.7.27"
 
 _LOGGER = logging.getLogger(__name__)
 
 SR_RECONNECT_TIMEOUT = 60
+
 
 async def raise_for_status(response):
     if 400 <= response.status:
@@ -90,6 +92,7 @@ class Easee:
         self.sr_connected = False
         self.sr_connect_in_progress = False
         self.running_loop = None
+        self.event_loop = None
 
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
@@ -202,7 +205,7 @@ class Easee:
         Return access token to signalr library, called from signalr thread, internal use only
         """
         if self.running_loop is not None:
-            future = asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.running_loop)
+            future = asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.event_loop)
             future.result()
         if "accessToken" not in self.token:
             accessToken = ""
@@ -233,7 +236,7 @@ class Easee:
         """
         if self.running_loop is not None:
             for data in stuff:
-                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
 
     def _sr_charger_update_cb(self, stuff: list):
         """
@@ -241,7 +244,7 @@ class Easee:
         """
         if self.running_loop is not None:
             for data in stuff:
-                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.running_loop)
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
 
     async def _sr_callback(self, stuff: list):
         """
@@ -249,8 +252,8 @@ class Easee:
         """
         if stuff["mid"] in self.sr_subscriptions:
             callback = self.sr_subscriptions[stuff["mid"]]
-            _LOGGER.debug("Calling callback %s", callback)
-            await callback(stuff["mid"], stuff["dataType"], stuff["id"], stuff["value"])
+            value = convert_stream_data(stuff["dataType"], stuff["value"])
+            await callback(stuff["mid"], stuff["dataType"], stuff["id"], value)
         else:
             _LOGGER.debug("No callback found for %s", stuff["mid"])
 
@@ -259,8 +262,9 @@ class Easee:
         Signalr connect - internal use only
         """
         self.running_loop = asyncio.get_running_loop()
+        self.event_loop = asyncio.get_event_loop()
 
-        if self.sr_connect_in_progress == False:
+        if self.sr_connect_in_progress is False:
             self.sr_connect_in_progress = True
             asyncio.ensure_future(self._sr_connect_loop())
 
@@ -292,14 +296,14 @@ class Easee:
         while True:
             """ The siglarcore lib start function does blocking I/O, so can not be called directly """
             try:
-                result = await self.running_loop.run_in_executor(None, self.sr_connection.start)
+                await self.running_loop.run_in_executor(None, self.sr_connection.start)
             except Exception as ex:
                 _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
                 await asyncio.sleep(SR_RECONNECT_TIMEOUT)
                 continue
 
             break
-        
+
         self.sr_connect_in_progress = False
 
     async def sr_subscribe(self, product, callback):

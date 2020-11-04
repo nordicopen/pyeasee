@@ -1,9 +1,40 @@
 import re
 from datetime import datetime, timezone
 from collections.abc import Mapping
+from .const import ChargerStreamData, EqualizerStreamData
 
 regex = r"^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?(Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])?$"
 match_iso8601 = re.compile(regex).match
+
+
+def lookup_charger_stream_id(id):
+    try:
+        name = ChargerStreamData(id).name
+    except BaseException:
+        return None
+    return name
+
+
+def lookup_equalizer_stream_id(id):
+    try:
+        name = EqualizerStreamData(id).name
+    except BaseException:
+        return None
+    return name
+
+
+def convert_stream_data(data_type, value):
+    if data_type == 2:
+        if value == "0":
+            return False
+        else:
+            return True
+    elif data_type == 3:
+        return float(value)
+    elif data_type == 4:
+        return int(value)
+
+    return value
 
 
 def validate_iso8601(str_val):

@@ -1,6 +1,8 @@
+# Data IDs for Charger from signalr stream
+
 from enum import Enum
 
-# Data IDs for Charger from signalr stream
+
 class ChargerStreamData(Enum):
     SelfTestResult = 1
     SelfTestDetails = 2
@@ -164,7 +166,7 @@ class ChargerStreamData(Enum):
     ListenToControlPulse = 56
     ControlPulseRTT = 57
 
-    
+
 # Data IDs for Equalizer from signalr stream
 class EqualizerStreamData(Enum):
     selfTestResult = 1
