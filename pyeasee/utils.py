@@ -10,7 +10,7 @@ match_iso8601 = re.compile(regex).match
 def lookup_charger_stream_id(id):
     try:
         name = ChargerStreamData(id).name
-    except BaseException:
+    except ValueError:
         return None
     return name
 
@@ -18,7 +18,7 @@ def lookup_charger_stream_id(id):
 def lookup_equalizer_stream_id(id):
     try:
         name = EqualizerStreamData(id).name
-    except BaseException:
+    except ValueError:
         return None
     return name
 

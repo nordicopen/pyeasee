@@ -294,7 +294,7 @@ class Easee:
 
         await self._verify_updated_token()
         while True:
-            """ The siglarcore lib start function does blocking I/O, so can not be called directly """
+            """ The signalrcore lib start function does blocking I/O, so can not be called directly """
             try:
                 await self.running_loop.run_in_executor(None, self.sr_connection.start)
             except Exception as ex:
@@ -323,10 +323,11 @@ class Easee:
     async def sr_unsubscribe(self, product):
         """
         Unsubscribe from signalr events for product
+        BUG: Does not work
         """
+        _LOGGER.debug("Unsubscribing from %s", product.id)
         if product.id in self.sr_subscriptions:
-            self.sr_subscriptions.remove(product.id)
-            # Is there a way to unsubcribe without disconnect/reconnect?
+            del self.sr_subscriptions[product.id]
             await self._sr_disconnect()
             await self._sr_connect()
 
