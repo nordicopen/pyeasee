@@ -58,6 +58,11 @@ class BaseDict(Mapping):
                 return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
         return self._storage[key]
 
+    def __setitem__(self, key, value):
+        print(f"Setting {key} to {value}")
+        self._storage[key] = value
+        print("Done")
+        
     def __iter__(self):
         return iter(self._storage)  # ``ghost`` is invisible
 

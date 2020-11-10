@@ -290,7 +290,8 @@ class Easee:
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
         self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-        self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
+        # The ChargerUpdate callback seems redundant?
+        # self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
         while True:
@@ -306,6 +307,9 @@ class Easee:
 
         self.sr_connect_in_progress = False
 
+    def sr_is_connected(self):
+        return self.sr_connected
+    
     async def sr_subscribe(self, product, callback):
         """
         Subscribe to signalr events for product, callback will be called as async callback(product_id, data_type, data_id, value)
