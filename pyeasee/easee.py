@@ -309,7 +309,7 @@ class Easee:
 
     def sr_is_connected(self):
         return self.sr_connected
-    
+
     async def sr_subscribe(self, product, callback):
         """
         Subscribe to signalr events for product, callback will be called as async callback(product_id, data_type, data_id, value)
