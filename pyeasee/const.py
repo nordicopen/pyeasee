@@ -27,7 +27,7 @@ class ChargerStreamData(Enum):
     config_isEnabled = 31
     CircuitSequenceNumber = 33
     SinglePhaseNumber = 34
-    Enable3PhasesDEPRECATED = 35
+    config_enable3PhasesDEPRECATED = 35
     config_wiFiSSID = 36
     config_enableIdleCurrent = 37
     config_phaseMode = 38
@@ -41,11 +41,11 @@ class ChargerStreamData(Enum):
     state_ledMode = 46
     config_maxChargerCurrent = 47
     state_dynamicChargerCurrent = 48
-    MaxCurrentOfflineFallbackP1 = 50
-    MaxCurrentOfflineFallbackP2 = 51
-    MaxCurrentOfflineFallbackP3 = 52
-    ChargingSchedule = 62
-    PairedEqualizer = 65
+    config_maxCurrentOfflineFallbackP1 = 50
+    config_maxCurrentOfflineFallbackP2 = 51
+    config_maxCurrentOfflineFallbackP3 = 52
+    schedule_chargingSchedule = 62
+    config_pairedEqualizer = 65
     state_wiFiAPEnabled = 68
     PairedUserIDToken = 69
     state_circuitTotalAllocatedPhaseConductorCurrentL1 = 70
@@ -94,7 +94,7 @@ class ChargerStreamData(Enum):
     state_sessionEnergy = 121
     state_energyPerHour = 122
     LegacyEvStatus = 123
-    LifetimeEnergy = 124
+    state_lifetimeEnergy = 124
     LifetimeRelaySwitches = 125
     LifetimeHours = 126
     DynamicCurrentOfflineFallbackDEPRICATED = 127
@@ -110,7 +110,7 @@ class ChargerStreamData(Enum):
     MasterBackPlateID = 137
     LocalTxPower = 138
     LocalState = 139
-    FoundWiFi = 140
+    state_foundWiFi = 140
     state_chargerRAT = 141
     CellularInterfaceErrorCount = 142
     CellularInterfaceResetCount = 143
@@ -120,7 +120,7 @@ class ChargerStreamData(Enum):
     config_localRadioChannel = 147
     config_localShortAddress = 148
     config_localParentAddrOrNumOfNodes = 149
-    TempMax = 150
+    state_tempMax = 150
     TempAmbientPowerBoard = 151
     TempInputT2 = 152
     TempInputT3 = 153

@@ -217,7 +217,7 @@ class Easee:
         """
         Signalr connected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SingnalR stream connected")
+        _LOGGER.debug("SignalR stream connected")
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
             self.sr_connection.send("SubscribeWithCurrentState", [id, True])
@@ -227,7 +227,7 @@ class Easee:
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SingnalR stream disconnected")
+        _LOGGER.debug("SignalR stream disconnected")
         self.sr_connected = False
 
     def _sr_product_update_cb(self, stuff: list):
@@ -283,7 +283,7 @@ class Easee:
             .with_url(self.sr_base, options)
             .configure_logging(logging.CRITICAL)
             .with_automatic_reconnect(
-                {"type": "raw", "keep_alive_interval": 10, "reconnect_interval": SR_RECONNECT_TIMEOUT}
+                {"type": "raw", "keep_alive_interval": 20, "reconnect_interval": SR_RECONNECT_TIMEOUT}
             )
             .build()
         )
