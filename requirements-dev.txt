@@ -26,7 +26,6 @@ more-itertools==8.4.0
 multidict==4.7.6
 packaging==20.4
 pathspec==0.8.0
-pdoc==0.3.2
 pdoc3==0.8.4
 pkginfo==1.5.0.1
 pluggy==0.13.1
@@ -42,6 +41,7 @@ regex==2020.6.8
 requests==2.24.0
 requests-toolbelt==0.9.1
 rfc3986==1.4.0
+signalrcore==0.8.8
 six==1.15.0
 toml==0.10.1
 tqdm==4.47.0

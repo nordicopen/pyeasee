@@ -21,6 +21,6 @@ setup(
     ],
     packages=["pyeasee"],
     include_package_data=True,
-    install_requires=["aiohttp"],
+    install_requires=["aiohttp", "signalrcore>=0.8.8"],
     entry_points={"console_scripts": ["pyeasee=pyeasee.__main__:main"]},
 )

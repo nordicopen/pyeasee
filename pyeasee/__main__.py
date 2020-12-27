@@ -2,14 +2,32 @@ import asyncio
 import json
 import logging
 import argparse
+import threading
+import sys
 from typing import List
+from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
 
-from . import Easee, Charger, Site, Circuit, Equalizer
+from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData
 
 
 CACHED_TOKEN = "easee-token.json"
 
 _LOGGER = logging.getLogger(__file__)
+
+
+def add_input(queue):
+    queue.put_nowait(sys.stdin.read(1))
+
+
+async def print_signalr(id, data_type, data_id, value):
+
+    type_str = DatatypesStreamData(data_type).name
+    if id[0] == "Q":
+        data_str = lookup_equalizer_stream_id(data_id)
+    else:
+        data_str = lookup_charger_stream_id(data_id)
+
+    print(f"SR: {id} data type {data_type} {type_str} data id {data_id} {data_str} value {value}")
 
 
 def parse_arguments():
@@ -21,7 +39,10 @@ def parse_arguments():
     parser.add_argument("-ci", "--circuits", help="Get circuits information", action="store_true")
     parser.add_argument("-e", "--equalizers", help="Get equalizers information", action="store_true")
     parser.add_argument(
-        "-a", "--all", help="Get all sites, circuits, equalizers and chargers information", action="store_true",
+        "-a",
+        "--all",
+        help="Get all sites, circuits, equalizers and chargers information",
+        action="store_true",
     )
     parser.add_argument(
         "-sum",
@@ -30,6 +51,7 @@ def parse_arguments():
         action="store_true",
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
+    parser.add_argument("-r", "--signalr", help="Listen to signalr stream", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
@@ -41,11 +63,17 @@ def parse_arguments():
         default=logging.WARNING,
     )
     parser.add_argument(
-        "-v", "--verbose", help="Be verbose", action="store_const", dest="loglevel", const=logging.INFO,
+        "-v",
+        "--verbose",
+        help="Be verbose",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
     )
     args = parser.parse_args()
     logging.basicConfig(
-        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s", level=args.loglevel,
+        format="%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s",
+        level=args.loglevel,
     )
     return args
 
@@ -176,7 +204,32 @@ async def main():
                     print(e)
                     await easee.close()
 
-    await easee.close()
+    if args.signalr:
+        chargers: List[Charger] = await easee.get_chargers()
+        equalizers = []
+        sites: List[Site] = await easee.get_sites()
+        for site in sites:
+            equalizers_site = site.get_equalizers()
+            for equalizer in equalizers_site:
+                equalizers.append(equalizer)
+        for charger in chargers:
+            await easee.sr_subscribe(charger, print_signalr)
+        for equalizer in equalizers:
+            await easee.sr_subscribe(equalizer, print_signalr)
+
+        queue = asyncio.Queue(1)
+        input_thread = threading.Thread(target=add_input, args=(queue,))
+        input_thread.daemon = True
+        input_thread.start()
+
+        while True:
+            await asyncio.sleep(1)
+
+            if queue.empty() is False:
+                #                print "\ninput:", input_queue.get()
+                break
+
+        await easee.close()
 
 
 async def chargers_info(chargers: List[Charger]):
@@ -220,7 +273,12 @@ async def equalizers_info(equalizers: List[Equalizer]):
         eq["state"] = state
         data.append(eq)
 
-    print(json.dumps(data, indent=2,))
+    print(
+        json.dumps(
+            data,
+            indent=2,
+        )
+    )
 
 
 async def charger_loop(charger: Charger, header=False):
@@ -256,10 +314,12 @@ async def charger_loop(charger: Charger, header=False):
     print(str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" ")
     print(str_fixed_length(f"{round(state.__getitem__('voltage'),1)}V", 10), end=" ")
     print(
-        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10), end=" ",
+        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10),
+        end=" ",
     )
     print(
-        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10), end=" ",
+        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10),
+        end=" ",
     )
     print(str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" ")
     print(" ")

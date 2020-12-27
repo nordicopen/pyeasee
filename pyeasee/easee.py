@@ -5,6 +5,7 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 from typing import Any, List
+from signalrcore.hub_connection_builder import HubConnectionBuilder
 
 import aiohttp
 
@@ -16,16 +17,22 @@ from .exceptions import (
     TooManyRequestsException,
 )
 from .site import Site, SiteState
+from .utils import convert_stream_data
 
 __VERSION__ = "0.7.27"
 
 _LOGGER = logging.getLogger(__name__)
 
+SR_RECONNECT_TIMEOUT = 60
+
 
 async def raise_for_status(response):
     if 400 <= response.status:
         e = aiohttp.ClientResponseError(
-            response.request_info, response.history, code=response.status, headers=response.headers,
+            response.request_info,
+            response.history,
+            code=response.status,
+            headers=response.headers,
         )
 
         if "json" in response.headers.get("CONTENT-TYPE", ""):
@@ -69,6 +76,7 @@ class Easee:
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
         self.base = "https://api.easee.cloud"
+        self.sr_base = "https://api.easee.cloud/hubs/chargers"
         self.token = {}
         self.headers = {
             "Accept": "application/json",
@@ -78,6 +86,13 @@ class Easee:
             self.session = aiohttp.ClientSession()
         else:
             self.session = session
+
+        self.sr_subscriptions = {}
+        self.sr_connection = None
+        self.sr_connected = False
+        self.sr_connect_in_progress = False
+        self.running_loop = None
+        self.event_loop = None
 
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
@@ -181,6 +196,151 @@ class Easee:
         if self.session and self.external_session is False:
             await self.session.close()
             self.session = None
+
+        await self._sr_disconnect()
+
+    def _sr_token(self):
+        """
+        Return access token to signalr library, called from signalr thread, internal use only
+        """
+        if self.running_loop is not None:
+            future = asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.event_loop)
+            future.result()
+        if "accessToken" not in self.token:
+            accessToken = ""
+        else:
+            accessToken = self.token["accessToken"]
+        return accessToken
+
+    def _sr_open_cb(self):
+        """
+        Signalr connected callback - called from signalr thread, internal use only
+        """
+        _LOGGER.debug("SignalR stream connected")
+        for id in self.sr_subscriptions:
+            _LOGGER.debug("Subscribing to %s", id)
+            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+        self.sr_connected = True
+
+    def _sr_close_cb(self):
+        """
+        Signalr disconnected callback - called from signalr thread, internal use only
+        """
+        _LOGGER.debug("SignalR stream disconnected")
+        self.sr_connected = False
+
+    def _sr_product_update_cb(self, stuff: list):
+        """
+        Signalr new data recieved callback - called from signalr thread, internal use only
+        """
+        if self.running_loop is not None:
+            for data in stuff:
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
+
+    def _sr_charger_update_cb(self, stuff: list):
+        """
+        Signalr new data recieved callback - called from signalr thread, internal use only
+        """
+        if self.running_loop is not None:
+            for data in stuff:
+                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
+
+    async def _sr_callback(self, stuff: list):
+        """
+        Signalr callback handler - internal use only
+        """
+        if stuff["mid"] in self.sr_subscriptions:
+            callback = self.sr_subscriptions[stuff["mid"]]
+            value = convert_stream_data(stuff["dataType"], stuff["value"])
+            await callback(stuff["mid"], stuff["dataType"], stuff["id"], value)
+        else:
+            _LOGGER.debug("No callback found for %s", stuff["mid"])
+
+    async def _sr_connect(self):
+        """
+        Signalr connect - internal use only
+        """
+        self.running_loop = asyncio.get_running_loop()
+        self.event_loop = asyncio.get_event_loop()
+
+        if self.sr_connect_in_progress is False:
+            self.sr_connect_in_progress = True
+            asyncio.ensure_future(self._sr_connect_loop())
+
+    async def _sr_connect_loop(self):
+        """
+        Signalr connect loop - internal use only
+        """
+        if self.sr_connection is not None:
+            return
+
+        _LOGGER.debug("SR connect loop")
+
+        options = {"access_token_factory": self._sr_token}
+        self.sr_connection = (
+            HubConnectionBuilder()
+            .with_url(self.sr_base, options)
+            .configure_logging(logging.CRITICAL)
+            .with_automatic_reconnect(
+                {"type": "raw", "keep_alive_interval": 20, "reconnect_interval": SR_RECONNECT_TIMEOUT}
+            )
+            .build()
+        )
+        self.sr_connection.on_open(lambda: self._sr_open_cb())
+        self.sr_connection.on_close(lambda: self._sr_close_cb())
+        self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
+        # The ChargerUpdate callback seems redundant?
+        # self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
+
+        await self._verify_updated_token()
+        while True:
+            """ The signalrcore lib start function does blocking I/O, so can not be called directly """
+            try:
+                await self.running_loop.run_in_executor(None, self.sr_connection.start)
+            except Exception as ex:
+                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
+                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                continue
+
+            break
+
+        self.sr_connect_in_progress = False
+
+    def sr_is_connected(self):
+        return self.sr_connected
+
+    async def sr_subscribe(self, product, callback):
+        """
+        Subscribe to signalr events for product, callback will be called as async callback(product_id, data_type, data_id, value)
+        """
+        if product.id in self.sr_subscriptions:
+            return
+
+        _LOGGER.debug("Subscribing to %s", product.id)
+        self.sr_subscriptions[product.id] = callback
+        if self.sr_connected is True:
+            self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+        else:
+            await self._sr_connect()
+
+    async def sr_unsubscribe(self, product):
+        """
+        Unsubscribe from signalr events for product
+        BUG: Does not work
+        """
+        _LOGGER.debug("Unsubscribing from %s", product.id)
+        if product.id in self.sr_subscriptions:
+            del self.sr_subscriptions[product.id]
+            await self._sr_disconnect()
+            await self._sr_connect()
+
+    async def _sr_disconnect(self):
+        """
+        Disconnect the signalr stream - internal use only
+        """
+        if self.sr_connection is not None:
+            self.sr_connection.stop()
+            self.sr_connection = None
 
     async def get_chargers(self) -> List[Charger]:
         """
