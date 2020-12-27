@@ -80,7 +80,7 @@
 <div class="desc"><p>Get and return charger basic charge plan setting from cloud</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.get_config"><code class="name flex">
-<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
+<span>async def <span class="ident">get_config</span></span>(<span>self, from_cache=False, raw=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get config for charger</p></div>
@@ -92,7 +92,7 @@
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.get_state"><code class="name flex">
-<span>async def <span class="ident">get_state</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
+<span>async def <span class="ident">get_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>get state for charger</p></div>
@@ -209,7 +209,7 @@
 </dd>
 <dt id="pyeasee.charger.ChargerConfig"><code class="flex name class">
 <span>class <span class="ident">ChargerConfig</span></span>
-<span>(</span><span>config: Dict[str, Any])</span>
+<span>(</span><span>config: Dict[str, Any], raw=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Charger config with integer enum values converted to human readable string values</p></div>
@@ -241,7 +241,7 @@
 </dd>
 <dt id="pyeasee.charger.ChargerState"><code class="flex name class">
 <span>class <span class="ident">ChargerState</span></span>
-<span>(</span><span>state: Dict[str, Any])</span>
+<span>(</span><span>state: Dict[str, Any], raw=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Charger state with integer enum values converted to human readable string values</p></div>
