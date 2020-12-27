@@ -42,7 +42,7 @@ regex==2020.6.8
 requests==2.24.0
 requests-toolbelt==0.9.1
 rfc3986==1.4.0
-signalrcore==0.8.7
+signalrcore==0.8.8
 six==1.15.0
 toml==0.10.1
 tqdm==4.47.0
