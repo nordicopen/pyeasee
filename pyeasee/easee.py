@@ -171,7 +171,6 @@ class Easee:
         response = await self.session.post(f"{self.base}/api/accounts/token", json=data)
         await raise_for_status(response)
         await self._handle_token_response(response)
-        await self._sr_connect()
 
     async def _refresh_token(self):
         """
