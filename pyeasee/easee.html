@@ -128,6 +128,25 @@
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="pyeasee.easee.Easee.sr_is_connected"><code class="name flex">
+<span>def <span class="ident">sr_is_connected</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyeasee.easee.Easee.sr_subscribe"><code class="name flex">
+<span>async def <span class="ident">sr_subscribe</span></span>(<span>self, product, callback)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Subscribe to signalr events for product, callback will be called as async callback(product_id, data_type, data_id, value)</p></div>
+</dd>
+<dt id="pyeasee.easee.Easee.sr_unsubscribe"><code class="name flex">
+<span>async def <span class="ident">sr_unsubscribe</span></span>(<span>self, product)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Unsubscribe from signalr events for product
+BUG: Does not work</p></div>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -167,6 +186,9 @@
 <li><code><a title="pyeasee.easee.Easee.get_sites" href="#pyeasee.easee.Easee.get_sites">get_sites</a></code></li>
 <li><code><a title="pyeasee.easee.Easee.post" href="#pyeasee.easee.Easee.post">post</a></code></li>
 <li><code><a title="pyeasee.easee.Easee.put" href="#pyeasee.easee.Easee.put">put</a></code></li>
+<li><code><a title="pyeasee.easee.Easee.sr_is_connected" href="#pyeasee.easee.Easee.sr_is_connected">sr_is_connected</a></code></li>
+<li><code><a title="pyeasee.easee.Easee.sr_subscribe" href="#pyeasee.easee.Easee.sr_subscribe">sr_subscribe</a></code></li>
+<li><code><a title="pyeasee.easee.Easee.sr_unsubscribe" href="#pyeasee.easee.Easee.sr_unsubscribe">sr_unsubscribe</a></code></li>
 </ul>
 </li>
 </ul>
