@@ -23,6 +23,7 @@ doc:
 
 publish_docs: doc
 	git subtree push --prefix html origin gh-pages
+	# git push origin `git subtree split --prefix html master`:gh-pages --force
 
 build: clean
 	python setup.py sdist bdist_wheel
