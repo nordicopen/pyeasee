@@ -175,7 +175,6 @@ class Easee:
     async def _refresh_token(self):
         """
         Refresh token
-        TODO: seems not to work. Debug later
         """
         data = {
             "accessToken": self.token["accessToken"],
@@ -183,7 +182,7 @@ class Easee:
         }
         _LOGGER.debug("Refreshing access token")
         try:
-            res = await self.post("/api/accounts/refresh_token", json=data)
+            res = await self.session.post("/api/accounts/refresh_token", json=data)
             await self._handle_token_response(res)
         except AuthorizationFailedException:
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
