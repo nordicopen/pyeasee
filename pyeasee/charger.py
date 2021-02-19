@@ -189,10 +189,11 @@ class Charger(BaseDict):
         """Override scheduled charging and start charging"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/override_schedule")
 
-    async def smart_charging(self):
+    async def smart_charging(self, enable: bool):
         """Set charger smart charging setting"""
-        return await self.easee.post(f"/api/chargers/{self.id}/commands/smart_charging")
-
+        json = {"smartCharging": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+        
     async def reboot(self):
         """Reboot charger"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/reboot")
