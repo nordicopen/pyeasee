@@ -23,6 +23,7 @@ Markdown==3.2.2
 MarkupSafe==1.1.1
 mccabe==0.6.1
 more-itertools==8.4.0
+msgpack==1.0.2
 multidict==4.7.6
 packaging==20.4
 pathspec==0.8.0
@@ -50,5 +51,6 @@ typed-ast==1.4.1
 urllib3==1.25.9
 wcwidth==0.2.5
 webencodings==0.5.1
+websocket-client==0.57.0
 yarl==1.4.2
 zipp==3.1.0
