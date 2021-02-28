@@ -7,6 +7,22 @@ from .charger import Charger, ChargerConfig, ChargerState
 _LOGGER = logging.getLogger(__name__)
 
 
+class EqualizerState(BaseDict):
+    """ Charger state with integer enum values converted to human readable string values"""
+
+    def __init__(self, state: Dict[str, Any]):
+        data = {**state}
+        super().__init__(data)
+
+
+class EqualizerConfig(BaseDict):
+    """ Charger config with integer enum values converted to human readable string values"""
+
+    def __init__(self, config: Dict[str, Any]):
+        data = {**config}
+        super().__init__(data)
+
+
 class Equalizer(BaseDict):
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
         super().__init__(data)
@@ -17,7 +33,13 @@ class Equalizer(BaseDict):
 
     async def get_state(self):
         """ Get Equalizer state """
-        return await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
+        state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
+        return EqualizerState(state)
+
+    async def get_config(self):
+        """ Get Equalizer config """
+        config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
+        return EqualizerConfig(config)
 
 
 class Circuit(BaseDict):
