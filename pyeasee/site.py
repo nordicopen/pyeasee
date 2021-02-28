@@ -8,16 +8,12 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class EqualizerState(BaseDict):
-    """ Charger state with integer enum values converted to human readable string values"""
-
     def __init__(self, state: Dict[str, Any]):
         data = {**state}
         super().__init__(data)
 
 
 class EqualizerConfig(BaseDict):
-    """ Charger config with integer enum values converted to human readable string values"""
-
     def __init__(self, config: Dict[str, Any]):
         data = {**config}
         super().__init__(data)
