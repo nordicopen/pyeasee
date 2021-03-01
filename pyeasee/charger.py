@@ -88,6 +88,18 @@ class ChargerSchedule(BaseDict):
         super().__init__(data)
 
 
+class ChargerSession(BaseDict):
+    """ Charger charging session """
+
+    def __init__(self, session: Dict[str, Any]):
+        data = {
+            "carConnected": session.get("carConnected"),
+            "carDisconnected": session.get("carDisconnected"),
+            "kiloWattHours": float(session.get("kiloWattHours")),
+        }
+        super().__init__(data)
+
+
 class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
         super().__init__(entries)
@@ -103,6 +115,18 @@ class Charger(BaseDict):
             await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
         ).text()
         return float(value)
+
+    async def get_sessions_between_dates(self, from_date: datetime, to_date):
+        """ Gets charging sessions between two dates """
+        sessions = await (
+            await self.easee.get(
+                f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
+            )
+        ).json()
+        sessions = [ChargerSession(session) for session in sessions]
+        sessions.sort(key=lambda x: x["carConnected"], reverse=True)
+
+        return sessions
 
     async def get_config(self, from_cache=False, raw=False) -> ChargerConfig:
         """ get config for charger """
@@ -169,6 +193,11 @@ class Charger(BaseDict):
     async def limitToSinglePhaseCharging(self, enable: bool):
         """Limit to single phase charging in charger settings """
         json = {"limitToSinglePhaseCharging": enable}
+        return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+
+    async def phaseMode(self, mode: int = 2):
+        """Set charging phase mode, 1 = always 1-phase, 2 = auto, 3 = always 3-phase """
+        json = {"phaseMode": mode}
         return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
 
     async def lockCablePermanently(self, enable: bool):
