@@ -222,7 +222,7 @@ class Charger(BaseDict):
         """Set charger smart charging setting"""
         json = {"smartCharging": enable}
         return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        
+
     async def reboot(self):
         """Reboot charger"""
         return await self.easee.post(f"/api/chargers/{self.id}/commands/reboot")
