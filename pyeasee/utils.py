@@ -55,7 +55,10 @@ class BaseDict(Mapping):
             try:
                 return datetime.fromisoformat(self._storage[key]).replace(tzinfo=timezone.utc)
             except ValueError:
-                return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+                try:
+                    return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+                except ValueError:
+                    return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%S.000Z").replace(tzinfo=timezone.utc)
         return self._storage[key]
 
     def __setitem__(self, key, value):
