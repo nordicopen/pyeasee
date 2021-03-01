@@ -270,7 +270,9 @@ async def equalizers_info(equalizers: List[Equalizer]):
     for equalizer in equalizers:
         eq = equalizer.get_data()
         state = await equalizer.get_state()
+        config = await equalizer.get_config()
         eq["state"] = state
+        eq["config"] = config
         data.append(eq)
 
     print(
