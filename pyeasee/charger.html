@@ -91,6 +91,12 @@
 <dd>
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.get_sessions_between_dates"><code class="name flex">
+<span>async def <span class="ident">get_sessions_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets charging sessions between two dates</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.get_state"><code class="name flex">
 <span>async def <span class="ident">get_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
@@ -120,6 +126,12 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Pause charging session</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.phaseMode"><code class="name flex">
+<span>async def <span class="ident">phaseMode</span></span>(<span>self, mode: int = 2)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set charging phase mode, 1 = always 1-phase, 2 = auto, 3 = always 3-phase</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.reboot"><code class="name flex">
 <span>async def <span class="ident">reboot</span></span>(<span>self)</span>
@@ -176,7 +188,7 @@
 <div class="desc"><p>Enable and disable smart button in charger settings</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.smart_charging"><code class="name flex">
-<span>async def <span class="ident">smart_charging</span></span>(<span>self)</span>
+<span>async def <span class="ident">smart_charging</span></span>(<span>self, enable: bool)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set charger smart charging setting</p></div>
@@ -239,6 +251,22 @@
 <li>collections.abc.Container</li>
 </ul>
 </dd>
+<dt id="pyeasee.charger.ChargerSession"><code class="flex name class">
+<span>class <span class="ident">ChargerSession</span></span>
+<span>(</span><span>session: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Charger charging session</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
+<li>collections.abc.Mapping</li>
+<li>collections.abc.Collection</li>
+<li>collections.abc.Sized</li>
+<li>collections.abc.Iterable</li>
+<li>collections.abc.Container</li>
+</ul>
+</dd>
 <dt id="pyeasee.charger.ChargerState"><code class="flex name class">
 <span>class <span class="ident">ChargerState</span></span>
 <span>(</span><span>state: Dict[str, Any], raw=False)</span>
@@ -281,11 +309,13 @@
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_sessions_between_dates" href="#pyeasee.charger.Charger.get_sessions_between_dates">get_sessions_between_dates</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.limitToSinglePhaseCharging" href="#pyeasee.charger.Charger.limitToSinglePhaseCharging">limitToSinglePhaseCharging</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.lockCablePermanently" href="#pyeasee.charger.Charger.lockCablePermanently">lockCablePermanently</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.override_schedule" href="#pyeasee.charger.Charger.override_schedule">override_schedule</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.pause" href="#pyeasee.charger.Charger.pause">pause</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.phaseMode" href="#pyeasee.charger.Charger.phaseMode">phaseMode</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.reboot" href="#pyeasee.charger.Charger.reboot">reboot</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.resume" href="#pyeasee.charger.Charger.resume">resume</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_access" href="#pyeasee.charger.Charger.set_access">set_access</a></code></li>
@@ -307,6 +337,9 @@
 </li>
 <li>
 <h4><code><a title="pyeasee.charger.ChargerSchedule" href="#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pyeasee.charger.ChargerSession" href="#pyeasee.charger.ChargerSession">ChargerSession</a></code></h4>
 </li>
 <li>
 <h4><code><a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></code></h4>
