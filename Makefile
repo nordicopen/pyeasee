@@ -1,5 +1,5 @@
 
-__VERSION__ = "0.7.33.rc1"
+__VERSION__ = "0.7.33"
 
 clean:
 	rm -rf pyeasee.egg-info dist build
