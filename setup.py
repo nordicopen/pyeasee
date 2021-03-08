@@ -6,7 +6,7 @@ from setuptools import setup
 # This call to setup() does all the work
 setup(
     name="pyeasee",
-    version="0.7.32",
+    version="0.7.33.rc1",
     description="Easee EV charger API library",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
