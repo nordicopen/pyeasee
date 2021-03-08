@@ -41,9 +41,9 @@ class ChargerStreamData(Enum):
     state_ledMode = 46
     config_maxChargerCurrent = 47
     state_dynamicChargerCurrent = 48
-    config_maxCurrentOfflineFallbackP1 = 50
-    config_maxCurrentOfflineFallbackP2 = 51
-    config_maxCurrentOfflineFallbackP3 = 52
+    state_offlineMaxCircuitCurrentP1 = 50
+    state_offlineMaxCircuitCurrentP2 = 51
+    state_offlineMaxCircuitCurrentP3 = 52
     schedule_chargingSchedule = 62
     config_pairedEqualizer = 65
     state_wiFiAPEnabled = 68
