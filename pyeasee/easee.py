@@ -94,6 +94,9 @@ class Easee:
         self.running_loop = None
         self.event_loop = None
 
+    def base_uri(self):
+        return self.base
+
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
