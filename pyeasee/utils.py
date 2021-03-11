@@ -62,9 +62,7 @@ class BaseDict(Mapping):
         return self._storage[key]
 
     def __setitem__(self, key, value):
-        print(f"Setting {key} to {value}")
         self._storage[key] = value
-        print("Done")
 
     def __iter__(self):
         return iter(self._storage)  # ``ghost`` is invisible
