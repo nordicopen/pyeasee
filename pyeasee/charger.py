@@ -245,6 +245,15 @@ class Charger(BaseDict):
         else:
             _LOGGER.info("Circuit info must be initialized for max current to be set")
 
+    async def set_max_offline_charger_circuit_current(
+        self, currentP1: int, currentP2: int = None, currentP3: int = None
+    ):
+        """ Set circuit max offline current for charger, fallback value for limit if charger is offline """
+        if self.circuit is not None:
+            return await self.circuit.set_max_offline_current(currentP1, currentP2, currentP3)
+        else:
+            _LOGGER.info("Circuit info must be initialized for offline current to be set")
+
     async def set_dynamic_charger_current(self, current: int):
         """ Set charger dynamic current """
         json = {"dynamicChargerCurrent": current}
