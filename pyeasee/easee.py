@@ -237,11 +237,11 @@ class Easee:
         """
         _LOGGER.debug("SignalR stream connected")
         self._sr_backoff = SR_MIN_BACKOFF
+        self.sr_connected = True
 
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
-            asyncio.ensure_future(self.sr_connection.send("SubscribeWithCurrentState", [id, True]))
-        self.sr_connected = True
+            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
 
     def _sr_close_cb(self):
         """
@@ -356,7 +356,10 @@ class Easee:
         _LOGGER.debug("Subscribing to %s", product.id)
         self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
-            asyncio.ensure_future(self.sr_connection.send("SubscribeWithCurrentState", [product.id, True]))
+            if self.running_loop is not None:
+                await self.running_loop.run_in_executor(
+                    None, self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+                )
         else:
             await self._sr_connect()
 
