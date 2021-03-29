@@ -212,10 +212,8 @@ class Easee:
         await self._sr_disconnect()
 
     def _sr_next(self):
-        if self._sr_backoff >= SR_MAX_BACKOFF:
-            return self._sr_backoff
-
-        self._sr_backoff = self._sr_backoff + SR_INC_BACKOFF
+        if self._sr_backoff < SR_MAX_BACKOFF:
+            self._sr_backoff = self._sr_backoff + SR_INC_BACKOFF
         return self._sr_backoff
 
     def _sr_token(self):
