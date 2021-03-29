@@ -6,6 +6,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, List
 from signalrcore.hub_connection_builder import HubConnectionBuilder
+from signalrcore.hub.errors import UnAuthorizedHubError
 
 import aiohttp
 
@@ -185,7 +186,7 @@ class Easee:
         }
         _LOGGER.debug("Refreshing access token")
         try:
-            res = await self.session.post("/api/accounts/refresh_token", json=data)
+            res = await self.session.post(f"{self.base}/api/accounts/refresh_token", json=data)
             await self._handle_token_response(res)
         except AuthorizationFailedException:
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
@@ -230,6 +231,8 @@ class Easee:
         """
         _LOGGER.debug("SignalR stream disconnected")
         self.sr_connected = False
+        if self.running_loop is not None:
+            asyncio.run_coroutine_threadsafe(self._sr_connect(SR_RECONNECT_TIMEOUT), self.event_loop)
 
     def _sr_product_update_cb(self, stuff: list):
         """
@@ -258,10 +261,12 @@ class Easee:
         else:
             _LOGGER.debug("No callback found for %s", stuff["mid"])
 
-    async def _sr_connect(self):
+    async def _sr_connect(self, start_delay=0):
         """
         Signalr connect - internal use only
         """
+        await asyncio.sleep(start_delay)
+
         self.running_loop = asyncio.get_running_loop()
         self.event_loop = asyncio.get_event_loop()
 
@@ -284,21 +289,32 @@ class Easee:
             .with_url(self.sr_base, options)
             .configure_logging(logging.CRITICAL)
             .with_automatic_reconnect(
-                {"type": "raw", "keep_alive_interval": 20, "reconnect_interval": SR_RECONNECT_TIMEOUT}
+                {
+                    "type": "raw",
+                    "keep_alive_interval": 20,
+                    "reconnect_interval": SR_RECONNECT_TIMEOUT,
+                    "max_attempts": 0,
+                }
             )
             .build()
         )
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
         self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-        # The ChargerUpdate callback seems redundant?
-        # self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
+
         while True:
             """ The signalrcore lib start function does blocking I/O, so can not be called directly """
             try:
                 await self.running_loop.run_in_executor(None, self.sr_connection.start)
+            except UnAuthorizedHubError as ex:
+                _LOGGER.debug(
+                    "SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT
+                )
+                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                await self._refresh_token()
+                continue
             except Exception as ex:
                 _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
                 await asyncio.sleep(SR_RECONNECT_TIMEOUT)
