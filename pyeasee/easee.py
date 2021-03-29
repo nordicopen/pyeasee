@@ -24,7 +24,9 @@ __VERSION__ = "0.7.35"
 
 _LOGGER = logging.getLogger(__name__)
 
-SR_RECONNECT_TIMEOUT = 60
+SR_MIN_BACKOFF = 0
+SR_MAX_BACKOFF = 300
+SR_INC_BACKOFF = 30
 
 
 async def raise_for_status(response):
@@ -80,6 +82,12 @@ class Easee:
         self.sr_base = "https://api.easee.cloud/hubs/chargers"
         self.token = {}
         self.headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} REST client",
+            "Accept": "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+        }
+        self.sr_headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} SignalR client",
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
@@ -94,6 +102,7 @@ class Easee:
         self.sr_connect_in_progress = False
         self.running_loop = None
         self.event_loop = None
+        self._sr_backoff = SR_MIN_BACKOFF
 
     def base_uri(self):
         return self.base
@@ -202,6 +211,13 @@ class Easee:
 
         await self._sr_disconnect()
 
+    def _sr_next(self):
+        if self._sr_backoff >= SR_MAX_BACKOFF:
+            return self._sr_backoff
+
+        self._sr_backoff = self._sr_backoff + SR_INC_BACKOFF
+        return self._sr_backoff
+
     def _sr_token(self):
         """
         Return access token to signalr library, called from signalr thread, internal use only
@@ -212,7 +228,7 @@ class Easee:
         if "accessToken" not in self.token:
             accessToken = ""
         else:
-            accessToken = self.token["accessToken"]
+            accessToken = self.token["accessToken"] + "FAIL"
         return accessToken
 
     def _sr_open_cb(self):
@@ -220,6 +236,8 @@ class Easee:
         Signalr connected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SignalR stream connected")
+        self._sr_backoff = SR_MIN_BACKOFF
+
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
             self.sr_connection.send("SubscribeWithCurrentState", [id, True])
@@ -232,7 +250,8 @@ class Easee:
         _LOGGER.debug("SignalR stream disconnected")
         self.sr_connected = False
         if self.running_loop is not None:
-            asyncio.run_coroutine_threadsafe(self._sr_connect(SR_RECONNECT_TIMEOUT), self.event_loop)
+            backoff = self._sr_next()
+            asyncio.run_coroutine_threadsafe(self._sr_connect(backoff), self.event_loop)
 
     def _sr_product_update_cb(self, stuff: list):
         """
@@ -283,7 +302,7 @@ class Easee:
 
         _LOGGER.debug("SR connect loop")
 
-        options = {"access_token_factory": self._sr_token}
+        options = {"access_token_factory": self._sr_token, "headers": self.sr_headers}
         self.sr_connection = (
             HubConnectionBuilder()
             .with_url(self.sr_base, options)
@@ -292,7 +311,7 @@ class Easee:
                 {
                     "type": "raw",
                     "keep_alive_interval": 20,
-                    "reconnect_interval": SR_RECONNECT_TIMEOUT,
+                    "reconnect_interval": SR_INC_BACKOFF,
                     "max_attempts": 0,
                 }
             )
@@ -309,15 +328,15 @@ class Easee:
             try:
                 await self.running_loop.run_in_executor(None, self.sr_connection.start)
             except UnAuthorizedHubError as ex:
-                _LOGGER.debug(
-                    "SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT
-                )
-                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                backoff = self._sr_next()
+                _LOGGER.debug("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                await asyncio.sleep(backoff)
                 await self._refresh_token()
                 continue
             except Exception as ex:
-                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
-                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                backoff = self._sr_next()
+                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                await asyncio.sleep(backoff)
                 continue
 
             break
