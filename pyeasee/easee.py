@@ -228,7 +228,7 @@ class Easee:
         if "accessToken" not in self.token:
             accessToken = ""
         else:
-            accessToken = self.token["accessToken"] + "FAIL"
+            accessToken = self.token["accessToken"]
         return accessToken
 
     def _sr_open_cb(self):
