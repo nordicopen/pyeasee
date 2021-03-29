@@ -240,7 +240,7 @@ class Easee:
 
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
-            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+            asyncio.ensure_future(self.sr_connection.send("SubscribeWithCurrentState", [id, True]))
         self.sr_connected = True
 
     def _sr_close_cb(self):
@@ -356,7 +356,7 @@ class Easee:
         _LOGGER.debug("Subscribing to %s", product.id)
         self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
-            self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+            asyncio.ensure_future(self.sr_connection.send("SubscribeWithCurrentState", [product.id, True]))
         else:
             await self._sr_connect()
 
