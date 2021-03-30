@@ -246,10 +246,10 @@ class Easee:
         Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SignalR stream disconnected")
+        self.sr_connection = None
         self.sr_connected = False
         if self.running_loop is not None:
-            backoff = self._sr_next()
-            asyncio.run_coroutine_threadsafe(self._sr_connect(backoff), self.event_loop)
+            asyncio.run_coroutine_threadsafe(self._sr_connect(SR_INC_BACKOFF), self.event_loop)
 
     def _sr_product_update_cb(self, stuff: list):
         """
@@ -282,14 +282,18 @@ class Easee:
         """
         Signalr connect - internal use only
         """
+        if self.sr_connect_in_progress is True:
+            _LOGGER.debug("Already connecting")
+            return
+        self.sr_connect_in_progress = True
+
+        _LOGGER.debug(f"SR connect sleep {start_delay}")
         await asyncio.sleep(start_delay)
 
         self.running_loop = asyncio.get_running_loop()
         self.event_loop = asyncio.get_event_loop()
 
-        if self.sr_connect_in_progress is False:
-            self.sr_connect_in_progress = True
-            asyncio.ensure_future(self._sr_connect_loop())
+        asyncio.ensure_future(self._sr_connect_loop())
 
     async def _sr_connect_loop(self):
         """
@@ -302,18 +306,7 @@ class Easee:
 
         options = {"access_token_factory": self._sr_token, "headers": self.sr_headers}
         self.sr_connection = (
-            HubConnectionBuilder()
-            .with_url(self.sr_base, options)
-            .configure_logging(logging.CRITICAL)
-            .with_automatic_reconnect(
-                {
-                    "type": "raw",
-                    "keep_alive_interval": 20,
-                    "reconnect_interval": SR_INC_BACKOFF,
-                    "max_attempts": 0,
-                }
-            )
-            .build()
+            HubConnectionBuilder().with_url(self.sr_base, options).configure_logging(logging.CRITICAL).build()
         )
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
