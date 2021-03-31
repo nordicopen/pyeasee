@@ -181,6 +181,12 @@
 <dd>
 <div class="desc"><p>Set charger max current</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.set_max_offline_charger_circuit_current"><code class="name flex">
+<span>async def <span class="ident">set_max_offline_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit max offline current for charger, fallback value for limit if charger is offline</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.smartButtonEnabled"><code class="name flex">
 <span>async def <span class="ident">smartButtonEnabled</span></span>(<span>self, enable: bool)</span>
 </code></dt>
@@ -324,6 +330,7 @@
 <li><code><a title="pyeasee.charger.Charger.set_dynamic_charger_current" href="#pyeasee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_current" href="#pyeasee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_max_offline_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_offline_charger_circuit_current">set_max_offline_charger_circuit_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.smartButtonEnabled" href="#pyeasee.charger.Charger.smartButtonEnabled">smartButtonEnabled</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.smart_charging" href="#pyeasee.charger.Charger.smart_charging">smart_charging</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.start" href="#pyeasee.charger.Charger.start">start</a></code></li>
