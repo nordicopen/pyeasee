@@ -92,7 +92,7 @@ def parse_arguments():
 #         json.dump(token, token_file, indent=2)
 
 
-async def main():
+async def async_main():
     args = parse_arguments()
     _LOGGER.debug("args: %s", args)
     easee = Easee(args.username, args.password)
@@ -335,10 +335,14 @@ def str_fixed_length(myStr, length: int):
     return myStr
 
 
+def main():
+    asyncio.run(async_main())
+
+
 if __name__ == "__main__":
     import time
 
     s = time.perf_counter()
-    asyncio.run(main())
+    asyncio.run(async_main())
     elapsed = time.perf_counter() - s
     print(f"{__file__} executed in {elapsed:0.2f} seconds.")
