@@ -229,7 +229,7 @@ async def async_main():
                 #                print "\ninput:", input_queue.get()
                 break
 
-        await easee.close()
+    await easee.close()
 
 
 async def chargers_info(chargers: List[Charger]):
