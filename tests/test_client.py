@@ -30,7 +30,7 @@ async def aiosession():
 async def test_get_chargers(aiosession, aioresponse):
 
     token_data = load_json_fixture("token.json")
-    aioresponse.post(f"{BASE_URL}/api/accounts/token", payload=token_data)
+    aioresponse.post(f"{BASE_URL}/api/accounts/login", payload=token_data)
 
     chargers_data = load_json_fixture("chargers.json")
     aioresponse.get(f"{BASE_URL}/api/chargers", payload=chargers_data)
@@ -54,7 +54,7 @@ async def test_get_chargers(aiosession, aioresponse):
 async def test_get_sites(aiosession, aioresponse):
 
     token_data = load_json_fixture("token.json")
-    aioresponse.post(f"{BASE_URL}/api/accounts/token", payload=token_data)
+    aioresponse.post(f"{BASE_URL}/api/accounts/login", payload=token_data)
 
     sites_data = load_json_fixture("sites.json")
     aioresponse.get(f"{BASE_URL}/api/sites", payload=sites_data)
@@ -84,7 +84,7 @@ async def test_get_sites(aiosession, aioresponse):
 async def test_get_site_state(aiosession, aioresponse):
 
     token_data = load_json_fixture("token.json")
-    aioresponse.post(f"{BASE_URL}/api/accounts/token", payload=token_data)
+    aioresponse.post(f"{BASE_URL}/api/accounts/login", payload=token_data)
 
     site_state_data = load_json_fixture("site-state.json")
     aioresponse.get(f"{BASE_URL}/api/sites/54321/state", payload=site_state_data)
