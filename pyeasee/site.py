@@ -65,6 +65,15 @@ class Circuit(BaseDict):
         }
         return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
 
+    async def set_max_offline_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+        """ Set circuit max offline current, fallback value for limit if charger is offline """
+        json = {
+            "offlineMaxCircuitCurrentP1": currentP1,
+            "offlineMaxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
+            "offlineMaxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
+        }
+        return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+
     async def set_rated_current(self, ratedCurrentFuseValue: int):
         """ Set circuit rated current - requires elevated access (installers only) """
         json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}

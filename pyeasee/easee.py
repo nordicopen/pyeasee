@@ -6,6 +6,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Any, List
 from signalrcore.hub_connection_builder import HubConnectionBuilder
+from signalrcore.hub.errors import UnAuthorizedHubError
 
 import aiohttp
 
@@ -19,11 +20,13 @@ from .exceptions import (
 from .site import Site, SiteState
 from .utils import convert_stream_data
 
-__VERSION__ = "0.7.32"
+__VERSION__ = "0.7.37"
 
 _LOGGER = logging.getLogger(__name__)
 
-SR_RECONNECT_TIMEOUT = 60
+SR_MIN_BACKOFF = 0
+SR_MAX_BACKOFF = 300
+SR_INC_BACKOFF = 30
 
 
 async def raise_for_status(response):
@@ -79,6 +82,12 @@ class Easee:
         self.sr_base = "https://api.easee.cloud/hubs/chargers"
         self.token = {}
         self.headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} REST client",
+            "Accept": "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+        }
+        self.sr_headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} SignalR client",
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
@@ -93,6 +102,10 @@ class Easee:
         self.sr_connect_in_progress = False
         self.running_loop = None
         self.event_loop = None
+        self._sr_backoff = SR_MIN_BACKOFF
+
+    def base_uri(self):
+        return self.base
 
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
@@ -182,7 +195,7 @@ class Easee:
         }
         _LOGGER.debug("Refreshing access token")
         try:
-            res = await self.session.post("/api/accounts/refresh_token", json=data)
+            res = await self.session.post(f"{self.base}/api/accounts/refresh_token", json=data)
             await self._handle_token_response(res)
         except AuthorizationFailedException:
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
@@ -197,6 +210,11 @@ class Easee:
             self.session = None
 
         await self._sr_disconnect()
+
+    def _sr_next(self):
+        if self._sr_backoff < SR_MAX_BACKOFF:
+            self._sr_backoff = self._sr_backoff + SR_INC_BACKOFF
+        return self._sr_backoff
 
     def _sr_token(self):
         """
@@ -216,17 +234,22 @@ class Easee:
         Signalr connected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SignalR stream connected")
+        self._sr_backoff = SR_MIN_BACKOFF
+        self.sr_connected = True
+
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
             self.sr_connection.send("SubscribeWithCurrentState", [id, True])
-        self.sr_connected = True
 
     def _sr_close_cb(self):
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SignalR stream disconnected")
+        self.sr_connection = None
         self.sr_connected = False
+        if self.running_loop is not None:
+            asyncio.run_coroutine_threadsafe(self._sr_connect(SR_INC_BACKOFF), self.event_loop)
 
     def _sr_product_update_cb(self, stuff: list):
         """
@@ -255,16 +278,22 @@ class Easee:
         else:
             _LOGGER.debug("No callback found for %s", stuff["mid"])
 
-    async def _sr_connect(self):
+    async def _sr_connect(self, start_delay=0):
         """
         Signalr connect - internal use only
         """
+        if self.sr_connect_in_progress is True:
+            _LOGGER.debug("Already connecting")
+            return
+        self.sr_connect_in_progress = True
+
+        _LOGGER.debug(f"SR connect sleep {start_delay}")
+        await asyncio.sleep(start_delay)
+
         self.running_loop = asyncio.get_running_loop()
         self.event_loop = asyncio.get_event_loop()
 
-        if self.sr_connect_in_progress is False:
-            self.sr_connect_in_progress = True
-            asyncio.ensure_future(self._sr_connect_loop())
+        asyncio.ensure_future(self._sr_connect_loop())
 
     async def _sr_connect_loop(self):
         """
@@ -275,30 +304,30 @@ class Easee:
 
         _LOGGER.debug("SR connect loop")
 
-        options = {"access_token_factory": self._sr_token}
+        options = {"access_token_factory": self._sr_token, "headers": self.sr_headers}
         self.sr_connection = (
-            HubConnectionBuilder()
-            .with_url(self.sr_base, options)
-            .configure_logging(logging.CRITICAL)
-            .with_automatic_reconnect(
-                {"type": "raw", "keep_alive_interval": 20, "reconnect_interval": SR_RECONNECT_TIMEOUT}
-            )
-            .build()
+            HubConnectionBuilder().with_url(self.sr_base, options).configure_logging(logging.CRITICAL).build()
         )
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
         self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-        # The ChargerUpdate callback seems redundant?
-        # self.sr_connection.on("ChargerUpdate", self._sr_charger_update_cb)
 
         await self._verify_updated_token()
+
         while True:
             """ The signalrcore lib start function does blocking I/O, so can not be called directly """
             try:
                 await self.running_loop.run_in_executor(None, self.sr_connection.start)
+            except UnAuthorizedHubError as ex:
+                backoff = self._sr_next()
+                _LOGGER.debug("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                await asyncio.sleep(backoff)
+                await self._refresh_token()
+                continue
             except Exception as ex:
-                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, SR_RECONNECT_TIMEOUT)
-                await asyncio.sleep(SR_RECONNECT_TIMEOUT)
+                backoff = self._sr_next()
+                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                await asyncio.sleep(backoff)
                 continue
 
             break
@@ -318,7 +347,10 @@ class Easee:
         _LOGGER.debug("Subscribing to %s", product.id)
         self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
-            self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+            if self.running_loop is not None:
+                await self.running_loop.run_in_executor(
+                    None, self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+                )
         else:
             await self._sr_connect()
 
