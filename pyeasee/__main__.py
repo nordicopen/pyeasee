@@ -231,16 +231,21 @@ async def main():
 
         await easee.close()
 
-
 async def chargers_info(chargers: List[Charger]):
     print("\n\n****************\nCHARGERS\n****************")
     data = []
     for charger in chargers:
         state = await charger.get_state()
         config = await charger.get_config()
+        schedule = await charger.get_basic_charge_plan()
+        week_schedule = await charger.get_weekly_charge_plan()
         ch = charger.get_data()
         ch["state"] = state.get_data()
         ch["config"] = config.get_data()
+        if schedule is not None:
+            ch["schedule"] = schedule.get_data()
+        if week_schedule is not None:
+            ch["week_schedule"] = week_schedule.get_data()
         data.append(ch)
 
     print(json.dumps(data, indent=2))

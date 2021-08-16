@@ -84,6 +84,17 @@ class ChargerSchedule(BaseDict):
             "chargeStartTime": schedule.get("chargeStartTime"),
             "chargeStopTime": schedule.get("chargeStopTime"),
             "repeat": schedule.get("repeat"),
+            "isEnabled": schedule.get("isEnabled"),
+        }
+        super().__init__(data)
+
+class ChargerWeeklySchedule(BaseDict):
+    """ Charger charging schedule/plan """
+
+    def __init__(self, schedule: Dict[str, Any]):
+        data = {
+            "isEnabled": schedule.get("isEnabled"),
+            "days": schedule.get("days")
         }
         super().__init__(data)
 
@@ -177,8 +188,39 @@ class Charger(BaseDict):
             "chargeStartTime": str(chargeStartTime),
             "chargeStopTime": str(chargeStopTime),
             "repeat": repeat,
+            "isEnabled": True,
         }
         return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
+
+    async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
+        """Get and return charger basic charge plan setting from cloud """
+        try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
+            plan = await plan.json()
+            _LOGGER.debug(plan)
+            return ChargerWeeklySchedule(plan)
+        except (NotFoundException):
+            _LOGGER.debug("No scheduled charge plan")
+            return None
+
+    # TODO: document types
+    async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
+        """Set and post charger basic charge plan setting to cloud """
+        json = {
+            "isEnabled": enabled,
+            "days": [
+                {
+                    "dayOfWeek": day,
+                    "ranges": [
+                        {
+                            "startTime": str(chargeStartTime),
+                            "stopTime": str(chargeStopTime),
+                        }
+                    ]
+                }
+            ]
+        }
+        return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
 
     async def enable_charger(self, enable: bool):
         """Enable and disable charger in charger settings """
