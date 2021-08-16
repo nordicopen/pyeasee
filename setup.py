@@ -6,7 +6,7 @@ from setuptools import setup
 # This call to setup() does all the work
 setup(
     name="pyeasee",
-    version="0.7.32",
+    version="0.7.37",
     description="Easee EV charger API library",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
@@ -21,6 +21,6 @@ setup(
     ],
     packages=["pyeasee"],
     include_package_data=True,
-    install_requires=["aiohttp", "signalrcore==0.8.8"],
+    install_requires=["aiohttp", "signalrcore==0.8.8", "websocket-client==0.54.0"],
     entry_points={"console_scripts": ["pyeasee=pyeasee.__main__:main"]},
 )

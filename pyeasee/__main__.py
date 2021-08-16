@@ -92,7 +92,7 @@ def parse_arguments():
 #         json.dump(token, token_file, indent=2)
 
 
-async def main():
+async def async_main():
     args = parse_arguments()
     _LOGGER.debug("args: %s", args)
     easee = Easee(args.username, args.password)
@@ -229,7 +229,7 @@ async def main():
                 #                print "\ninput:", input_queue.get()
                 break
 
-        await easee.close()
+    await easee.close()
 
 
 async def chargers_info(chargers: List[Charger]):
@@ -271,8 +271,8 @@ async def equalizers_info(equalizers: List[Equalizer]):
         eq = equalizer.get_data()
         state = await equalizer.get_state()
         config = await equalizer.get_config()
-        eq["state"] = state
-        eq["config"] = config
+        eq["state"] = state.get_data()
+        eq["config"] = config.get_data()
         data.append(eq)
 
     print(
@@ -335,10 +335,14 @@ def str_fixed_length(myStr, length: int):
     return myStr
 
 
+def main():
+    asyncio.run(async_main())
+
+
 if __name__ == "__main__":
     import time
 
     s = time.perf_counter()
-    asyncio.run(main())
+    main()
     elapsed = time.perf_counter() - s
     print(f"{__file__} executed in {elapsed:0.2f} seconds.")

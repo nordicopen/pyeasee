@@ -67,6 +67,12 @@
 <dd>
 <div class="desc"><p>Set circuit max current</p></div>
 </dd>
+<dt id="pyeasee.site.Circuit.set_max_offline_current"><code class="name flex">
+<span>async def <span class="ident">set_max_offline_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set circuit max offline current, fallback value for limit if charger is offline</p></div>
+</dd>
 <dt id="pyeasee.site.Circuit.set_rated_current"><code class="name flex">
 <span>async def <span class="ident">set_rated_current</span></span>(<span>self, ratedCurrentFuseValue: int)</span>
 </code></dt>
@@ -240,6 +246,7 @@
 <li><code><a title="pyeasee.site.Circuit.get_chargers" href="#pyeasee.site.Circuit.get_chargers">get_chargers</a></code></li>
 <li><code><a title="pyeasee.site.Circuit.set_dynamic_current" href="#pyeasee.site.Circuit.set_dynamic_current">set_dynamic_current</a></code></li>
 <li><code><a title="pyeasee.site.Circuit.set_max_current" href="#pyeasee.site.Circuit.set_max_current">set_max_current</a></code></li>
+<li><code><a title="pyeasee.site.Circuit.set_max_offline_current" href="#pyeasee.site.Circuit.set_max_offline_current">set_max_offline_current</a></code></li>
 <li><code><a title="pyeasee.site.Circuit.set_rated_current" href="#pyeasee.site.Circuit.set_rated_current">set_rated_current</a></code></li>
 </ul>
 </li>

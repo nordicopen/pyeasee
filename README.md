@@ -1,4 +1,4 @@
-![Maintenance](https://img.shields.io/maintenance/yes/2020.svg) ![Easee library](https://github.com/fondberg/easee/workflows/Easee%20library/badge.svg)
+![Maintenance](https://img.shields.io/maintenance/yes/2021.svg) ![Easee library](https://github.com/fondberg/easee/workflows/Easee%20library/badge.svg)
 
 [![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/fondberg)
 
