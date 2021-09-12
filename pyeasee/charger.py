@@ -88,14 +88,58 @@ class ChargerSchedule(BaseDict):
         }
         super().__init__(data)
 
+
 class ChargerWeeklySchedule(BaseDict):
     """ Charger charging schedule/plan """
 
     def __init__(self, schedule: Dict[str, Any]):
+        days = schedule.get("days")
         data = {
             "isEnabled": schedule.get("isEnabled"),
-            "days": schedule.get("days")
+            "MondayStartTime": "-",
+            "MondayStopTime": "-",
+            "TuesdayStartTime": "-",
+            "TuesdayStopTime": "-",
+            "WednesdayStartTime": "-",
+            "WednesdayStopTime": "-",
+            "ThursdayStartTime": "-",
+            "ThursdayStopTime": "-",
+            "FridayStartTime": "-",
+            "FridayStopTime": "-",
+            "SaturdayStartTime": "-",
+            "SaturdayStopTime": "-",
+            "SundayStartTime": "-",
+            "SundayStopTime": "-",
+            "days": days,
         }
+        if data["isEnabled"]:
+            for day in days:
+                ranges = day["ranges"]
+                for times in ranges:
+                    start = times["startTime"]
+                    stop = times["stopTime"]
+                    if day["dayOfWeek"] == 0:
+                        data["MondayStartTime"] = start
+                        data["MondayStopTime"] = stop
+                    elif day["dayOfWeek"] == 1:
+                        data["TuesdayStartTime"] = start
+                        data["TuesdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 2:
+                        data["WednesdayStartTime"] = start
+                        data["WednesdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 3:
+                        data["ThursdayStartTime"] = start
+                        data["ThursdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 4:
+                        data["FridayStartTime"] = start
+                        data["FridayStopTime"] = stop
+                    elif day["dayOfWeek"] == 5:
+                        data["SaturdayStartTime"] = start
+                        data["SaturdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 6:
+                        data["SundayStartTime"] = start
+                        data["SundayStopTime"] = stop
+
         super().__init__(data)
 
 
@@ -216,9 +260,9 @@ class Charger(BaseDict):
                             "startTime": str(chargeStartTime),
                             "stopTime": str(chargeStopTime),
                         }
-                    ]
+                    ],
                 }
-            ]
+            ],
         }
         return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
 

@@ -231,6 +231,7 @@ async def async_main():
 
     await easee.close()
 
+
 async def chargers_info(chargers: List[Charger]):
     print("\n\n****************\nCHARGERS\n****************")
     data = []
