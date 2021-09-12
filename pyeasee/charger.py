@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Union
 
 from .exceptions import NotFoundException
@@ -113,11 +113,22 @@ class ChargerWeeklySchedule(BaseDict):
             "days": days,
         }
         if data["isEnabled"]:
+            tzinfo = datetime.utcnow().astimezone().tzinfo
             for day in days:
                 ranges = day["ranges"]
                 for times in ranges:
-                    start = times["startTime"]
-                    stop = times["stopTime"]
+                    start = (
+                        datetime.strptime(times["startTime"], "%H:%MZ")
+                        .replace(tzinfo=timezone.utc)
+                        .astimezone(tzinfo)
+                        .strftime("%H:%M")
+                    )
+                    stop = (
+                        datetime.strptime(times["stopTime"], "%H:%MZ")
+                        .replace(tzinfo=timezone.utc)
+                        .astimezone(tzinfo)
+                        .strftime("%H:%M")
+                    )
                     if day["dayOfWeek"] == 0:
                         data["MondayStartTime"] = start
                         data["MondayStopTime"] = stop
