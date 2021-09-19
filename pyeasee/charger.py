@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Union
 
 from .exceptions import NotFoundException
@@ -84,7 +84,73 @@ class ChargerSchedule(BaseDict):
             "chargeStartTime": schedule.get("chargeStartTime"),
             "chargeStopTime": schedule.get("chargeStopTime"),
             "repeat": schedule.get("repeat"),
+            "isEnabled": schedule.get("isEnabled"),
         }
+        super().__init__(data)
+
+
+class ChargerWeeklySchedule(BaseDict):
+    """ Charger charging schedule/plan """
+
+    def __init__(self, schedule: Dict[str, Any]):
+        days = schedule.get("days")
+        data = {
+            "isEnabled": schedule.get("isEnabled"),
+            "MondayStartTime": "-",
+            "MondayStopTime": "-",
+            "TuesdayStartTime": "-",
+            "TuesdayStopTime": "-",
+            "WednesdayStartTime": "-",
+            "WednesdayStopTime": "-",
+            "ThursdayStartTime": "-",
+            "ThursdayStopTime": "-",
+            "FridayStartTime": "-",
+            "FridayStopTime": "-",
+            "SaturdayStartTime": "-",
+            "SaturdayStopTime": "-",
+            "SundayStartTime": "-",
+            "SundayStopTime": "-",
+            "days": days,
+        }
+        if data["isEnabled"]:
+            tzinfo = datetime.utcnow().astimezone().tzinfo
+            for day in days:
+                ranges = day["ranges"]
+                for times in ranges:
+                    start = (
+                        datetime.strptime(times["startTime"], "%H:%MZ")
+                        .replace(tzinfo=timezone.utc)
+                        .astimezone(tzinfo)
+                        .strftime("%H:%M")
+                    )
+                    stop = (
+                        datetime.strptime(times["stopTime"], "%H:%MZ")
+                        .replace(tzinfo=timezone.utc)
+                        .astimezone(tzinfo)
+                        .strftime("%H:%M")
+                    )
+                    if day["dayOfWeek"] == 0:
+                        data["MondayStartTime"] = start
+                        data["MondayStopTime"] = stop
+                    elif day["dayOfWeek"] == 1:
+                        data["TuesdayStartTime"] = start
+                        data["TuesdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 2:
+                        data["WednesdayStartTime"] = start
+                        data["WednesdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 3:
+                        data["ThursdayStartTime"] = start
+                        data["ThursdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 4:
+                        data["FridayStartTime"] = start
+                        data["FridayStopTime"] = stop
+                    elif day["dayOfWeek"] == 5:
+                        data["SaturdayStartTime"] = start
+                        data["SaturdayStopTime"] = stop
+                    elif day["dayOfWeek"] == 6:
+                        data["SundayStartTime"] = start
+                        data["SundayStopTime"] = stop
+
         super().__init__(data)
 
 
@@ -177,8 +243,39 @@ class Charger(BaseDict):
             "chargeStartTime": str(chargeStartTime),
             "chargeStopTime": str(chargeStopTime),
             "repeat": repeat,
+            "isEnabled": True,
         }
         return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
+
+    async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
+        """Get and return charger basic charge plan setting from cloud """
+        try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
+            plan = await plan.json()
+            _LOGGER.debug(plan)
+            return ChargerWeeklySchedule(plan)
+        except (NotFoundException):
+            _LOGGER.debug("No scheduled charge plan")
+            return None
+
+    # TODO: document types
+    async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
+        """Set and post charger basic charge plan setting to cloud """
+        json = {
+            "isEnabled": enabled,
+            "days": [
+                {
+                    "dayOfWeek": day,
+                    "ranges": [
+                        {
+                            "startTime": str(chargeStartTime),
+                            "stopTime": str(chargeStopTime),
+                        }
+                    ],
+                }
+            ],
+        }
+        return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
 
     async def enable_charger(self, enable: bool):
         """Enable and disable charger in charger settings """
