@@ -163,7 +163,7 @@ class Easee:
             self.token["expires"] < datetime.now(),
         )
         if self.token["expires"] < datetime.now():
-            self._refresh_token()
+            await self._refresh_token()
 
     async def _handle_token_response(self, res):
         """
