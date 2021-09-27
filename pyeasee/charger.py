@@ -179,7 +179,9 @@ class Charger(BaseDict):
         """ Gets consumption between two dates """
         try:
             value = await (
-                await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
+                await self.easee.get(
+                    f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
+                )
             ).text()
             return float(value)
         except (ServerFailureException):
@@ -187,6 +189,7 @@ class Charger(BaseDict):
 
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
         """ Gets charging sessions between two dates """
+        try:
             sessions = await (
                 await self.easee.get(
                     f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
