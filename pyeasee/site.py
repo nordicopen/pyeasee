@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 
 from .utils import BaseDict
 from .charger import Charger, ChargerConfig, ChargerState
+from .exceptions import ServerFailureException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,13 +30,19 @@ class Equalizer(BaseDict):
 
     async def get_state(self):
         """ Get Equalizer state """
-        state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
-        return EqualizerState(state)
+        try:
+            state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
+            return EqualizerState(state)
+        except (ServerFailureException):
+            return None
 
     async def get_config(self):
         """ Get Equalizer config """
-        config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
-        return EqualizerConfig(config)
+        try:
+            config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
+            return EqualizerConfig(config)
+        except (ServerFailureException):
+            return None
 
 
 class Circuit(BaseDict):

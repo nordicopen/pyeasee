@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, Union
 
-from .exceptions import NotFoundException
+from .exceptions import NotFoundException, ServerFailureException
 from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
@@ -177,32 +177,42 @@ class Charger(BaseDict):
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """ Gets consumption between two dates """
-        value = await (
-            await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
-        ).text()
-        return float(value)
+        try:
+            value = await (
+                await self.easee.get(f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}")
+            ).text()
+            return float(value)
+        except (ServerFailureException):
+            return None
 
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
         """ Gets charging sessions between two dates """
-        sessions = await (
-            await self.easee.get(
-                f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
-            )
-        ).json()
-        sessions = [ChargerSession(session) for session in sessions]
-        sessions.sort(key=lambda x: x["carConnected"], reverse=True)
-
-        return sessions
+            sessions = await (
+                await self.easee.get(
+                    f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
+                )
+            ).json()
+            sessions = [ChargerSession(session) for session in sessions]
+            sessions.sort(key=lambda x: x["carConnected"], reverse=True)
+            return sessions
+        except (ServerFailureException):
+            return None
 
     async def get_config(self, from_cache=False, raw=False) -> ChargerConfig:
         """ get config for charger """
-        config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
-        return ChargerConfig(config, raw)
+        try:
+            config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
+            return ChargerConfig(config, raw)
+        except (ServerFailureException):
+            return None
 
     async def get_state(self, raw=False) -> ChargerState:
         """ get state for charger """
-        state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
-        return ChargerState(state, raw)
+        try:
+            state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
+            return ChargerState(state, raw)
+        except (ServerFailureException):
+            return None
 
     async def start(self):
         """Start charging session"""
@@ -229,10 +239,11 @@ class Charger(BaseDict):
         try:
             plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
             plan = await plan.json()
-            _LOGGER.debug(plan)
             return ChargerSchedule(plan)
         except (NotFoundException):
             _LOGGER.debug("No scheduled charge plan")
+            return None
+        except (ServerFailureException):
             return None
 
     # TODO: document types
@@ -256,6 +267,8 @@ class Charger(BaseDict):
             return ChargerWeeklySchedule(plan)
         except (NotFoundException):
             _LOGGER.debug("No scheduled charge plan")
+            return None
+        except (ServerFailureException):
             return None
 
     # TODO: document types
