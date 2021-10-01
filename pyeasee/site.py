@@ -61,7 +61,10 @@ class Circuit(BaseDict):
             "dynamicCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
             "dynamicCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
-        return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        try:
+            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        except (ServerFailureException):
+            return None
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit max current """
@@ -70,7 +73,10 @@ class Circuit(BaseDict):
             "maxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
             "maxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
-        return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        try:
+            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        except (ServerFailureException):
+            return None
 
     async def set_max_offline_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit max offline current, fallback value for limit if charger is offline """
@@ -79,12 +85,18 @@ class Circuit(BaseDict):
             "offlineMaxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
             "offlineMaxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
-        return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        try:
+            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+        except (ServerFailureException):
+            return None
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
         """ Set circuit rated current - requires elevated access (installers only) """
         json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
-        return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
+        try:
+            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
+        except (ServerFailureException):
+            return None
 
     def get_chargers(self) -> List[Charger]:
         return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]
@@ -169,4 +181,7 @@ class Site(BaseDict):
             "costPerKwhExcludeVat": costPerKwhExcludeVat,
         }
 
-        return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+        try:
+            return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+        except (ServerFailureException):
+            return None
