@@ -59,7 +59,7 @@ async def raise_for_status(response):
         elif 429 == response.status:
             _LOGGER.debug("Too many requests " + f"({response.status}: {data} {response.url})")
             raise TooManyRequestsException(data)
-        elif response.status > 500:
+        elif response.status >= 500:
             _LOGGER.warning("Server failure" + f"({response.status}: {response.url})")
             raise ServerFailureException(data)
         else:
@@ -163,7 +163,7 @@ class Easee:
             self.token["expires"] < datetime.now(),
         )
         if self.token["expires"] < datetime.now():
-            self._refresh_token()
+            await self._refresh_token()
 
     async def _handle_token_response(self, res):
         """
@@ -377,36 +377,54 @@ class Easee:
         """
         Retrieve all chargers
         """
-        records = await (await self.get("/api/chargers")).json()
-        _LOGGER.debug("Chargers:  %s", records)
-        return [Charger(k, self) for k in records]
+        try:
+            records = await (await self.get("/api/chargers")).json()
+            _LOGGER.debug("Chargers:  %s", records)
+            return [Charger(k, self) for k in records]
+        except (ServerFailureException):
+            return None
 
     async def get_site(self, id: int) -> Site:
         """ get site by id """
-        data = await (await self.get(f"/api/sites/{id}?detailed=true")).json()
-        _LOGGER.debug("Site:  %s", data)
-        return Site(data, self)
+        try:
+            data = await (await self.get(f"/api/sites/{id}?detailed=true")).json()
+            _LOGGER.debug("Site:  %s", data)
+            return Site(data, self)
+        except (ServerFailureException):
+            return None
 
     async def get_sites(self) -> List[Site]:
         """ Get all sites """
-        records = await (await self.get("/api/sites")).json()
-        _LOGGER.debug("Sites:  %s", records)
-        sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
-        return sites
+        try:
+            records = await (await self.get("/api/sites")).json()
+            _LOGGER.debug("Sites:  %s", records)
+            sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+            return sites
+        except (ServerFailureException):
+            return None
 
     async def get_site_state(self, id: str) -> SiteState:
         """ Get site state """
-        state = await (await self.get(f"/api/sites/{id}/state")).json()
-        return SiteState(state)
+        try:
+            state = await (await self.get(f"/api/sites/{id}/state")).json()
+            return SiteState(state)
+        except (ServerFailureException):
+            return None
 
     async def get_active_countries(self) -> List[Any]:
         """ Get all active countries """
-        records = await (await self.get("/api/resources/countries/active")).json()
-        _LOGGER.debug("Active countries:  %s", records)
-        return records
+        try:
+            records = await (await self.get("/api/resources/countries/active")).json()
+            _LOGGER.debug("Active countries:  %s", records)
+            return records
+        except (ServerFailureException):
+            return None
 
     async def get_currencies(self) -> List[Any]:
         """ Get all currencies """
-        records = await (await self.get("/api/resources/currencies")).json()
-        _LOGGER.debug("Currencies:  %s", records)
-        return records
+        try:
+            records = await (await self.get("/api/resources/currencies")).json()
+            _LOGGER.debug("Currencies:  %s", records)
+            return records
+        except (ServerFailureException):
+            return None
