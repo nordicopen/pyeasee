@@ -54,17 +54,37 @@ class Circuit(BaseDict):
         self.site = site
         self.easee = easee
 
-    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+ 
+    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = None):
         """ Set circuit dynamic current """
-        json = {
-            "dynamicCircuitCurrentP1": currentP1,
-            "dynamicCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
-            "dynamicCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
-        }
-        try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
-        except (ServerFailureException):
-            return None
+        """ Compatibility note:
+            If timeToLive is supplied, then use another API call which accepts this argument.
+            timeToLive is expressed in minutes, where 0 means that the dynamic current setting is valid until it is changed with a new command or power cycle
+        """
+        if timeToLive is None:
+            print("set_dynamic_current: legacy call")
+            json = {
+                "dynamicCircuitCurrentP1": currentP1,
+                "dynamicCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
+                "dynamicCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
+            }
+            try:
+
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+            except (ServerFailureException):
+                return None
+        else:
+            print("set_dynamic_current: new call")
+            json = {
+                "phase1": currentP1,
+                "phase2": currentP2 if currentP2 is not None else currentP1,
+                "phase3": currentP3 if currentP3 is not None else currentP1,
+                "timeToLive": timeToLive,
+            }
+            try:
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
+            except (ServerFailureException):
+                return None
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """ Set circuit max current """

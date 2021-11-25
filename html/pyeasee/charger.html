@@ -164,16 +164,16 @@
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_dynamic_charger_circuit_current"><code class="name flex">
-<span>async def <span class="ident">set_dynamic_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
+<span>async def <span class="ident">set_dynamic_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Set circuit dynamic current for charger</p></div>
+<div class="desc"><p>Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the setting is valid. If set to 0, it is valid until changed the next time. If omitted, it is valid until the start of a new charging session. The dynamic current is always reset to default when the charger is power cycled</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_dynamic_charger_current"><code class="name flex">
 <span>async def <span class="ident">set_dynamic_charger_current</span></span>(<span>self, current: int)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Set charger dynamic current</p></div>
+<div class="desc"><p>Set charger dynamic current. The dynamic current is always reset to default when the charger is power cycled and at the start of each charging session</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_max_charger_circuit_current"><code class="name flex">
 <span>async def <span class="ident">set_max_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>

@@ -398,10 +398,10 @@ class Charger(BaseDict):
         except (ServerFailureException):
             return None
 
-    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
+    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = None):
         """ Set circuit dynamic current for charger """
         if self.circuit is not None:
-            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
+            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3, timeToLive)
         else:
             _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
 
