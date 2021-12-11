@@ -54,15 +54,17 @@ class Circuit(BaseDict):
         self.site = site
         self.easee = easee
 
-    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Set circuit dynamic current """
+ 
+    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0):
+        """ Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted"""
         json = {
-            "dynamicCircuitCurrentP1": currentP1,
-            "dynamicCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
-            "dynamicCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
+            "phase1": currentP1,
+            "phase2": currentP2 if currentP2 is not None else currentP1,
+            "phase3": currentP3 if currentP3 is not None else currentP1,
+            "timeToLive": timeToLive,
         }
         try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
         except (ServerFailureException):
             return None
 

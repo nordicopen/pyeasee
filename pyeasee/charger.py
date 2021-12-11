@@ -398,10 +398,10 @@ class Charger(BaseDict):
         except (ServerFailureException):
             return None
 
-    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Set circuit dynamic current for charger """
+    async def set_dynamic_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0):
+        """ Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted."""
         if self.circuit is not None:
-            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3)
+            return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3, timeToLive)
         else:
             _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
 
