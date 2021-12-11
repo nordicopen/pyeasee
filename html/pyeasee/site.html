@@ -56,10 +56,10 @@
 <div class="desc"></div>
 </dd>
 <dt id="pyeasee.site.Circuit.set_dynamic_current"><code class="name flex">
-<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = None)</span>
+<span>async def <span class="ident">set_dynamic_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. If timeToLive is set to 0 or omitted, the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted</p></div>
+<div class="desc"><p>Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted</p></div>
 </dd>
 <dt id="pyeasee.site.Circuit.set_max_current"><code class="name flex">
 <span>async def <span class="ident">set_max_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
