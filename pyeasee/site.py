@@ -54,8 +54,9 @@ class Circuit(BaseDict):
         self.site = site
         self.easee = easee
 
- 
-    async def set_dynamic_current(self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0):
+    async def set_dynamic_current(
+        self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0
+    ):
         """ Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted"""
         json = {
             "phase1": currentP1,
