@@ -154,8 +154,6 @@ class Easee:
         """
         if "accessToken" not in self.token:
             await self.connect()
-        accessToken = self.token["accessToken"]
-        self.headers["Authorization"] = f"Bearer {accessToken}"
         _LOGGER.debug(
             "verify_updated_token: %s, %s, %s",
             self.token["expires"],
@@ -164,6 +162,8 @@ class Easee:
         )
         if self.token["expires"] < datetime.now():
             await self._refresh_token()
+        accessToken = self.token["accessToken"]
+        self.headers["Authorization"] = f"Bearer {accessToken}"
 
     async def _handle_token_response(self, res):
         """
