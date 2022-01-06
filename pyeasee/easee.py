@@ -86,6 +86,7 @@ class Easee:
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
+        self.minimal_headers = self.headers
         self.sr_headers = {
             "User-Agent": f"pyeasee/{__VERSION__} SignalR client",
             "Accept": "application/json",
@@ -181,7 +182,7 @@ class Easee:
         """
         data = {"userName": self.username, "password": self.password}
         _LOGGER.debug("getting token for user: %s", self.username)
-        response = await self.session.post(f"{self.base}/api/accounts/login", json=data)
+        response = await self.session.post(f"{self.base}/api/accounts/login", headers=self.minimal_headers, json=data)
         await raise_for_status(response)
         await self._handle_token_response(response)
 
@@ -195,7 +196,7 @@ class Easee:
         }
         _LOGGER.debug("Refreshing access token")
         try:
-            res = await self.session.post(f"{self.base}/api/accounts/refresh_token", headers=self.headers, json=data)
+            res = await self.session.post(f"{self.base}/api/accounts/refresh_token", headers=self.minimal_headers, json=data)
             await self._handle_token_response(res)
         except AuthorizationFailedException:
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
