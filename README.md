@@ -49,6 +49,9 @@ async def main():
     await easee.close()
 ```
 
+The __main__.py file also serves a more complete example, see:
+https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py
+
 ## Development
 
 This project uses `black` for code formatting and `flake8` for linting. To autoformat and run lint run
