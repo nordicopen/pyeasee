@@ -49,8 +49,7 @@ async def main():
     await easee.close()
 ```
 
-The __main__.py file also serves a more complete example, see:
-https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py
+The __main__.py file also serves a more complete example, see: [__main__.py](https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py)
 
 ## Development
 
