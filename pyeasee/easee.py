@@ -172,7 +172,7 @@ class Easee:
         """
         self.token = await res.json()
         _LOGGER.debug("TOKEN: %s", self.token)
-        expiresIn = int(self.token["expiresIn"])
+        expiresIn = int(self.token["expiresIn"]) - 60
         now = datetime.now()
         self.token["expires"] = now + timedelta(0, expiresIn)
 
