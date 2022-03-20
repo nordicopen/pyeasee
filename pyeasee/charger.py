@@ -165,6 +165,18 @@ class ChargerSession(BaseDict):
         }
         super().__init__(data)
 
+class ChargerOngoingChargingSession(BaseDict):
+    """ Charger ongoing charging session """
+
+    def __init__(self, session: Dict[str, Any]):
+        data = {
+            "sessionEnergy": float(session.get("sessionEnergy")),
+            "sessionStart": session.get("sessionStart"),
+            "sessionEnd": session.get("sessionEnd"),
+            "chargeDurationInSeconds": int(session.get("chargeDurationInSeconds")),
+        }
+        super().__init__(data)
+
 
 class Charger(BaseDict):
     def __init__(self, entries: Dict[str, Any], easee: Any, site: Any = None, circuit: Any = None):
@@ -460,4 +472,12 @@ class Charger(BaseDict):
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/access")
         except (ServerFailureException):
+            return None
+
+    async def get_ongoing_charging_session(self) -> ChargerOngoingChargingSession:
+        """ Get ongoing charging session """
+        try:
+            session = await (await self.easee.get(f"/api/chargers/{self.id}/sessions/ongoing")).json()
+            return ChargerOngoingChargingSession(session)
+        except (ServerFailureException, NotFoundException):
             return None

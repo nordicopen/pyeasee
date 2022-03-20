@@ -240,6 +240,7 @@ async def chargers_info(chargers: List[Charger]):
         config = await charger.get_config()
         schedule = await charger.get_basic_charge_plan()
         week_schedule = await charger.get_weekly_charge_plan()
+        ongoing_charging_session = await charger.get_ongoing_charging_session()
         ch = charger.get_data()
         ch["state"] = state.get_data()
         ch["config"] = config.get_data()
@@ -247,6 +248,8 @@ async def chargers_info(chargers: List[Charger]):
             ch["schedule"] = schedule.get_data()
         if week_schedule is not None:
             ch["week_schedule"] = week_schedule.get_data()
+        if ongoing_charging_session is not None:
+            ch["ongoing_charging_session"] = ongoing_charging_session.get_data()
         data.append(ch)
 
     print(json.dumps(data, indent=2))

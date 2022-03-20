@@ -98,6 +98,13 @@ default_config = {
     "ledStripBrightness": None,
 }
 
+default_ongoing_charging_session = {
+    "sessionEnergy": 24.291513,
+    "sessionStart": "2022-03-20T13:14:39Z",
+    "sessionEnd": "2022-03-20T16:16:20Z",
+    "chargeDurationInSeconds": 9309
+} 
+
 
 @pytest.mark.asyncio
 async def test_get_correct_status():
@@ -113,3 +120,10 @@ async def test_get_correct_phase_mode():
     charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
     state = await charger.get_config()
     assert state["phaseMode"] == "Locked to three phase"
+
+@pytest.mark.asyncio
+async def test_get_ongoing_charging_session():
+    mock_easee = MockEasee(get_data=default_ongoing_charging_session)
+    charger = Charger({"id": "EH123456", "name": "Easee Home 12345"}, mock_easee)
+    state = await charger.get_ongoing_charging_session()
+    assert state["chargeDurationInSeconds"] == 9309

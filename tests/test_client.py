@@ -46,6 +46,13 @@ async def test_get_chargers(aiosession, aioresponse):
 
     assert state["chargerOpMode"] == 2
 
+    charger_ongoing_charging_session_data = load_json_fixture("charger-ongoing-charging-session.json")
+    aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/sessions/ongoing", payload=charger_ongoing_charging_session_data)
+
+    state = await chargers[0].get_ongoing_charging_session()
+
+    assert state["chargeDurationInSeconds"] == 9309
+
     await easee.close()
     await aiosession.close()
 

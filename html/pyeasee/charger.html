@@ -91,6 +91,12 @@
 <dd>
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.get_ongoing_charging_session"><code class="name flex">
+<span>async def <span class="ident">get_ongoing_charging_session</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerOngoingChargingSession" href="#pyeasee.charger.ChargerOngoingChargingSession">ChargerOngoingChargingSession</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get ongoing charging session</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.get_sessions_between_dates"><code class="name flex">
 <span>async def <span class="ident">get_sessions_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date)</span>
 </code></dt>
@@ -253,6 +259,22 @@
 <li>collections.abc.Container</li>
 </ul>
 </dd>
+<dt id="pyeasee.charger.ChargerOngoingChargingSession"><code class="flex name class">
+<span>class <span class="ident">ChargerOngoingChargingSession</span></span>
+<span>(</span><span>session: Dict[str, Any])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Charger ongoing charging session</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pyeasee.utils.BaseDict" href="utils.html#pyeasee.utils.BaseDict">BaseDict</a></li>
+<li>collections.abc.Mapping</li>
+<li>collections.abc.Collection</li>
+<li>collections.abc.Sized</li>
+<li>collections.abc.Iterable</li>
+<li>collections.abc.Container</li>
+</ul>
+</dd>
 <dt id="pyeasee.charger.ChargerSchedule"><code class="flex name class">
 <span>class <span class="ident">ChargerSchedule</span></span>
 <span>(</span><span>schedule: Dict[str, Any])</span>
@@ -343,6 +365,7 @@
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_ongoing_charging_session" href="#pyeasee.charger.Charger.get_ongoing_charging_session">get_ongoing_charging_session</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_sessions_between_dates" href="#pyeasee.charger.Charger.get_sessions_between_dates">get_sessions_between_dates</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_weekly_charge_plan" href="#pyeasee.charger.Charger.get_weekly_charge_plan">get_weekly_charge_plan</a></code></li>
@@ -371,6 +394,9 @@
 </li>
 <li>
 <h4><code><a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pyeasee.charger.ChargerOngoingChargingSession" href="#pyeasee.charger.ChargerOngoingChargingSession">ChargerOngoingChargingSession</a></code></h4>
 </li>
 <li>
 <h4><code><a title="pyeasee.charger.ChargerSchedule" href="#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></code></h4>
