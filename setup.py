@@ -21,6 +21,6 @@ setup(
     ],
     packages=["pyeasee"],
     include_package_data=True,
-    install_requires=["aiohttp", "signalrcore==0.8.8", "websocket-client==0.54.0"],
+    install_requires=["aiohttp", "signalrcore==0.9.5"],
     entry_points={"console_scripts": ["pyeasee=pyeasee.__main__:main"]},
 )
