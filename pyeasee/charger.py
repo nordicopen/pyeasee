@@ -117,18 +117,33 @@ class ChargerWeeklySchedule(BaseDict):
             for day in days:
                 ranges = day["ranges"]
                 for times in ranges:
-                    start = (
-                        datetime.strptime(times["startTime"], "%H:%MZ")
-                        .replace(tzinfo=timezone.utc)
-                        .astimezone(tzinfo)
-                        .strftime("%H:%M")
-                    )
-                    stop = (
-                        datetime.strptime(times["stopTime"], "%H:%MZ")
-                        .replace(tzinfo=timezone.utc)
-                        .astimezone(tzinfo)
-                        .strftime("%H:%M")
-                    )
+                    try:
+                        start = (
+                            datetime.strptime(times["startTime"], "%H:%MZ")
+                            .replace(tzinfo=timezone.utc)
+                            .astimezone(tzinfo)
+                            .strftime("%H:%M")
+                        )
+                        stop = (
+                            datetime.strptime(times["stopTime"], "%H:%MZ")
+                            .replace(tzinfo=timezone.utc)
+                            .astimezone(tzinfo)
+                            .strftime("%H:%M")
+                        )
+                    except ValueError:
+                        start = (
+                            datetime.strptime(times["startTime"], "%H:%M")
+                            .replace(tzinfo=timezone.utc)
+                            .astimezone(tzinfo)
+                            .strftime("%H:%M")
+                        )
+                        stop = (
+                            datetime.strptime(times["stopTime"], "%H:%M")
+                            .replace(tzinfo=timezone.utc)
+                            .astimezone(tzinfo)
+                            .strftime("%H:%M")
+                        )
+
                     if day["dayOfWeek"] == 0:
                         data["MondayStartTime"] = start
                         data["MondayStopTime"] = stop
