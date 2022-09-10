@@ -26,27 +26,55 @@ Read the API documentation [here](https://fondberg.github.io/pyeasee/pyeasee/)
 
 ### Small example
 
-Easee is the connection class and Charger
+Copy below script to the `test_pyeasee.py` :
 
 ```python
 from pyeasee import Easee, Charger, Site
+import asyncio
+from aiologger import Logger
+import os
 
-async def main():
-    _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])
-    easee = Easee(sys.argv[1], sys.argv[2])
-    chargers = await easee.get_chargers()
+
+_LOGGER = Logger.with_default_handlers(name=__name__)
+
+
+async def list_chargers(chargers):
+    """Print out charger state by iterating over charger list"""
     for charger in chargers:
         state = await charger.get_state()
-        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+        _LOGGER.info(f"Charger: {charger.name} status: {state['chargerOpMode']}")
 
+
+async def main():
+    user = os.getenv("EASEE_USER", "johndoe")
+    passwd = os.getenv("EASEE_PASS", "dummy123")
+    # Uncomment below if you want interactive login
+    # user = input("Username: ")
+    # passwd = input("PAssword: ")
+
+    _LOGGER.info(f"Logging in using: user: {user} pass: {passwd}")
+    easee = Easee(user, passwd)
+    chargers = await easee.get_chargers()
+    await list_chargers(chargers)
     sites = await easee.get_sites()
     for site in sites:
-        _LOGGER.info("Get sites circuits chargers: %s", site["createdOn"])
-        charger = site.get_circuits()[0].get_chargers()[0]
-        state = await charger.get_state()
-        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+        _LOGGER.info(f"Get sites circuits chargers: {site['createdOn']}")
+        chargers_for_site = site.get_circuits()[0].get_chargers()
+        await list_chargers(chargers_for_site)
 
     await easee.close()
+
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+loop.close()
+```
+
+Define the relevant environment variables and then run the script above:
+```
+export EASEE_USER=<YOUR USER>
+export EASE_PASS=<YOUR PASSWORD>
+python3 test_pyeasee.py
 ```
 
 See also [\_\_main\_\_.py](https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py) for a more complete usage example.
