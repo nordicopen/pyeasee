@@ -29,7 +29,7 @@ class Equalizer(BaseDict):
         self.easee = easee
 
     async def get_state(self):
-        """ Get Equalizer state """
+        """Get Equalizer state"""
         try:
             state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
             return EqualizerState(state)
@@ -37,7 +37,7 @@ class Equalizer(BaseDict):
             return None
 
     async def get_config(self):
-        """ Get Equalizer config """
+        """Get Equalizer config"""
         try:
             config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
             return EqualizerConfig(config)
@@ -46,7 +46,7 @@ class Equalizer(BaseDict):
 
 
 class Circuit(BaseDict):
-    """ Represents a Circuit """
+    """Represents a Circuit"""
 
     def __init__(self, data: Dict[str, Any], site: Any, easee: Any):
         super().__init__(data)
@@ -57,7 +57,7 @@ class Circuit(BaseDict):
     async def set_dynamic_current(
         self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0
     ):
-        """ Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted"""
+        """Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted"""
         json = {
             "phase1": currentP1,
             "phase2": currentP2 if currentP2 is not None else currentP1,
@@ -70,7 +70,7 @@ class Circuit(BaseDict):
             return None
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Set circuit max current """
+        """Set circuit max current"""
         json = {
             "maxCircuitCurrentP1": currentP1,
             "maxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
@@ -82,7 +82,7 @@ class Circuit(BaseDict):
             return None
 
     async def set_max_offline_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Set circuit max offline current, fallback value for limit if charger is offline """
+        """Set circuit max offline current, fallback value for limit if charger is offline"""
         json = {
             "offlineMaxCircuitCurrentP1": currentP1,
             "offlineMaxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
@@ -94,7 +94,7 @@ class Circuit(BaseDict):
             return None
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
-        """ Set circuit rated current - requires elevated access (installers only) """
+        """Set circuit rated current - requires elevated access (installers only)"""
         json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         try:
             return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
@@ -106,13 +106,13 @@ class Circuit(BaseDict):
 
 
 class SiteState(BaseDict):
-    """ Represents the site state as received through /sites/<id>/state """
+    """Represents the site state as received through /sites/<id>/state"""
 
     def __init__(self, data: Dict[str, Any]):
         super().__init__(data)
 
     def get_charger_config(self, charger_id: str, raw=False) -> ChargerConfig:
-        """ get config for charger from the instance data"""
+        """get config for charger from the instance data"""
         for circuit in self["circuitStates"]:
             for charger_data in circuit["chargerStates"]:
                 if charger_data["chargerID"] == charger_id:
@@ -121,7 +121,7 @@ class SiteState(BaseDict):
         return None
 
     def get_charger_state(self, charger_id: str, raw=False) -> ChargerState:
-        """ get state for charger from the instance data"""
+        """get state for charger from the instance data"""
         for circuit in self["circuitStates"]:
             for charger_data in circuit["chargerStates"]:
                 if charger_data["chargerID"] == charger_id:
@@ -130,8 +130,14 @@ class SiteState(BaseDict):
         return None
 
 
+class SiteCost(BaseDict):
+    def __init__(self, state: Dict[str, Any]):
+        data = {**state}
+        super().__init__(data)
+
+
 class Site(BaseDict):
-    """ Represents a Site """
+    """Represents a Site"""
 
     def __init__(self, data: Dict[str, Any], easee: Any):
         super().__init__(data)
@@ -140,20 +146,20 @@ class Site(BaseDict):
         self.easee = easee
 
     def get_circuits(self) -> List[Circuit]:
-        """ Get circuits for the site """
+        """Get circuits for the site"""
         return [Circuit(c, self, self.easee) for c in self["circuits"]]
 
     def get_equalizers(self) -> List[Equalizer]:
-        """ Get equalizers for the site """
+        """Get equalizers for the site"""
         return [Equalizer(e, self, self.easee) for e in self["equalizers"]]
 
     async def set_name(self, name: str):
-        """ Set name for the site """
+        """Set name for the site"""
         json = {**self.get_data(), "name": name}
         return await self.easee.put(f"/api/sites/{self.id}", json=json)
 
     async def set_currency(self, currency: str):
-        """ Set currency for the site """
+        """Set currency for the site"""
         json = {**self.get_data(), "currencyId": currency}
         return await self.easee.put(f"/api/sites/{self.id}", json=json)
 
@@ -164,7 +170,7 @@ class Site(BaseDict):
         currency: str = None,
         costPerKwhExcludeVat: float = None,
     ):
-        """ Set price per kWh for the site """
+        """Set price per kWh for the site"""
 
         json = {"costPerKWh": costPerKWh}
 
@@ -186,5 +192,15 @@ class Site(BaseDict):
 
         try:
             return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+        except (ServerFailureException):
+            return None
+
+    async def get_cost_between_dates(self, from_date: datetime, to_date: datetime):
+        """Get the charging cost between from_datetime and to_datetime"""
+        try:
+            cost = await (
+                await self.easee.get(f"api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
+            ).json()
+            return SiteCost(cost)
         except (ServerFailureException):
             return None

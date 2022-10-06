@@ -47,7 +47,7 @@ class ChargerStreamData(Enum):
     schedule_chargingSchedule = 62
     config_pairedEqualizer = 65
     state_wiFiAPEnabled = 68
-    PairedUserIDToken = 69
+    state_pairedUserIDToken = 69
     state_circuitTotalAllocatedPhaseConductorCurrentL1 = 70
     state_circuitTotalAllocatedPhaseConductorCurrentL2 = 71
     state_circuitTotalAllocatedPhaseConductorCurrentL3 = 72
@@ -78,7 +78,7 @@ class ChargerStreamData(Enum):
     PilotHigh = 105
     PilotLow = 106
     BackPlateID = 107
-    UserIDTokenReversed = 108
+    state_userIDTokenReversed = 108
     state_chargerOpMode = 109
     state_outputPhase = 110
     state_dynamicCircuitCurrentP1 = 111
@@ -98,7 +98,7 @@ class ChargerStreamData(Enum):
     LifetimeRelaySwitches = 125
     LifetimeHours = 126
     DynamicCurrentOfflineFallbackDEPRICATED = 127
-    UserIDToken = 128
+    state_userIDToken = 128
     ChargingSession = 129
     state_cellRSSI = 130
     CellRAT = 131
@@ -160,9 +160,9 @@ class ChargerStreamData(Enum):
     LTERSRP = 220
     LTESINR = 221
     LTERSRQ = 222
-    EqAvailableCurrentP1 = 230
-    EqAvailableCurrentP2 = 231
-    EqAvailableCurrentP3 = 232
+    state_EqAvailableCurrentP1 = 230
+    state_EqAvailableCurrentP2 = 231
+    state_EqAvailableCurrentP3 = 232
     ListenToControlPulse = 56
     ControlPulseRTT = 57
 
@@ -203,14 +203,14 @@ class EqualizerStreamData(Enum):
     state_rcpi = 50
     config_ssid = 51
     config_masterBackPlateID = 55
-    equalizerID = 56
+    config_equalizerID = 56
     exceptionData = 60
     bootReason = 61
     highCurrentTransitions = 64
-    vCap = 65
-    vBusMin = 66
-    vbusMax = 67
-    internalTemperature = 68
+    state_vCap = 65
+    state_vBusMin = 66
+    state_vbusMax = 67
+    state_internalTemperature = 68
     hanSnapshot = 69
     state_localRSSI = 70
     localTxPower = 71
@@ -221,14 +221,14 @@ class EqualizerStreamData(Enum):
     circuitPhaseMapping = 80
     phaseMappingReport = 81
     modbusConfiguration = 85
-    loadbalanceThrottle = 86
-    availableCurrentL1 = 87
-    availableCurrentL2 = 88
-    availableCurrentL3 = 89
+    state_loadbalanceThrottle = 86
+    state_availableCurrentL1 = 87
+    state_availableCurrentL2 = 88
+    state_availableCurrentL3 = 89
     hanChecksumErrors = 90
     APMacAddress = 91
     wifiReconnects = 92
-    ledMode = 100
+    state_ledMode = 100
 
 
 # Data IDs for Equalizer from signalr stream
