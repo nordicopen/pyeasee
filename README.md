@@ -26,27 +26,41 @@ Read the API documentation [here](https://fondberg.github.io/pyeasee/pyeasee/)
 
 ### Small example
 
-Easee is the connection class and Charger
+Save the example to a file and run it like this: python3 example.py <username> <password>
+Username is the phone number that was used to register the Easee account with country code.
+E.g. +46xxxxxxxxx.
 
 ```python
-from pyeasee import Easee, Charger, Site
+import asyncio
+import sys
+from pyeasee import Easee
 
-async def main():
-    _LOGGER.info("Logging in using: %s %s", sys.argv[1], sys.argv[2])
+async def async_main():
+
+    if len(sys.argv) < 3:
+        print(f"Usage: {sys.argv[0]} <username> <password>")
+        return
+        
+    print(f"Logging in using: {sys.argv[1]} {sys.argv[2]}")
     easee = Easee(sys.argv[1], sys.argv[2])
-    chargers = await easee.get_chargers()
-    for charger in chargers:
-        state = await charger.get_state()
-        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
 
     sites = await easee.get_sites()
     for site in sites:
-        _LOGGER.info("Get sites circuits chargers: %s", site["createdOn"])
-        charger = site.get_circuits()[0].get_chargers()[0]
-        state = await charger.get_state()
-        _LOGGER.info("Charger: %s status: %s", charger.name, state["chargerOpMode"])
+        print(f"Site {site.name} ({site.id})")
+        equalizers = site.get_equalizers()
+        for equalizer in equalizers:
+            print(f"  Equalizer: {equalizer.name} ({equalizer.id})")
+        circuits = site.get_circuits()
+        for circuit in circuits:
+            print(f"  Circuit {circuit.id}")
+            chargers = circuit.get_chargers()
+            for charger in chargers:
+                state = await charger.get_state()
+                print(f"    Charger: {charger.name} ({charger.id}) status: {state['chargerOpMode']}")
 
     await easee.close()
+
+asyncio.run(async_main())
 ```
 
 See also [\_\_main\_\_.py](https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py) for a more complete usage example.
