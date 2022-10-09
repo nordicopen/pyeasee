@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any, Dict, List
 
 from .utils import BaseDict
@@ -198,10 +198,11 @@ class Site(BaseDict):
 
     async def get_cost_between_dates(self, from_date: datetime, to_date: datetime):
         """Get the charging cost between from_datetime and to_datetime"""
+
         try:
-            cost = await (
-                await self.easee.get(f"api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
+            costs = await (
+                await self.easee.get(f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
             ).json()
-            return SiteCost(cost)
+            return [SiteCost(c) for c in costs]
         except (ServerFailureException):
             return None

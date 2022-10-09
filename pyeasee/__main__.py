@@ -4,10 +4,11 @@ import logging
 import argparse
 import threading
 import sys
+from datetime import datetime
 from typing import List
 from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
 
-from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData
+from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData, SiteCost
 
 
 CACHED_TOKEN = "easee-token.json"
@@ -52,6 +53,7 @@ def parse_arguments():
     )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("-r", "--signalr", help="Listen to signalr stream", action="store_true")
+    parser.add_argument("-co", "--cost", help="Retrieve cost for last year", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
     parser.add_argument(
         "-d",
@@ -117,6 +119,14 @@ async def async_main():
     if args.countries:
         countries_active = await easee.get_active_countries()
         print(json.dumps(countries_active, indent=2))
+
+    if args.cost:
+        dt_end = datetime.now()
+        dt_start = datetime.now().replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        sites: List[Site] = await easee.get_sites()
+        for site in sites:
+            costs: List[SiteCost] = await site.get_cost_between_dates(dt_start, dt_end)
+            await costs_info(costs)
 
     if args.all:
         sites: List[Site] = await easee.get_sites()
@@ -287,6 +297,18 @@ async def equalizers_info(equalizers: List[Equalizer]):
             indent=2,
         )
     )
+
+
+async def costs_info(costs: List[SiteCost]):
+    print("\n\n****************\nCOST\n****************")
+    data = []
+    for cost in costs:
+        data.append(cost["chargerId"])
+        data.append(cost["totalCost"])
+        data.append(cost["currencyId"])
+        data.append(cost["totalEnergyUsage"])
+
+    print(json.dumps(data, indent=2))
 
 
 async def charger_loop(charger: Charger, header=False):
