@@ -131,12 +131,6 @@ class SiteState(BaseDict):
         return None
 
 
-class SiteCost(BaseDict):
-    def __init__(self, state: Dict[str, Any]):
-        data = {**state}
-        super().__init__(data)
-
-
 class Site(BaseDict):
     """Represents a Site"""
 
@@ -203,6 +197,6 @@ class Site(BaseDict):
             costs = await (
                 await self.easee.get(f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
             ).json()
-            return [SiteCost(c) for c in costs]
+            return costs
         except (ServerFailureException):
             return None
