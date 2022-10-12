@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import List
 from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
 
-from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData, SiteCost
+from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData
 
 
 CACHED_TOKEN = "easee-token.json"
@@ -125,7 +125,7 @@ async def async_main():
         dt_start = datetime.now().replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
         sites: List[Site] = await easee.get_sites()
         for site in sites:
-            costs: List[SiteCost] = await site.get_cost_between_dates(dt_start, dt_end)
+            costs = await site.get_cost_between_dates(dt_start, dt_end)
             await costs_info(costs)
 
     if args.all:
@@ -299,7 +299,7 @@ async def equalizers_info(equalizers: List[Equalizer]):
     )
 
 
-async def costs_info(costs: List[SiteCost]):
+async def costs_info(costs):
     print("\n\n****************\nCOST\n****************")
     data = []
     for cost in costs:
