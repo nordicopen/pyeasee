@@ -318,7 +318,7 @@ class Easee:
         await self._verify_updated_token()
 
         while True:
-            """ The signalrcore lib start function does blocking I/O, so can not be called directly """
+            """The signalrcore lib start function does blocking I/O, so can not be called directly"""
             try:
                 await self.running_loop.run_in_executor(None, self.sr_connection.start)
             except UnAuthorizedHubError as ex:
@@ -388,7 +388,7 @@ class Easee:
             return None
 
     async def get_site(self, id: int) -> Site:
-        """ get site by id """
+        """get site by id"""
         try:
             data = await (await self.get(f"/api/sites/{id}?detailed=true")).json()
             _LOGGER.debug("Site:  %s", data)
@@ -397,7 +397,7 @@ class Easee:
             return None
 
     async def get_sites(self) -> List[Site]:
-        """ Get all sites """
+        """Get all sites"""
         try:
             records = await (await self.get("/api/sites")).json()
             _LOGGER.debug("Sites:  %s", records)
@@ -407,7 +407,7 @@ class Easee:
             return None
 
     async def get_site_state(self, id: str) -> SiteState:
-        """ Get site state """
+        """Get site state"""
         try:
             state = await (await self.get(f"/api/sites/{id}/state")).json()
             return SiteState(state)
@@ -415,7 +415,7 @@ class Easee:
             return None
 
     async def get_active_countries(self) -> List[Any]:
-        """ Get all active countries """
+        """Get all active countries"""
         try:
             records = await (await self.get("/api/resources/countries/active")).json()
             _LOGGER.debug("Active countries:  %s", records)
@@ -424,7 +424,7 @@ class Easee:
             return None
 
     async def get_currencies(self) -> List[Any]:
-        """ Get all currencies """
+        """Get all currencies"""
         try:
             records = await (await self.get("/api/resources/currencies")).json()
             _LOGGER.debug("Currencies:  %s", records)

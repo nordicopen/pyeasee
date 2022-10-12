@@ -43,7 +43,7 @@ REASON_FOR_NO_CURRENT = {
 
 
 class ChargerState(BaseDict):
-    """ Charger state with integer enum values converted to human readable string values"""
+    """Charger state with integer enum values converted to human readable string values"""
 
     def __init__(self, state: Dict[str, Any], raw=False):
         if not raw:
@@ -61,7 +61,7 @@ class ChargerState(BaseDict):
 
 
 class ChargerConfig(BaseDict):
-    """ Charger config with integer enum values converted to human readable string values"""
+    """Charger config with integer enum values converted to human readable string values"""
 
     def __init__(self, config: Dict[str, Any], raw=False):
         if not raw:
@@ -76,7 +76,7 @@ class ChargerConfig(BaseDict):
 
 
 class ChargerSchedule(BaseDict):
-    """ Charger charging schedule/plan """
+    """Charger charging schedule/plan"""
 
     def __init__(self, schedule: Dict[str, Any]):
         data = {
@@ -90,7 +90,7 @@ class ChargerSchedule(BaseDict):
 
 
 class ChargerWeeklySchedule(BaseDict):
-    """ Charger charging schedule/plan """
+    """Charger charging schedule/plan"""
 
     def __init__(self, schedule: Dict[str, Any]):
         days = schedule.get("days")
@@ -170,7 +170,7 @@ class ChargerWeeklySchedule(BaseDict):
 
 
 class ChargerSession(BaseDict):
-    """ Charger charging session """
+    """Charger charging session"""
 
     def __init__(self, session: Dict[str, Any]):
         data = {
@@ -191,7 +191,7 @@ class Charger(BaseDict):
         self.easee = easee
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
-        """ Gets consumption between two dates """
+        """Gets consumption between two dates"""
         try:
             value = await (
                 await self.easee.get(
@@ -203,7 +203,7 @@ class Charger(BaseDict):
             return None
 
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
-        """ Gets charging sessions between two dates """
+        """Gets charging sessions between two dates"""
         try:
             sessions = await (
                 await self.easee.get(
@@ -217,7 +217,7 @@ class Charger(BaseDict):
             return None
 
     async def get_config(self, from_cache=False, raw=False) -> ChargerConfig:
-        """ get config for charger """
+        """get config for charger"""
         try:
             config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
             return ChargerConfig(config, raw)
@@ -225,7 +225,7 @@ class Charger(BaseDict):
             return None
 
     async def get_state(self, raw=False) -> ChargerState:
-        """ get state for charger """
+        """get state for charger"""
         try:
             state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
             return ChargerState(state, raw)
@@ -261,14 +261,14 @@ class Charger(BaseDict):
             return None
 
     async def toggle(self):
-        """Toggle charging session start/stop/pause/resume """
+        """Toggle charging session start/stop/pause/resume"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/toggle_charging")
         except (ServerFailureException):
             return None
 
     async def get_basic_charge_plan(self) -> ChargerSchedule:
-        """Get and return charger basic charge plan setting from cloud """
+        """Get and return charger basic charge plan setting from cloud"""
         try:
             plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
             plan = await plan.json()
@@ -281,7 +281,7 @@ class Charger(BaseDict):
 
     # TODO: document types
     async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
-        """Set and post charger basic charge plan setting to cloud """
+        """Set and post charger basic charge plan setting to cloud"""
         json = {
             "id": id,
             "chargeStartTime": str(chargeStartTime),
@@ -295,7 +295,7 @@ class Charger(BaseDict):
             return None
 
     async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
-        """Get and return charger basic charge plan setting from cloud """
+        """Get and return charger basic charge plan setting from cloud"""
         try:
             plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
             plan = await plan.json()
@@ -309,7 +309,7 @@ class Charger(BaseDict):
 
     # TODO: document types
     async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
-        """Set and post charger basic charge plan setting to cloud """
+        """Set and post charger basic charge plan setting to cloud"""
         json = {
             "isEnabled": enabled,
             "days": [
@@ -330,7 +330,7 @@ class Charger(BaseDict):
             return None
 
     async def enable_charger(self, enable: bool):
-        """Enable and disable charger in charger settings """
+        """Enable and disable charger in charger settings"""
         json = {"enabled": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -338,7 +338,7 @@ class Charger(BaseDict):
             return None
 
     async def enable_idle_current(self, enable: bool):
-        """Enable and disable idle current in charger settings """
+        """Enable and disable idle current in charger settings"""
         json = {"enableIdleCurrent": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -346,7 +346,7 @@ class Charger(BaseDict):
             return None
 
     async def limitToSinglePhaseCharging(self, enable: bool):
-        """Limit to single phase charging in charger settings """
+        """Limit to single phase charging in charger settings"""
         json = {"limitToSinglePhaseCharging": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -354,7 +354,7 @@ class Charger(BaseDict):
             return None
 
     async def phaseMode(self, mode: int = 2):
-        """Set charging phase mode, 1 = always 1-phase, 2 = auto, 3 = always 3-phase """
+        """Set charging phase mode, 1 = always 1-phase, 2 = auto, 3 = always 3-phase"""
         json = {"phaseMode": mode}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -362,7 +362,7 @@ class Charger(BaseDict):
             return None
 
     async def lockCablePermanently(self, enable: bool):
-        """Lock and unlock cable permanently in charger settings """
+        """Lock and unlock cable permanently in charger settings"""
         json = {"lockCablePermanently": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -370,7 +370,7 @@ class Charger(BaseDict):
             return None
 
     async def smartButtonEnabled(self, enable: bool):
-        """Enable and disable smart button in charger settings """
+        """Enable and disable smart button in charger settings"""
         json = {"smartButtonEnabled": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -378,7 +378,7 @@ class Charger(BaseDict):
             return None
 
     async def delete_basic_charge_plan(self):
-        """Delete charger basic charge plan setting from cloud """
+        """Delete charger basic charge plan setting from cloud"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/basic_charge_plan")
         except (ServerFailureException):
@@ -416,14 +416,14 @@ class Charger(BaseDict):
     async def set_dynamic_charger_circuit_current(
         self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0
     ):
-        """ Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted."""
+        """Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted."""
         if self.circuit is not None:
             return await self.circuit.set_dynamic_current(currentP1, currentP2, currentP3, timeToLive)
         else:
             _LOGGER.info("Circuit info must be initialized for dynamic current to be set")
 
     async def set_max_charger_circuit_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
-        """ Set circuit max current for charger """
+        """Set circuit max current for charger"""
         if self.circuit is not None:
             return await self.circuit.set_max_current(currentP1, currentP2, currentP3)
         else:
@@ -432,14 +432,14 @@ class Charger(BaseDict):
     async def set_max_offline_charger_circuit_current(
         self, currentP1: int, currentP2: int = None, currentP3: int = None
     ):
-        """ Set circuit max offline current for charger, fallback value for limit if charger is offline """
+        """Set circuit max offline current for charger, fallback value for limit if charger is offline"""
         if self.circuit is not None:
             return await self.circuit.set_max_offline_current(currentP1, currentP2, currentP3)
         else:
             _LOGGER.info("Circuit info must be initialized for offline current to be set")
 
     async def set_dynamic_charger_current(self, current: int):
-        """ Set charger dynamic current """
+        """Set charger dynamic current"""
         json = {"dynamicChargerCurrent": current}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -447,7 +447,7 @@ class Charger(BaseDict):
             return None
 
     async def set_max_charger_current(self, current: int):
-        """ Set charger max current """
+        """Set charger max current"""
         json = {"maxChargerCurrent": current}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
@@ -455,7 +455,7 @@ class Charger(BaseDict):
             return None
 
     async def set_access(self, access: Union[int, str]):
-        """ Set the level of access for a changer """
+        """Set the level of access for a changer"""
         json = {
             1: 1,
             2: 2,
@@ -471,7 +471,7 @@ class Charger(BaseDict):
             return None
 
     async def delete_access(self):
-        """ Revert permissions overridden on a charger level"""
+        """Revert permissions overridden on a charger level"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/access")
         except (ServerFailureException):
