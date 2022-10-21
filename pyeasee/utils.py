@@ -25,10 +25,10 @@ def lookup_equalizer_stream_id(id):
 
 def convert_stream_data(data_type, value):
     if data_type == 2:
-        if value == "0":
-            return False
-        else:
+        if value.lower() in ['1', 'true', 'on', 'yes']:
             return True
+        else:
+            return False
     elif data_type == 3:
         return float(value)
     elif data_type == 4:
