@@ -25,7 +25,7 @@ def lookup_equalizer_stream_id(id):
 
 def convert_stream_data(data_type, value):
     if data_type == 2:
-        if value.lower() in ['1', 'true', 'on', 'yes']:
+        if value.lower() in ["1", "true", "on", "yes"]:
             return True
         else:
             return False
