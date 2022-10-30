@@ -363,9 +363,9 @@ class Charger(BaseDict):
 
     async def lockCablePermanently(self, enable: bool):
         """Lock and unlock cable permanently in charger settings"""
-        json = {"lockCablePermanently": enable}
+        json = {"state": enable}
         try:
-            return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+            return await self.easee.post(f"/api/chargers/{self.id}/commands/lock_state", json=json)
         except (ServerFailureException):
             return None
 
