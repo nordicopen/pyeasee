@@ -406,6 +406,16 @@ class Easee:
         except (ServerFailureException):
             return None
 
+    async def get_account_products(self) -> List[Site]:
+        """Get all sites and products that are accessible by the logged in user"""
+        try:
+            records = await (await self.get("/api/accounts/products")).json()
+            _LOGGER.debug("Sites:  %s", records)
+            sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+            return sites
+        except (ServerFailureException):
+            return None
+
     async def get_site_state(self, id: str) -> SiteState:
         """Get site state"""
         try:
