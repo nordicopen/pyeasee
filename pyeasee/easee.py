@@ -411,7 +411,7 @@ class Easee:
         try:
             records = await (await self.get("/api/accounts/products")).json()
             _LOGGER.debug("Sites:  %s", records)
-            sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+            sites = [Site(r, self) for r in records]
             return sites
         except (ServerFailureException):
             return None
