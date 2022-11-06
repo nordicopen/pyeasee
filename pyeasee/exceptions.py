@@ -12,3 +12,6 @@ class TooManyRequestsException(Exception):
 
 class ServerFailureException(Exception):
     pass
+
+class ForbiddenServiceException(Exception):
+    pass

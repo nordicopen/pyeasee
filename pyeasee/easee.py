@@ -13,6 +13,7 @@ import aiohttp
 from .charger import Charger
 from .exceptions import (
     AuthorizationFailedException,
+    ForbiddenServiceException,
     NotFoundException,
     ServerFailureException,
     TooManyRequestsException,
@@ -51,7 +52,8 @@ async def raise_for_status(response):
             _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
             raise AuthorizationFailedException(data)
         elif 403 == response.status:
-            _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
+            _LOGGER.debug("Forbidden service " + f"({response.status}: {data} {response.url})")
+            raise ForbiddenServiceException(data)
         elif 404 == response.status:
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")

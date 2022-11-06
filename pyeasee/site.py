@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 from .utils import BaseDict
 from .charger import Charger, ChargerConfig, ChargerState
-from .exceptions import ServerFailureException
+from .exceptions import ForbiddenServiceException, ServerFailureException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -198,5 +198,5 @@ class Site(BaseDict):
                 await self.easee.get(f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
             ).json()
             return costs
-        except (ServerFailureException):
+        except (ServerFailureException, ForbiddenServiceException):
             return None
