@@ -52,8 +52,8 @@ async def raise_for_status(response):
             _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
             raise AuthorizationFailedException(data)
         elif 403 == response.status:
-            _LOGGER.debug("Forbidden service " + f"({response.status}: {data} {response.url})")
-            raise ForbiddenServiceException(data)
+            _LOGGER.debug("Forbidden service" + f"({response.status}: {response.url})")
+            raise ForbiddenServiceException
         elif 404 == response.status:
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
@@ -147,6 +147,8 @@ class Easee:
             await self.connect()
             # rethrow it
             await raise_for_status(response)
+        except ForbiddenServiceException as ex:
+            raise
         except Exception as ex:
             _LOGGER.debug("Got other exception from status: %s", type(ex).__name__)
             raise
@@ -413,7 +415,12 @@ class Easee:
         try:
             records = await (await self.get("/api/accounts/products")).json()
             _LOGGER.debug("Sites:  %s", records)
-            sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
+            sites = []
+            for r in records:
+                site = await self.get_site(r["id"])
+                site["circuits"] = r["circuits"]
+                site["equalizers"] = r["equalizers"]
+                sites.append(site)
             return sites
         except (ServerFailureException):
             return None
