@@ -1,10 +1,8 @@
-
-__VERSION__ = "0.7.47"
-
 clean:
 	rm -rf pyeasee.egg-info dist build
 
 lint:
+	isort pyeasee
 	black pyeasee --line-length 120
 	flake8 --ignore=E501,E231,F403 pyeasee
 
@@ -15,7 +13,7 @@ test:
 	pytest -s -v
 
 bump:
-	bump2version --current-version $(__VERSION__) patch Makefile setup.py setup.py pyeasee/easee.py
+	bump2version --allow-dirty patch setup.py pyeasee/easee.py
 
 doc:
 	rm -rf html
@@ -33,5 +31,3 @@ publish-test:
 
 publish: build publish_docs
 	twine upload dist/*
-
-
