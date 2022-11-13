@@ -9,7 +9,7 @@ bleach==3.1.5
 bump2version==1.0.0
 certifi==2020.6.20
 chardet==3.0.4
-click==8.0.0
+click
 colorama==0.4.3
 docutils==0.16
 flake8
@@ -27,7 +27,7 @@ more-itertools==8.4.0
 msgpack==1.0.2
 multidict==4.7.6
 packaging==20.4
-pathspec==0.8.0
+pathspec
 pdoc3==0.8.4
 pkginfo==1.5.0.1
 pluggy==0.13.1
