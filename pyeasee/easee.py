@@ -13,6 +13,8 @@ import aiohttp
 from .charger import Charger
 from .exceptions import (
     AuthorizationFailedException,
+    BadRequestException,
+    ForbiddenServiceException,
     NotFoundException,
     ServerFailureException,
     TooManyRequestsException,
@@ -45,13 +47,14 @@ async def raise_for_status(response):
             data = await response.text()
 
         if 400 == response.status:
-            _LOGGER.error("Bad request service " + f"({response.status}: {data} {response.url})")
-            raise AuthorizationFailedException(data)
+            _LOGGER.debug("Bad request " + f"({response.status}: {data} {response.url})")
+            raise BadRequestException(data)
         elif 401 == response.status:
             _LOGGER.debug("Unautorized " + f"({response.status}: {data} {response.url})")
             raise AuthorizationFailedException(data)
         elif 403 == response.status:
-            _LOGGER.error("Forbidden service " + f"({response.status}: {data} {response.url})")
+            _LOGGER.debug("Forbidden service" + f"({response.status}: {response.url})")
+            raise ForbiddenServiceException(data)
         elif 404 == response.status:
             # Getting this error when getting or deleting charge schedules which doesn't exist (empty)
             _LOGGER.debug("Not found " + f"({response.status}: {data} {response.url})")
@@ -140,11 +143,13 @@ class Easee:
     async def check_status(self, response):
         try:
             await raise_for_status(response)
-        except AuthorizationFailedException:
+        except (AuthorizationFailedException, BadRequestException):
             _LOGGER.debug("Re authorizing due to 401")
             await self.connect()
             # rethrow it
             await raise_for_status(response)
+        except ForbiddenServiceException:
+            raise
         except Exception as ex:
             _LOGGER.debug("Got other exception from status: %s", type(ex).__name__)
             raise
@@ -200,7 +205,7 @@ class Easee:
                 f"{self.base}/api/accounts/refresh_token", headers=self.minimal_headers, json=data
             )
             await self._handle_token_response(res)
-        except AuthorizationFailedException:
+        except (AuthorizationFailedException, BadRequestException):
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
             await self.connect()
 
