@@ -44,6 +44,49 @@
 <li>builtins.BaseException</li>
 </ul>
 </dd>
+<dt id="pyeasee.exceptions.BadRequestException"><code class="flex name class">
+<span>class <span class="ident">BadRequestException</span></span>
+<span>(</span><span>*args)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Bad arguments or operation not allowed in this context.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pyeasee.exceptions.ExceptionWithDict" href="#pyeasee.exceptions.ExceptionWithDict">ExceptionWithDict</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="pyeasee.exceptions.ExceptionWithDict"><code class="flex name class">
+<span>class <span class="ident">ExceptionWithDict</span></span>
+<span>(</span><span>*args)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Common base class for all non-exit exceptions.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pyeasee.exceptions.BadRequestException" href="#pyeasee.exceptions.BadRequestException">BadRequestException</a></li>
+<li><a title="pyeasee.exceptions.ForbiddenServiceException" href="#pyeasee.exceptions.ForbiddenServiceException">ForbiddenServiceException</a></li>
+</ul>
+</dd>
+<dt id="pyeasee.exceptions.ForbiddenServiceException"><code class="flex name class">
+<span>class <span class="ident">ForbiddenServiceException</span></span>
+<span>(</span><span>*args)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Authenticated but access to resource not allowed.</p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pyeasee.exceptions.ExceptionWithDict" href="#pyeasee.exceptions.ExceptionWithDict">ExceptionWithDict</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="pyeasee.exceptions.NotFoundException"><code class="flex name class">
 <span>class <span class="ident">NotFoundException</span></span>
 <span>(</span><span>...)</span>
@@ -98,6 +141,15 @@
 <ul>
 <li>
 <h4><code><a title="pyeasee.exceptions.AuthorizationFailedException" href="#pyeasee.exceptions.AuthorizationFailedException">AuthorizationFailedException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pyeasee.exceptions.BadRequestException" href="#pyeasee.exceptions.BadRequestException">BadRequestException</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pyeasee.exceptions.ExceptionWithDict" href="#pyeasee.exceptions.ExceptionWithDict">ExceptionWithDict</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pyeasee.exceptions.ForbiddenServiceException" href="#pyeasee.exceptions.ForbiddenServiceException">ForbiddenServiceException</a></code></h4>
 </li>
 <li>
 <h4><code><a title="pyeasee.exceptions.NotFoundException" href="#pyeasee.exceptions.NotFoundException">NotFoundException</a></code></h4>
