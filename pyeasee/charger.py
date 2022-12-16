@@ -280,18 +280,17 @@ class Charger(BaseDict):
             return None
 
     # TODO: document types
-    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime=None, repeat=True):
+    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True):
         """Set and post charger basic charge plan setting to cloud"""
         json = {
             "id": id,
             "chargeStartTime": str(chargeStartTime),
             "repeat": repeat,
-            "isEnabled": True,
+            "isEnabled": isEnabled,
         }
         if chargeStopTime is not None:
             json["chargeStopTime"] = str(chargeStopTime)
 
-        print(f"Json = {json}")
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
         except (ServerFailureException):
