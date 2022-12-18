@@ -280,22 +280,24 @@ class Charger(BaseDict):
             return None
 
     # TODO: document types
-    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime, repeat=True):
+    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True):
         """Set and post charger basic charge plan setting to cloud"""
         json = {
             "id": id,
             "chargeStartTime": str(chargeStartTime),
-            "chargeStopTime": str(chargeStopTime),
             "repeat": repeat,
-            "isEnabled": True,
+            "isEnabled": isEnabled,
         }
+        if chargeStopTime is not None:
+            json["chargeStopTime"] = str(chargeStopTime)
+
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
         except (ServerFailureException):
             return None
 
     async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
-        """Get and return charger basic charge plan setting from cloud"""
+        """Get and return charger weekly charge plan setting from cloud"""
         try:
             plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
             plan = await plan.json()
@@ -309,7 +311,7 @@ class Charger(BaseDict):
 
     # TODO: document types
     async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
-        """Set and post charger basic charge plan setting to cloud"""
+        """Set and post charger weekly charge plan setting to cloud"""
         json = {
             "isEnabled": enabled,
             "days": [
