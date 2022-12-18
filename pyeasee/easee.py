@@ -2,13 +2,13 @@
 Main client for the Eesee account.
 """
 import asyncio
-import logging
 from datetime import datetime, timedelta
+import logging
 from typing import Any, List
-from signalrcore.hub_connection_builder import HubConnectionBuilder
-from signalrcore.hub.errors import UnAuthorizedHubError
 
 import aiohttp
+from signalrcore.hub.errors import UnAuthorizedHubError
+from signalrcore.hub_connection_builder import HubConnectionBuilder
 
 from .charger import Charger
 from .exceptions import (

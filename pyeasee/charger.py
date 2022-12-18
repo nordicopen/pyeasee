@@ -1,5 +1,5 @@
-import logging
 from datetime import datetime, timezone
+import logging
 from typing import Any, Dict, Union
 
 from .exceptions import NotFoundException, ServerFailureException

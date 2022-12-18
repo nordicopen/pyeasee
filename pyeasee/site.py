@@ -1,10 +1,10 @@
-import logging
 from datetime import datetime
+import logging
 from typing import Any, Dict, List
 
-from .utils import BaseDict
 from .charger import Charger, ChargerConfig, ChargerState
 from .exceptions import ForbiddenServiceException, ServerFailureException
+from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
 

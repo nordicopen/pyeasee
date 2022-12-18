@@ -1,15 +1,14 @@
+import argparse
 import asyncio
+from datetime import datetime
 import json
 import logging
-import argparse
-import threading
 import sys
-from datetime import datetime
+import threading
 from typing import List
+
+from . import Charger, Circuit, DatatypesStreamData, Easee, Equalizer, Site
 from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
-
-from . import Easee, Charger, Site, Circuit, Equalizer, DatatypesStreamData
-
 
 CACHED_TOKEN = "easee-token.json"
 
