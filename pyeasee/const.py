@@ -85,11 +85,11 @@ class ChargerStreamData(Enum):
     state_dynamicCircuitCurrentP2 = 112
     state_dynamicCircuitCurrentP3 = 113
     state_outputCurrent = 114
-    DeratedCurrent = 115
-    DeratingActive = 116
+    state_deratedCurrent = 115
+    state_deratingActive = 116
     DebugString = 117
     ErrorString = 118
-    ErrorCode = 119
+    state_errorCode = 119
     state_totalPower = 120
     state_sessionEnergy = 121
     state_energyPerHour = 122
@@ -160,9 +160,9 @@ class ChargerStreamData(Enum):
     LTERSRP = 220
     LTESINR = 221
     LTERSRQ = 222
-    state_EqAvailableCurrentP1 = 230
-    state_EqAvailableCurrentP2 = 231
-    state_EqAvailableCurrentP3 = 232
+    state_eqAvailableCurrentP1 = 230
+    state_eqAvailableCurrentP2 = 231
+    state_eqAvailableCurrentP3 = 232
     ListenToControlPulse = 56
     ControlPulseRTT = 57
 
