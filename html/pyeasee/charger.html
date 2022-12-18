@@ -107,7 +107,7 @@
 <span>async def <span class="ident">get_weekly_charge_plan</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerWeeklySchedule" href="#pyeasee.charger.ChargerWeeklySchedule">ChargerWeeklySchedule</a></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get and return charger basic charge plan setting from cloud</p></div>
+<div class="desc"><p>Get and return charger weekly charge plan setting from cloud</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.limitToSinglePhaseCharging"><code class="name flex">
 <span>async def <span class="ident">limitToSinglePhaseCharging</span></span>(<span>self, enable: bool)</span>
@@ -158,7 +158,7 @@
 <div class="desc"><p>Set the level of access for a changer</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_basic_charge_plan"><code class="name flex">
-<span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime, repeat=True)</span>
+<span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
@@ -197,7 +197,7 @@
 <span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, day, chargeStartTime, chargeStopTime, enabled=True)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
+<div class="desc"><p>Set and post charger weekly charge plan setting to cloud</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.smartButtonEnabled"><code class="name flex">
 <span>async def <span class="ident">smartButtonEnabled</span></span>(<span>self, enable: bool)</span>
