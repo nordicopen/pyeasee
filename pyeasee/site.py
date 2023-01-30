@@ -156,7 +156,9 @@ class Site(BaseDict):
     async def set_currency(self, currency: str):
         """Set currency for the site"""
         json = {**self.get_data(), "currencyId": currency}
-        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+        val = await self.easee.put(f"/api/sites/{self.id}", json=json)
+        self["currencyId"] = currency
+        return val
 
     async def set_price(
         self,
@@ -186,7 +188,12 @@ class Site(BaseDict):
         }
 
         try:
-            return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+            val = await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+            self["vat"] = vat
+            self["currencyId"] = currency
+            self["costPerKWh"] = costPerKWh
+            self["costPerKwhExcludeVat"] = costPerKwhExcludeVat
+            return val
         except (ServerFailureException):
             return None
 

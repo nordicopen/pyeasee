@@ -102,7 +102,7 @@ async def async_main():
         await chargers_info(chargers)
 
     if args.sites:
-        sites: List[Site] = await easee.get_sites()
+        sites: List[Site] = await easee.get_account_products()
         await sites_info(sites)
 
     if args.circuits:
