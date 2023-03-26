@@ -81,7 +81,7 @@ class Easee:
 
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
-        self.base = "https://api.easee.cloud"
+        self.base = [ "https://api.easee.cloud", "https://api.easee.com" ]
         self.sr_base = "https://api.easee.cloud/hubs/chargers"
         self.token = {}
         self.headers = {
@@ -109,33 +109,33 @@ class Easee:
         self._sr_backoff = SR_MIN_BACKOFF
 
     def base_uri(self):
-        return self.base
+        return self.base[0]
 
-    async def post(self, url, **kwargs):
+    async def post(self, url, base=0, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
+        response = await self.session.post(f"{self.base[base]}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
-    async def put(self, url, **kwargs):
+    async def put(self, url, base=0, **kwargs):
         _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
+        response = await self.session.put(f"{self.base[base]}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
-    async def get(self, url, **kwargs):
+    async def get(self, url, base=0, **kwargs):
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
+        response = await self.session.get(f"{self.base[base]}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
-    async def delete(self, url, **kwargs):
+    async def delete(self, url, base=0, **kwargs):
         _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
+        response = await self.session.delete(f"{self.base[base]}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
@@ -187,7 +187,7 @@ class Easee:
         """
         data = {"userName": self.username, "password": self.password}
         _LOGGER.debug("getting token for user: %s", self.username)
-        response = await self.session.post(f"{self.base}/api/accounts/login", headers=self.minimal_headers, json=data)
+        response = await self.session.post(f"{self.base[0]}/api/accounts/login", headers=self.minimal_headers, json=data)
         await raise_for_status(response)
         await self._handle_token_response(response)
 
@@ -202,7 +202,7 @@ class Easee:
         _LOGGER.debug("Refreshing access token")
         try:
             res = await self.session.post(
-                f"{self.base}/api/accounts/refresh_token", headers=self.minimal_headers, json=data
+                f"{self.base[0]}/api/accounts/refresh_token", headers=self.minimal_headers, json=data
             )
             await self._handle_token_response(res)
         except (AuthorizationFailedException, BadRequestException):

@@ -29,6 +29,14 @@ class Equalizer(BaseDict):
         self.site = site
         self.easee = easee
 
+    async def get_observations(self, *args):
+        """Gets observation IDs"""
+        observation_ids = ','.join(str(s) for s in args)
+        try:
+            return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
+        except (ServerFailureException):
+            return None
+
     async def get_state(self):
         """Get Equalizer state"""
         try:
@@ -44,7 +52,6 @@ class Equalizer(BaseDict):
             return EqualizerConfig(config)
         except (ServerFailureException):
             return None
-
 
 class Circuit(BaseDict):
     """Represents a Circuit"""
