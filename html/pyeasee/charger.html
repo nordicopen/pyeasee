@@ -61,6 +61,18 @@
 <dd>
 <div class="desc"><p>Delete charger basic charge plan setting from cloud</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.empty_config"><code class="name flex">
+<span>async def <span class="ident">empty_config</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create an empty config data structure</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.empty_state"><code class="name flex">
+<span>async def <span class="ident">empty_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create an empty config data structure</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.enable_charger"><code class="name flex">
 <span>async def <span class="ident">enable_charger</span></span>(<span>self, enable: bool)</span>
 </code></dt>
@@ -90,6 +102,18 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Gets consumption between two dates</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.get_latest_firmware"><code class="name flex">
+<span>async def <span class="ident">get_latest_firmware</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get the latest released firmeware version</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.get_observations"><code class="name flex">
+<span>async def <span class="ident">get_observations</span></span>(<span>self, *args)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets observation IDs</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.get_sessions_between_dates"><code class="name flex">
 <span>async def <span class="ident">get_sessions_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date)</span>
@@ -338,11 +362,15 @@
 <ul class="">
 <li><code><a title="pyeasee.charger.Charger.delete_access" href="#pyeasee.charger.Charger.delete_access">delete_access</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_basic_charge_plan" href="#pyeasee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.empty_config" href="#pyeasee.charger.Charger.empty_config">empty_config</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.empty_state" href="#pyeasee.charger.Charger.empty_state">empty_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_charger" href="#pyeasee.charger.Charger.enable_charger">enable_charger</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_idle_current" href="#pyeasee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_latest_firmware" href="#pyeasee.charger.Charger.get_latest_firmware">get_latest_firmware</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_observations" href="#pyeasee.charger.Charger.get_observations">get_observations</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_sessions_between_dates" href="#pyeasee.charger.Charger.get_sessions_between_dates">get_sessions_between_dates</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_weekly_charge_plan" href="#pyeasee.charger.Charger.get_weekly_charge_plan">get_weekly_charge_plan</a></code></li>
