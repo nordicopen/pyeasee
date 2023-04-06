@@ -192,7 +192,7 @@ class Charger(BaseDict):
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
-        observation_ids = ','.join(str(s) for s in args)
+        observation_ids = ",".join(str(s) for s in args)
         try:
             return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
         except (ServerFailureException):
@@ -239,6 +239,19 @@ class Charger(BaseDict):
             return ChargerState(state, raw)
         except (ServerFailureException):
             return None
+
+    async def empty_config(self, raw=False) -> ChargerConfig:
+        """Create an empty config data structure"""
+        config = {}
+        return ChargerConfig(config, raw)
+
+    async def empty_state(self, raw=False) -> ChargerConfig:
+        """Create an empty config data structure"""
+        state = {
+            "chargerOpMode": 0,
+            "reasonForNoCurrent": 0,
+        }
+        return ChargerState(state, raw)
 
     async def start(self):
         """Start charging session"""

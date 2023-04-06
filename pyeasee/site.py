@@ -31,7 +31,7 @@ class Equalizer(BaseDict):
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
-        observation_ids = ','.join(str(s) for s in args)
+        observation_ids = ",".join(str(s) for s in args)
         try:
             return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
         except (ServerFailureException):
@@ -52,6 +52,24 @@ class Equalizer(BaseDict):
             return EqualizerConfig(config)
         except (ServerFailureException):
             return None
+
+    async def empty_state(self, raw=False):
+        """Create an empty state data structyre"""
+        state = {}
+        return EqualizerState(state)
+
+    async def empty_config(self, raw=False):
+        """Crate an empty config data structure"""
+        config = {}
+        return EqualizerConfig(config)
+
+    async def get_latest_firmware(self):
+        """Get the latest released firmeware version"""
+        try:
+            return await (await self.easee.get(f"/firmware/{self.id}/latest", base=1)).json()
+        except (ServerFailureException):
+            return None
+
 
 class Circuit(BaseDict):
     """Represents a Circuit"""
