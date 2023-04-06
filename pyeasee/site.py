@@ -29,6 +29,14 @@ class Equalizer(BaseDict):
         self.site = site
         self.easee = easee
 
+    async def get_observations(self, *args):
+        """Gets observation IDs"""
+        observation_ids = ",".join(str(s) for s in args)
+        try:
+            return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
+        except (ServerFailureException):
+            return None
+
     async def get_state(self):
         """Get Equalizer state"""
         try:
@@ -42,6 +50,23 @@ class Equalizer(BaseDict):
         try:
             config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
             return EqualizerConfig(config)
+        except (ServerFailureException):
+            return None
+
+    async def empty_state(self, raw=False):
+        """Create an empty state data structyre"""
+        state = {}
+        return EqualizerState(state)
+
+    async def empty_config(self, raw=False):
+        """Crate an empty config data structure"""
+        config = {}
+        return EqualizerConfig(config)
+
+    async def get_latest_firmware(self):
+        """Get the latest released firmeware version"""
+        try:
+            return await (await self.easee.get(f"/firmware/{self.id}/latest", base=1)).json()
         except (ServerFailureException):
             return None
 
@@ -156,7 +181,9 @@ class Site(BaseDict):
     async def set_currency(self, currency: str):
         """Set currency for the site"""
         json = {**self.get_data(), "currencyId": currency}
-        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+        val = await self.easee.put(f"/api/sites/{self.id}", json=json)
+        self["currencyId"] = currency
+        return val
 
     async def set_price(
         self,
@@ -186,7 +213,12 @@ class Site(BaseDict):
         }
 
         try:
-            return await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+            val = await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+            self["vat"] = vat
+            self["currencyId"] = currency
+            self["costPerKWh"] = costPerKWh
+            self["costPerKwhExcludeVat"] = costPerKwhExcludeVat
+            return val
         except (ServerFailureException):
             return None
 

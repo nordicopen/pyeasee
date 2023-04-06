@@ -190,6 +190,14 @@ class Charger(BaseDict):
         self.circuit = circuit
         self.easee = easee
 
+    async def get_observations(self, *args):
+        """Gets observation IDs"""
+        observation_ids = ",".join(str(s) for s in args)
+        try:
+            return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
+        except (ServerFailureException):
+            return None
+
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """Gets consumption between two dates"""
         try:
@@ -231,6 +239,19 @@ class Charger(BaseDict):
             return ChargerState(state, raw)
         except (ServerFailureException):
             return None
+
+    async def empty_config(self, raw=False) -> ChargerConfig:
+        """Create an empty config data structure"""
+        config = {}
+        return ChargerConfig(config, raw)
+
+    async def empty_state(self, raw=False) -> ChargerConfig:
+        """Create an empty config data structure"""
+        state = {
+            "chargerOpMode": 0,
+            "reasonForNoCurrent": 0,
+        }
+        return ChargerState(state, raw)
 
     async def start(self):
         """Start charging session"""
@@ -412,6 +433,13 @@ class Charger(BaseDict):
         """Update charger firmware"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
+        except (ServerFailureException):
+            return None
+
+    async def get_latest_firmware(self):
+        """Get the latest released firmeware version"""
+        try:
+            return await (await self.easee.get(f"/firmware/{self.id}/latest", base=1)).json()
         except (ServerFailureException):
             return None
 

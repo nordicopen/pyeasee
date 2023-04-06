@@ -102,7 +102,7 @@ async def async_main():
         await chargers_info(chargers)
 
     if args.sites:
-        sites: List[Site] = await easee.get_sites()
+        sites: List[Site] = await easee.get_account_products()
         await sites_info(sites)
 
     if args.circuits:
@@ -249,9 +249,13 @@ async def chargers_info(chargers: List[Charger]):
         config = await charger.get_config()
         schedule = await charger.get_basic_charge_plan()
         week_schedule = await charger.get_weekly_charge_plan()
+        observation_test = await charger.get_observations(30, 31, 35, 36, 45)
+        firmware = await charger.get_latest_firmware()
         ch = charger.get_data()
         ch["state"] = state.get_data()
         ch["config"] = config.get_data()
+        ch["firmware"] = firmware
+        ch["observation"] = observation_test
         if schedule is not None:
             ch["schedule"] = schedule.get_data()
         if week_schedule is not None:
