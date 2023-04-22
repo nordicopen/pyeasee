@@ -82,7 +82,7 @@ class Easee:
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
         self.base = ["https://api.easee.cloud", "https://api.easee.com"]
-        self.sr_base = "https://api.easee.cloud/hubs/chargers"
+        self.sr_base = "https://streams.easee.com/hubs/chargers"
         self.token = {}
         self.headers = {
             "User-Agent": f"pyeasee/{__VERSION__} REST client",
