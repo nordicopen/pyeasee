@@ -33,7 +33,7 @@ class Equalizer(BaseDict):
         """Gets observation IDs"""
         observation_ids = ",".join(str(s) for s in args)
         try:
-            return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}", base=1)).json()
+            return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}")).json()
         except (ServerFailureException):
             return None
 
@@ -66,7 +66,7 @@ class Equalizer(BaseDict):
     async def get_latest_firmware(self):
         """Get the latest released firmeware version"""
         try:
-            return await (await self.easee.get(f"/firmware/{self.id}/latest", base=1)).json()
+            return await (await self.easee.get(f"/firmware/{self.id}/latest")).json()
         except (ServerFailureException):
             return None
 

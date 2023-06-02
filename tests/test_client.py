@@ -7,7 +7,7 @@ import pytest
 from aioresponses import aioresponses
 from pyeasee import Charger, Easee
 
-BASE_URL = "https://api.easee.cloud"
+BASE_URL = "https://api.easee.com"
 
 
 def load_json_fixture(filename):
