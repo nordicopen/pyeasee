@@ -187,9 +187,7 @@ class Easee:
         """
         data = {"userName": self.username, "password": self.password}
         _LOGGER.debug("getting token for user: %s", self.username)
-        response = await self.session.post(
-            f"{self.base}/api/accounts/login", headers=self.minimal_headers, json=data
-        )
+        response = await self.session.post(f"{self.base}/api/accounts/login", headers=self.minimal_headers, json=data)
         await raise_for_status(response)
         await self._handle_token_response(response)
 
