@@ -370,20 +370,52 @@ class Charger(BaseDict):
     # TODO: document types
     async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
         """Set and post charger weekly charge plan setting to cloud"""
-        json = {
-            "isEnabled": enabled,
-            "days": [
-                {
-                    "dayOfWeek": day,
-                    "ranges": [
-                        {
-                            "startTime": str(chargeStartTime),
-                            "stopTime": str(chargeStopTime),
-                        }
-                    ],
-                }
-            ],
-        }
+
+        try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
+            plan = await plan.json()
+            _LOGGER.debug(plan)
+        except (NotFoundException):
+            _LOGGER.debug("No scheduled charge plan")
+            plan = None
+        except (ServerFailureException):
+            return None
+
+        if plan is None:
+            json = {
+                "isEnabled": enabled,
+                "days": [
+                    {
+                        "dayOfWeek": day,
+                        "ranges": [
+                            {
+                                "startTime": str(chargeStartTime),
+                                "stopTime": str(chargeStopTime),
+                            }
+                        ],
+                    }
+                ],
+            }
+        else:
+            json = plan
+            days = json["days"]
+            newdays = []
+            for oldday in days:
+                if oldday["dayOfWeek"] == day:
+                    newday = {
+                        "dayOfWeek": day,
+                        "ranges": [
+                            {
+                                "startTime": str(chargeStartTime),
+                                "stopTime": str(chargeStopTime),
+                            }
+                        ],
+                    }
+                    newdays.append(newday)
+                else:
+                    newdays.append(oldday)
+            json["days"] = newdays
+
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
         except (ServerFailureException):
@@ -441,6 +473,13 @@ class Charger(BaseDict):
         """Delete charger basic charge plan setting from cloud"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/basic_charge_plan")
+        except (ServerFailureException):
+            return None
+
+    async def delete_weekly_charge_plan(self):
+        """Delete charger basic charge plan setting from cloud"""
+        try:
+            return await self.easee.delete(f"/api/chargers/{self.id}/weekly_charge_plan")
         except (ServerFailureException):
             return None
 
