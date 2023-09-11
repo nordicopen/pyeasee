@@ -33,7 +33,8 @@
             "masterBackPlateId": "masterBackPlateId"
           },
           "levelOfAccess": null,
-          "productCode": 1
+          "productCode": 1,
+          "userRole": 1
         }
       ],
       "masterBackplate": null,
