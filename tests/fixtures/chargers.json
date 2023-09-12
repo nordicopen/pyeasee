@@ -10,6 +10,7 @@
       "masterBackPlateId": "masterBackPlateId"
     },
     "levelOfAccess": 1,
-    "productCode": 1
+    "productCode": 1,
+    "userRole": 1
   }
 ]

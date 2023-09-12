@@ -19,7 +19,8 @@
               "masterBackPlateId": "ABCD1234567890"
             },
             "levelOfAccess": null,
-            "productCode": 1
+            "productCode": 1,
+            "userRole": 1
           }
         ],
         "masterBackplate": null,
@@ -142,7 +143,8 @@
               "masterBackPlateId": "ABCD1234567890"
             },
             "levelOfAccess": null,
-            "productCode": 1
+            "productCode": 1,
+            "userRole": 1
           }
         ],
         "masterBackplate": null,

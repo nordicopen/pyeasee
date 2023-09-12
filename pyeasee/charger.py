@@ -223,6 +223,9 @@ class Charger(BaseDict):
         super().__init__(entries)
         self.id: str = entries["id"]
         self.name: str = entries["name"]
+        self.product_code: int = entries["productCode"]
+        self.level_of_access: int = entries["levelOfAccess"]
+        self.user_role: int = entries["userRole"]
         self.site = site
         self.circuit = circuit
         self.easee = easee
