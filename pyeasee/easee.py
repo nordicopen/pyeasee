@@ -22,7 +22,7 @@ from .exceptions import (
 from .site import Site, SiteState
 from .utils import convert_stream_data
 
-__VERSION__ = "0.7.53"
+__VERSION__ = "0.7.54"
 
 _LOGGER = logging.getLogger(__name__)
 
