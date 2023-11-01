@@ -314,7 +314,11 @@ class Easee:
 
         options = {"access_token_factory": self._sr_token, "headers": self.sr_headers}
         self.sr_connection = (
-            HubConnectionBuilder().with_url(self.sr_base, options).configure_logging(logging.CRITICAL).build()
+            HubConnectionBuilder()
+            .with_url(self.sr_base, options)
+            .configure_logging(logging.CRITICAL)
+            .with_automatic_reconnect({"type": "raw", "keep_alive_interval": 15, "reconnect_interval": 5})
+            .build()
         )
         self.sr_connection.on_open(lambda: self._sr_open_cb())
         self.sr_connection.on_close(lambda: self._sr_close_cb())
