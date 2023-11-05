@@ -2,7 +2,7 @@
 
 # Easee EV Charger library
 
-This library is an async thin wrapper around [Easee's Rest API](https://api.easee.cloud/index.html)
+This library is an async thin wrapper around [Easee's Rest API](https://developer.easee.com/reference/post_api-accounts-login)
 
 ## Installation
 
