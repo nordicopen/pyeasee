@@ -1,7 +1,5 @@
 ![Maintenance](https://img.shields.io/maintenance/yes/2023.svg) ![Easee library](https://github.com/fondberg/easee/workflows/Easee%20library/badge.svg)
 
-[![Buy me a coffee](https://img.shields.io/static/v1.svg?label=Buy%20me%20a%20coffee&message=🥨&color=black&logo=buy%20me%20a%20coffee&logoColor=white&labelColor=6f4e37)](https://www.buymeacoffee.com/fondberg)
-
 # Easee EV Charger library
 
 This library is an async thin wrapper around [Easee's Rest API](https://api.easee.cloud/index.html)
@@ -72,3 +70,6 @@ This project uses `black` for code formatting and `flake8` for linting. To autof
 ```
 make lint
 ```
+## Attribution, support and cooperation
+
+This project was started by the late Niklas Fondberg, @fondberg. The repository has been inherited by his collaborators.
