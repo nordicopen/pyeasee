@@ -91,6 +91,18 @@
 <dd>
 <div class="desc"><p>Enable and disable idle current in charger settings</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.force_update_lifetimeenergy"><code class="name flex">
+<span>async def <span class="ident">force_update_lifetimeenergy</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Forces charger to update Lifetime Energy reading to the cloud. Warning: Rate limited to once every 3 minutes.</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.force_update_opmode"><code class="name flex">
+<span>async def <span class="ident">force_update_opmode</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Forces charger to update Op Mode to the cloud. Warning: Rate limited to once every 3 minutes.</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.get_basic_charge_plan"><code class="name flex">
 <span>async def <span class="ident">get_basic_charge_plan</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerSchedule" href="#pyeasee.charger.ChargerSchedule">ChargerSchedule</a></span>
 </code></dt>
@@ -373,6 +385,8 @@
 <li><code><a title="pyeasee.charger.Charger.empty_state" href="#pyeasee.charger.Charger.empty_state">empty_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_charger" href="#pyeasee.charger.Charger.enable_charger">enable_charger</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_idle_current" href="#pyeasee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.force_update_lifetimeenergy" href="#pyeasee.charger.Charger.force_update_lifetimeenergy">force_update_lifetimeenergy</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.force_update_opmode" href="#pyeasee.charger.Charger.force_update_opmode">force_update_opmode</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
