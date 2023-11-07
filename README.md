@@ -61,7 +61,7 @@ async def async_main():
 asyncio.run(async_main())
 ```
 
-See also [\_\_main\_\_.py](https://github.com/fondberg/pyeasee/blob/master/pyeasee/__main__.py) for a more complete usage example.
+See also [\_\_main\_\_.py](https://github.com/nordicopen/pyeasee/blob/master/pyeasee/__main__.py) for a more complete usage example.
 
 ## Development
 
