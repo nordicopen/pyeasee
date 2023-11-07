@@ -50,6 +50,9 @@ def parse_arguments():
         help="Get summary of sites, circuits, equalizers and chargers information",
         action="store_true",
     )
+    parser.add_argument(
+        "-f", "--force", help="Force update of lifetime energy and charger opmode ", action="store_true"
+    )
     parser.add_argument("-l", "--loop", help="Loop charger data every 5 seconds", action="store_true")
     parser.add_argument("-r", "--signalr", help="Listen to signalr stream", action="store_true")
     parser.add_argument("-co", "--cost", help="Retrieve cost for last year", action="store_true")
@@ -97,6 +100,7 @@ async def async_main():
     args = parse_arguments()
     _LOGGER.debug("args: %s", args)
     easee = Easee(args.username, args.password)
+
     if args.chargers:
         chargers: List[Charger] = await easee.get_chargers()
         await chargers_info(chargers)
@@ -212,6 +216,14 @@ async def async_main():
                 except Exception as e:
                     print(e)
                     await easee.close()
+
+    if args.force:
+        chargers: List[Charger] = await easee.get_chargers()
+        for charger in chargers:
+            print(f"Forcing update of lifetimeenergy on charger {charger['id']}")
+            await charger.force_update_lifetimeenergy()
+            print(f"Forcing update of opmode on charger {charger['id']}")
+            await charger.force_update_opmode()
 
     if args.signalr:
         chargers: List[Charger] = await easee.get_chargers()
