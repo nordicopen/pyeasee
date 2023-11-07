@@ -20,7 +20,7 @@ Run `python -m pyeasee -h` for help.
 
 ### Docs
 
-Read the API documentation [here](https://fondberg.github.io/pyeasee/pyeasee/)
+Read the API documentation [here](https://nordicopen.github.io/pyeasee/pyeasee/)
 
 ### Small example
 
