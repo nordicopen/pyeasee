@@ -587,14 +587,14 @@ class Charger(BaseDict):
             return None
 
     async def force_update_lifetimeenergy(self):
-        """Polls for a new Energy Reading from the charger. Warning: Rate limited to once every 3 minutes."""
+        """Forces charger to update Lifetime Energy reading to the cloud. Warning: Rate limited to once every 3 minutes."""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/poll_lifetimeenergy")
         except (ServerFailureException):
             return None
 
-    async def force_update_chargeropmode(self):
-        """Polls for a new Charger Op Mode from the charger. Warning: Rate limited to once every 3 minutes."""
+    async def force_update_opmode(self):
+        """Forces charger to update Op Mode to the cloud. Warning: Rate limited to once every 3 minutes."""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/poll_chargeropmode")
         except (ServerFailureException):
