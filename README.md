@@ -1,4 +1,4 @@
-![Maintenance](https://img.shields.io/maintenance/yes/2023.svg) ![Easee library](https://github.com/fondberg/easee/workflows/Easee%20library/badge.svg)
+![Maintenance](https://img.shields.io/maintenance/yes/2023.svg) ![Easee library](https://github.com/nordicopen/easee/workflows/Easee%20library/badge.svg)
 
 # Easee EV Charger library
 
@@ -38,7 +38,7 @@ async def async_main():
     if len(sys.argv) < 3:
         print(f"Usage: {sys.argv[0]} <username> <password>")
         return
-        
+
     print(f"Logging in using: {sys.argv[1]} {sys.argv[2]}")
     easee = Easee(sys.argv[1], sys.argv[2])
 
@@ -70,6 +70,7 @@ This project uses `black` for code formatting and `flake8` for linting. To autof
 ```
 make lint
 ```
+
 ## Attribution, support and cooperation
 
 This project was started by the late Niklas Fondberg, @fondberg. The repository has been inherited by his collaborators.

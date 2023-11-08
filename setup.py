@@ -10,9 +10,9 @@ setup(
     description="Easee EV charger API library",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/fondberg/pyeasee",
-    author="Niklas Fondberg",
-    author_email="niklas.fondberg@gmail.com",
+    url="https://github.com/nordicopen/pyeasee",
+    author="Ola Lidholm",
+    author_email="olal@plea.se",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
