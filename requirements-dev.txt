@@ -36,6 +36,7 @@ pycodestyle==2.6.0
 pyflakes==2.2.0
 Pygments==2.6.1
 pyparsing==2.4.7
+pysignalr==1.0.0
 pytest==5.4.3
 pytest-asyncio==0.14.0
 readme-renderer==26.0
