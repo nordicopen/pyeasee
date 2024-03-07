@@ -4,11 +4,12 @@ Main client for the Eesee account.
 import asyncio
 from datetime import datetime, timedelta
 import logging
-from typing import Any, List
+from typing import Any, Dict, List
 
 import aiohttp
-from signalrcore.hub.errors import UnAuthorizedHubError
-from signalrcore.hub_connection_builder import HubConnectionBuilder
+from pysignalr.client import SignalRClient
+from pysignalr.exceptions import AuthorizationError
+from pysignalr.messages import CompletionMessage
 
 from .charger import Charger
 from .exceptions import (
@@ -104,9 +105,8 @@ class Easee:
         self.sr_connection = None
         self.sr_connected = False
         self.sr_connect_in_progress = False
-        self.running_loop = None
-        self.event_loop = None
         self._sr_backoff = SR_MIN_BACKOFF
+        self._sr_task = None
 
     def base_uri(self):
         return self.base
@@ -170,6 +170,7 @@ class Easee:
             await self._refresh_token()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
+        self.sr_headers["Authorization"] = f"Bearer {accessToken}"
 
     async def _handle_token_response(self, res):
         """
@@ -224,20 +225,7 @@ class Easee:
             self._sr_backoff = self._sr_backoff + SR_INC_BACKOFF
         return self._sr_backoff
 
-    def _sr_token(self):
-        """
-        Return access token to signalr library, called from signalr thread, internal use only
-        """
-        if self.running_loop is not None:
-            future = asyncio.run_coroutine_threadsafe(self._verify_updated_token(), self.event_loop)
-            future.result()
-        if "accessToken" not in self.token:
-            accessToken = ""
-        else:
-            accessToken = self.token["accessToken"]
-        return accessToken
-
-    def _sr_open_cb(self):
+    async def _sr_open_cb(self) -> None:
         """
         Signalr connected callback - called from signalr thread, internal use only
         """
@@ -247,35 +235,28 @@ class Easee:
 
         for id in self.sr_subscriptions:
             _LOGGER.debug("Subscribing to %s", id)
-            self.sr_connection.send("SubscribeWithCurrentState", [id, True])
+            await self.sr_connection.send("SubscribeWithCurrentState", [id, True])
 
-    def _sr_close_cb(self):
+    async def _sr_close_cb(self) -> None:
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.debug("SignalR stream disconnected")
         self.sr_connection = None
         self.sr_connected = False
-        if self.running_loop is not None:
-            asyncio.run_coroutine_threadsafe(self._sr_connect(SR_INC_BACKOFF), self.event_loop)
+        self._sr_connect(SR_INC_BACKOFF)
 
-    def _sr_product_update_cb(self, stuff: list):
+    async def _sr_error_cb(self, message: CompletionMessage) -> None:
+        _LOGGER.debug("SignalR error recevied {message.error}")
+
+    async def _sr_product_update_cb(self, stuff: List[Dict[str, Any]]) -> None:
         """
         Signalr new data recieved callback - called from signalr thread, internal use only
         """
-        if self.running_loop is not None:
-            for data in stuff:
-                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
+        for data in stuff:
+            await self._sr_callback(data)
 
-    def _sr_charger_update_cb(self, stuff: list):
-        """
-        Signalr new data recieved callback - called from signalr thread, internal use only
-        """
-        if self.running_loop is not None:
-            for data in stuff:
-                asyncio.run_coroutine_threadsafe(self._sr_callback(data), self.event_loop)
-
-    async def _sr_callback(self, stuff: list):
+    async def _sr_callback(self, stuff: List[Dict[str, Any]]):
         """
         Signalr callback handler - internal use only
         """
@@ -298,10 +279,7 @@ class Easee:
         _LOGGER.debug(f"SR connect sleep {start_delay}")
         await asyncio.sleep(start_delay)
 
-        self.running_loop = asyncio.get_running_loop()
-        self.event_loop = asyncio.get_event_loop()
-
-        asyncio.ensure_future(self._sr_connect_loop())
+        self._sr_task = asyncio.create_task(self._sr_connect_loop())
 
     async def _sr_connect_loop(self):
         """
@@ -312,21 +290,18 @@ class Easee:
 
         _LOGGER.debug("SR connect loop")
 
-        options = {"access_token_factory": self._sr_token, "headers": self.sr_headers}
-        self.sr_connection = (
-            HubConnectionBuilder().with_url(self.sr_base, options).configure_logging(logging.CRITICAL).build()
-        )
-        self.sr_connection.on_open(lambda: self._sr_open_cb())
-        self.sr_connection.on_close(lambda: self._sr_close_cb())
-        self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-
         await self._verify_updated_token()
 
+        self.sr_connection = SignalRClient(self.sr_base, headers=self.sr_headers)
+        self.sr_connection.on_open(self._sr_open_cb)
+        self.sr_connection.on_close(self._sr_close_cb)
+        self.sr_connection.on_error(self._sr_error_cb)
+        self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
+
         while True:
-            """The signalrcore lib start function does blocking I/O, so can not be called directly"""
             try:
-                await self.running_loop.run_in_executor(None, self.sr_connection.start)
-            except UnAuthorizedHubError as ex:
+                await self.sr_connection.run()
+            except AuthorizationError as ex:
                 backoff = self._sr_next()
                 _LOGGER.debug("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
                 await asyncio.sleep(backoff)
@@ -356,9 +331,7 @@ class Easee:
         self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
             if self.running_loop is not None:
-                await self.running_loop.run_in_executor(
-                    None, self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
-                )
+                await self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
         else:
             await self._sr_connect()
 
@@ -378,7 +351,6 @@ class Easee:
         Disconnect the signalr stream - internal use only
         """
         if self.sr_connection is not None:
-            self.sr_connection.stop()
             self.sr_connection = None
 
     async def get_chargers(self) -> List[Charger]:
