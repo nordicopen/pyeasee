@@ -328,8 +328,7 @@ class Easee:
         _LOGGER.debug("Subscribing to %s", product.id)
         self.sr_subscriptions[product.id] = callback
         if self.sr_connected is True:
-            if self.running_loop is not None:
-                await self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
+            await self.sr_connection.send("SubscribeWithCurrentState", [product.id, True])
         else:
             await self._sr_connect()
 
