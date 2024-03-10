@@ -4,6 +4,7 @@ import os
 
 import aiohttp
 import pytest
+import pytest_asyncio
 from aioresponses import aioresponses
 from pyeasee import Charger, Easee
 
@@ -15,13 +16,13 @@ def load_json_fixture(filename):
         return json.load(f)
 
 
-@pytest.fixture
-def aioresponse():
+@pytest_asyncio.fixture
+async def aioresponse():
     with aioresponses() as m:
         yield m
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def aiosession():
     return aiohttp.ClientSession()
 
