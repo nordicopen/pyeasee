@@ -290,16 +290,14 @@ class Easee:
 
         _LOGGER.debug("SR connect loop")
 
-        await self._verify_updated_token()
-
-        self.sr_connection = SignalRClient(self.sr_base, headers=self.sr_headers)
-        self.sr_connection.on_open(self._sr_open_cb)
-        self.sr_connection.on_close(self._sr_close_cb)
-        self.sr_connection.on_error(self._sr_error_cb)
-        self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-
         while True:
             try:
+                await self._verify_updated_token()
+                self.sr_connection = SignalRClient(self.sr_base, headers=self.sr_headers)
+                self.sr_connection.on_open(self._sr_open_cb)
+                self.sr_connection.on_close(self._sr_close_cb)
+                self.sr_connection.on_error(self._sr_error_cb)
+                self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
                 await self.sr_connection.run()
             except AuthorizationError as ex:
                 backoff = self._sr_next()
@@ -309,7 +307,7 @@ class Easee:
                 continue
             except Exception as ex:
                 backoff = self._sr_next()
-                _LOGGER.debug("SR start exception: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                _LOGGER.debug("SR start exception: %s: %s. Retry in %d seconds", type(ex).__name__, ex, backoff)
                 await asyncio.sleep(backoff)
                 continue
 

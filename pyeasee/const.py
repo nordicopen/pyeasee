@@ -231,16 +231,16 @@ class ChargerStreamData(Enum):
         199  # Input voltage RMS between T4 and T5 [Volt][telemetry] [Double] ['Admin', 'Partner', 'User']
     )
     state_nominalVoltage = 200  # Nominal voltage setting for Easee One [Integer] ['Admin', 'Partner', 'User']
-    state_outVoltPin1_2 = (
+    state_outVoltPin1to2 = (
         202  # Output voltage RMS between type 2 pin 1 and 2 [Volt][telemetry] [Double] ['Admin', 'Partner']
     )
-    state_outVoltPin1_3 = (
+    state_outVoltPin1to3 = (
         203  # Output voltage RMS between type 2 pin 1 and 3 [Volt][telemetry] [Double] ['Admin', 'Partner']
     )
-    state_outVoltPin1_4 = (
+    state_outVoltPin1to4 = (
         204  # Output voltage RMS between type 2 pin 1 and 4 [Volt][telemetry] [Double] ['Admin', 'Partner']
     )
-    state_outVoltPin1_5 = (
+    state_outVoltPin1to5 = (
         205  # Output voltage RMS between type 2 pin 1 and 5 [Volt][telemetry] [Double] ['Admin', 'Partner']
     )
     state_outVoltPin2_3 = 206  # Output voltage RMS between type 2 pin 2 and 3 [Volt] [Double] ['Admin', 'Partner']
@@ -250,9 +250,9 @@ class ChargerStreamData(Enum):
     state_fatalErrorCode = (
         219  # Fatal error code according to error code table [event] [Integer] ['Admin', 'Partner', 'User']
     )
-    state_LTE_RSRP = 220  # Reference Signal Received Power (LTE) [-144 .. -44 dBm] [Integer] ['Admin', 'Partner']
-    state_LTE_SINR = 221  # Signal to Interference plus Noise Ratio (LTE) [-20 .. +30 dB] [Integer] ['Admin', 'Partner']
-    state_LTE_RSRQ = 222  # Reference Signal Received Quality (LTE) [-19 .. -3 dB] [Integer] ['Admin', 'Partner']
+    state_LTERSRP = 220  # Reference Signal Received Power (LTE) [-144 .. -44 dBm] [Integer] ['Admin', 'Partner']
+    state_LTESINR = 221  # Signal to Interference plus Noise Ratio (LTE) [-20 .. +30 dB] [Integer] ['Admin', 'Partner']
+    state_LTERSRQ = 222  # Reference Signal Received Quality (LTE) [-19 .. -3 dB] [Integer] ['Admin', 'Partner']
     state_chargingSessionStart = 223  # Charging session started [event] [String] ['Admin', 'Partner']
     state_eqAvailableCurrentP1 = (
         230  # Available current for charging on P1 according to Equalizer [Double] ['Admin', 'Partner', 'User']
