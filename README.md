@@ -1,4 +1,4 @@
-![Maintenance](https://img.shields.io/maintenance/yes/2024.svg) ![Easee library](https://github.com/nordicopen/easee/workflows/Easee%20library/badge.svg)
+![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)
 
 # Easee EV Charger library
 
