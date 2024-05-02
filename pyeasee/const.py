@@ -79,14 +79,14 @@ class ChargerStreamData(Enum):
     state_circuitTotalPhaseConductorCurrentL1 = 73  # Total current in L1 (sum of all chargers on the circuit) Sent in by master only [Double] ['Admin', 'Partner', 'User']
     state_circuitTotalPhaseConductorCurrentL2 = 74  # Total current in L2 (sum of all chargers on the circuit) Sent in by master only [Double] ['Admin', 'Partner', 'User']
     state_circuitTotalPhaseConductorCurrentL3 = 75  # Total current in L3 (sum of all chargers on the circuit) Sent in by master only [Double] ['Admin', 'Partner', 'User']
-    NumberOfCarsConnected = 76  # Number of cars connected to this circuit [Integer] ['Admin', 'Partner']
-    NumberOfCarsCharging = 77  # Number of cars currently charging [Integer] ['Admin', 'Partner']
-    NumberOfCarsInQueue = (
+    state_numberOfCarsConnected = 76  # Number of cars connected to this circuit [Integer] ['Admin', 'Partner']
+    state_numberOfCarsCharging = 77  # Number of cars currently charging [Integer] ['Admin', 'Partner']
+    state_numberOfCarsInQueue = (
         78  # Number of cars currently in queue, waiting to be allocated power [Integer] ['Admin', 'Partner']
     )
-    NumberOfCarsFullyCharged = 79  # Number of cars that appear to be fully charged [Integer] ['Admin', 'Partner']
+    state_numberOfCarsFullyCharged = 79  # Number of cars that appear to be fully charged [Integer] ['Admin', 'Partner']
     state_chargerFirmware = 80  # Embedded software package release id [boot] [Integer] ['Admin', 'Partner', 'User']
-    ICCID = 81  # SIM integrated circuit card identifier [String] ['Admin', 'Partner']
+    state_ICCID = 81  # SIM integrated circuit card identifier [String] ['Admin', 'Partner']
     ModemFwId = 82  # Modem firmware version [String] ['Admin', 'Partner']
     OTAErrorCode = 83  # OTA error code, see table [event] [Integer] ['Admin', 'Partner']
     MobileNetworkOperator = 84  # Current mobile network operator [pollable] [String] ['Admin', 'Partner']
@@ -95,11 +95,11 @@ class ChargerStreamData(Enum):
     ComPCBVersion = 91  # Communication PCB hardware version [Integer] ['Admin', 'Partner']
     state_reasonForNoCurrent = 96  # Enum describing why a charger with a car connected is not offering current to the car [Integer] ['Admin', 'Partner', 'User']
     LoadBalancingNumberOfConnectedChargers = 97  # Number of connected chargers in the load balancin. Including the master. Sent from Master only. [Integer] ['Admin', 'Partner']
-    UDPNumOfConnectedNodes = (
+    state_UDPNumOfConnectedNodes = (
         98  # Number of chargers connected to master through UDP / WIFI [Integer] ['Admin', 'Partner']
     )
-    LocalConnection = 99  # Slaves only. Current connection to master, 0 = None, 1= Radio, 2 = WIFI UDP, 3 = Radio and WIFI UDP [Integer] ['Admin', 'Partner']
-    PilotMode = 100  # Pilot Mode Letter (A-F) [event] [String] ['Admin', 'Partner']
+    state_localConnection = 99  # Slaves only. Current connection to master, 0 = None, 1= Radio, 2 = WIFI UDP, 3 = Radio and WIFI UDP [Integer] ['Admin', 'Partner']
+    state_pilotMode = 100  # Pilot Mode Letter (A-F) [event] [String] ['Admin', 'Partner']
     CarConnectedDEPRECATED = 101  # Car connection state [Boolean] ['Admin', 'Partner']
     state_smartCharging = (
         102  # Smart charging state enabled by capacitive touch button [event] [Boolean] ['Admin', 'Partner', 'User']
@@ -108,7 +108,7 @@ class ChargerStreamData(Enum):
     state_cableRating = 104  # Cable rating read [Amperes][event] [Integer] ['Admin', 'Partner', 'User']
     PilotHigh = 105  # Pilot signal high [Volt][debug] [Integer] ['Admin', 'Partner']
     PilotLow = 106  # Pilot signal low [Volt][debug] [Integer] ['Admin', 'Partner']
-    BackPlateID = 107  # Back Plate RFID of charger [boot] [String] ['Admin', 'Partner']
+    state_backPlateID = 107  # Back Plate RFID of charger [boot] [String] ['Admin', 'Partner']
     state_userIDTokenReversed = 108  # User ID token string from RFID reading [event](NB! Must reverse these strings) [String] ['Admin', 'Partner']
     state_chargerOpMode = (
         109  # Charger operation mode according to charger mode table [event] [Integer] ['Admin', 'Partner', 'User']
@@ -130,13 +130,13 @@ class ChargerStreamData(Enum):
     state_lifetimeEnergy = (
         124  # Accumulated energy in the lifetime of the charger [kWh] [Double] ['Admin', 'Partner', 'User']
     )
-    LifetimeRelaySwitches = 125  # Total number of relay switches in the lifetime of the charger (irrespective of the number of phases used) [Integer] ['Admin', 'Partner']
-    LifetimeHours = 126  # Total number of hours in operation [Integer] ['Admin', 'Partner']
+    state_lifetimeRelaySwitches = 125  # Total number of relay switches in the lifetime of the charger (irrespective of the number of phases used) [Integer] ['Admin', 'Partner']
+    state_lifetimeHours = 126  # Total number of hours in operation [Integer] ['Admin', 'Partner']
     DynamicCurrentOfflineFallbackDEPRICATED = (
         127  # Maximum circuit current when offline [event] [Integer] ['Admin', 'Partner']
     )
     state_userIDToken = 128  # User ID token string from RFID reading [event] [String] ['Admin', 'Partner']
-    ChargingSession = 129  # Charging sessions [json][event] [String] ['Admin', 'Partner']
+    state_ChargingSession = 129  # Charging sessions [json][event] [String] ['Admin', 'Partner']
     state_cellRSSI = 130  # Cellular signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
     CellRAT = 131  # Cellular radio access technology according to RAT table [event] [Integer] ['Admin', 'Partner']
     state_wiFiRSSI = 132  # WiFi signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
@@ -344,8 +344,8 @@ class EqualizerStreamData(Enum):
     state_availableCurrentL1 = 87  # Available Current for Balancing in Amps [Double] ['Admin', 'Partner', 'User']
     state_availableCurrentL2 = 88  # Available Current for Balancing in Amps [Double] ['Admin', 'Partner', 'User']
     state_availableCurrentL3 = 89  # Available Current for Balancing in Amps [Double] ['Admin', 'Partner', 'User']
-    MeterErrors = 90  # Meter Errors [Integer] ['Admin', 'Partner']
-    APMacAddress = 91  # Mac Address of the Wifi access point [String] ['Admin', 'Partner']
+    state_meterErrors = 90  # Meter Errors [Integer] ['Admin', 'Partner']
+    state_APMacAddress = 91  # Mac Address of the Wifi access point [String] ['Admin', 'Partner']
     state_wifiReconnects = 92  # Number of sucessful reconnects to AP [Integer] ['Admin', 'Partner']
     state_ledMode = 100  # Current LED pattern [Integer] ['Admin', 'Partner', 'User']
     state_equalizedChargeCurrentL1 = (

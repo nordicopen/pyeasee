@@ -244,7 +244,7 @@ class Easee:
         _LOGGER.debug("SignalR stream disconnected")
         self.sr_connection = None
         self.sr_connected = False
-        self._sr_connect(SR_INC_BACKOFF)
+        await self._sr_connect(SR_INC_BACKOFF)
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
         _LOGGER.debug("SignalR error recevied {message.error}")
