@@ -46,7 +46,7 @@ requests-toolbelt==1.0.0
 rfc3986==2.0.0
 six==1.16.0
 toml==0.10.2
-tqdm==4.66.2
+tqdm==4.66.3
 twine==5.0.0
 typed-ast
 urllib3==2.2.1
