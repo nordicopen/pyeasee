@@ -265,7 +265,7 @@ class Easee:
             value = convert_stream_data(stuff["dataType"], stuff["value"])
             await callback(stuff["mid"], stuff["dataType"], stuff["id"], value)
         else:
-            _LOGGER.debug("No callback found for %s", stuff["mid"])
+            _LOGGER.debug("No callback found for '%s'", stuff["mid"])
 
     async def _sr_connect(self, start_delay=0):
         """
