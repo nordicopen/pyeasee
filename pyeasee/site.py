@@ -63,6 +63,26 @@ class Equalizer(BaseDict):
         config = {}
         return EqualizerConfig(config)
 
+    async def get_load_balancing(self):
+        """Get the load balancing settings"""
+        try:
+            return await (
+                await self.easee.get(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy")
+            ).json()
+        except (ServerFailureException):
+            return None
+
+    async def set_load_balancing(self, activate: bool, current_limit: int):
+        """Get the load balancing settings"""
+        json = {
+            "mode": "chargingWithImport" if activate is True else "none",
+            "chargingWithImport": {"eligible": activate, "maximumImportAddedCurrent": current_limit},
+        }
+        try:
+            return await self.easee.post(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=json)
+        except (ServerFailureException):
+            return None
+
     async def get_latest_firmware(self):
         """Get the latest released firmeware version"""
         try:
