@@ -75,7 +75,7 @@ async def raise_for_status(response):
 
 
 class Easee:
-    def __init__(self, username, password, session: aiohttp.ClientSession = None, user_agent = None):
+    def __init__(self, username, password, session: aiohttp.ClientSession = None, user_agent=None):
         self.username = username
         self.password = password
         self.external_session = True if session else False
