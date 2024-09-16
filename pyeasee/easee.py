@@ -75,10 +75,14 @@ async def raise_for_status(response):
 
 
 class Easee:
-    def __init__(self, username, password, session: aiohttp.ClientSession = None):
+    def __init__(self, username, password, session: aiohttp.ClientSession = None, user_agent = None):
         self.username = username
         self.password = password
         self.external_session = True if session else False
+        if user_agent is None:
+            append_user_agent = ""
+        else:
+            append_user_agent = f"; {user_agent}"
 
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
@@ -86,13 +90,13 @@ class Easee:
         self.sr_base = "https://streams.easee.com/hubs/chargers"
         self.token = {}
         self.headers = {
-            "User-Agent": f"pyeasee/{__VERSION__} REST client",
+            "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
         self.minimal_headers = self.headers
         self.sr_headers = {
-            "User-Agent": f"pyeasee/{__VERSION__} SignalR client",
+            "User-Agent": f"pyeasee/{__VERSION__} SignalR client{append_user_agent}",
             "Accept": "application/json",
             "Content-Type": "application/json;charset=UTF-8",
         }
