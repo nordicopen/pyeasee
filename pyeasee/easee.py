@@ -245,7 +245,10 @@ class Easee:
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SignalR stream disconnected")
+        _LOGGER.debug("SignalR stream disconnected or failed to connect")
+        if self._sr_task is not None:
+            self._sr_task.cancel()
+        self.sr_connect_in_progress = False
         self.sr_connected = False
         await self._sr_connect(SR_INC_BACKOFF)
 
