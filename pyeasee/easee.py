@@ -255,7 +255,7 @@ class Easee:
 
         self.sr_connect_in_progress = False
         self.sr_connected = False
-        await self._sr_connect(SR_INC_BACKOFF)
+        await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
         _LOGGER.debug("SignalR error recevied {message.error}")
