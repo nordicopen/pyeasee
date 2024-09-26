@@ -248,6 +248,11 @@ class Easee:
         _LOGGER.debug("SignalR stream disconnected or failed to connect")
         if self._sr_task is not None:
             self._sr_task.cancel()
+            try:
+                await self._sr_task
+            except asyncio.CancelledError:
+                _LOGGER.debug("SignalR task cancelled")
+
         self.sr_connect_in_progress = False
         self.sr_connected = False
         await self._sr_connect(SR_INC_BACKOFF)
