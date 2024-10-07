@@ -122,6 +122,7 @@ class ChargerSchedule(BaseDict):
             "chargeStopTime": schedule.get("chargeStopTime"),
             "repeat": schedule.get("repeat"),
             "isEnabled": schedule.get("isEnabled"),
+            "chargingCurrentLimit": schedule.get("chargingCurrentLimit"),
         }
         super().__init__(data)
 
@@ -154,6 +155,7 @@ class ChargerWeeklySchedule(BaseDict):
             for day in days:
                 ranges = day["ranges"]
                 for times in ranges:
+                    limit = times["chargingCurrentLimit"]
                     try:
                         start = (
                             datetime.strptime(times["startTime"], "%H:%MZ")
@@ -184,24 +186,31 @@ class ChargerWeeklySchedule(BaseDict):
                     if day["dayOfWeek"] == 0:
                         data["MondayStartTime"] = start
                         data["MondayStopTime"] = stop
+                        data["MondayLimit"] = limit
                     elif day["dayOfWeek"] == 1:
                         data["TuesdayStartTime"] = start
                         data["TuesdayStopTime"] = stop
+                        data["TuesdayLimit"] = limit
                     elif day["dayOfWeek"] == 2:
                         data["WednesdayStartTime"] = start
                         data["WednesdayStopTime"] = stop
+                        data["WednesdayLimit"] = limit
                     elif day["dayOfWeek"] == 3:
                         data["ThursdayStartTime"] = start
                         data["ThursdayStopTime"] = stop
+                        data["ThursdayLimit"] = limit
                     elif day["dayOfWeek"] == 4:
                         data["FridayStartTime"] = start
                         data["FridayStopTime"] = stop
+                        data["FridayLimit"] = limit
                     elif day["dayOfWeek"] == 5:
                         data["SaturdayStartTime"] = start
                         data["SaturdayStopTime"] = stop
+                        data["SaturdayLimit"] = limit
                     elif day["dayOfWeek"] == 6:
                         data["SundayStartTime"] = start
                         data["SundayStopTime"] = stop
+                        data["SundayLimit"] = limit
 
         super().__init__(data)
 
@@ -341,13 +350,16 @@ class Charger(BaseDict):
             return None
 
     # TODO: document types
-    async def set_basic_charge_plan(self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True):
+    async def set_basic_charge_plan(
+        self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True, limit=32
+    ):
         """Set and post charger basic charge plan setting to cloud"""
         json = {
             "id": id,
             "chargeStartTime": str(chargeStartTime),
             "repeat": repeat,
             "isEnabled": isEnabled,
+            "chargingCurrentLimit": limit,
         }
         if chargeStopTime is not None:
             json["chargeStopTime"] = str(chargeStopTime)
@@ -371,7 +383,7 @@ class Charger(BaseDict):
             return None
 
     # TODO: document types
-    async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True):
+    async def set_weekly_charge_plan(self, day, chargeStartTime, chargeStopTime, enabled=True, limit=32):
         """Set and post charger weekly charge plan setting to cloud"""
 
         try:
@@ -394,6 +406,7 @@ class Charger(BaseDict):
                             {
                                 "startTime": str(chargeStartTime),
                                 "stopTime": str(chargeStopTime),
+                                "chargingCurrentLimit": limit,
                             }
                         ],
                     }
@@ -411,6 +424,7 @@ class Charger(BaseDict):
                             {
                                 "startTime": str(chargeStartTime),
                                 "stopTime": str(chargeStopTime),
+                                "chargingCurrentLimit": limit,
                             }
                         ],
                     }
