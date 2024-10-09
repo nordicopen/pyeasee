@@ -74,10 +74,16 @@ class Equalizer(BaseDict):
 
     async def set_load_balancing(self, activate: bool, current_limit: int):
         """Get the load balancing settings"""
-        json = {
-            "mode": "chargingWithImport" if activate is True else "none",
-            "chargingWithImport": {"eligible": activate, "maximumImportAddedCurrent": current_limit},
-        }
+        if activate is True:
+            json = {
+                "mode": "chargingWithImport",
+                "chargingWithImport": {"eligible": activate, "maximumImportAddedCurrent": current_limit},
+            }
+        else:
+            json = {
+                "mode": "none",
+            }
+
         try:
             return await self.easee.post(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=json)
         except (ServerFailureException):

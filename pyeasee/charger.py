@@ -369,6 +369,30 @@ class Charger(BaseDict):
         except (ServerFailureException):
             return None
 
+    async def disable_basic_charge_plan(self):
+        await self.enable_basic_charge_plan(False)
+
+    async def enable_basic_charge_plan(self, enable=True):
+        """Enabled or disable basic charge plan without changing other settings."""
+
+        try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
+            plan = await plan.json()
+        except (NotFoundException):
+            _LOGGER.debug("No scheduled charge plan")
+            plan = None
+        except (ServerFailureException):
+            plan = None
+
+        if plan is not None:
+            plan["isEnabled"] = enable
+            json = plan
+
+            try:
+                return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
+            except (ServerFailureException):
+                return None
+
     async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
         """Get and return charger weekly charge plan setting from cloud"""
         try:
@@ -414,6 +438,7 @@ class Charger(BaseDict):
             }
         else:
             json = plan
+            json["isEnabled"] = enabled
             days = json["days"]
             newdays = []
             for oldday in days:
@@ -437,6 +462,31 @@ class Charger(BaseDict):
             return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
         except (ServerFailureException):
             return None
+
+    async def disable_weekly_charge_plan(self):
+        await self.enable_weekly_charge_plan(False)
+
+    async def enable_weekly_charge_plan(self, enable=True):
+        """Enable or disable charger weekly charge plan setting to cloud"""
+
+        try:
+            plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
+            plan = await plan.json()
+            _LOGGER.debug(plan)
+        except (NotFoundException):
+            _LOGGER.debug("No scheduled charge plan")
+            plan = None
+        except (ServerFailureException):
+            return None
+
+        if plan is not None:
+            json = plan
+            json["isEnabled"] = enable
+
+            try:
+                return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
+            except (ServerFailureException):
+                return None
 
     async def enable_charger(self, enable: bool):
         """Enable and disable charger in charger settings"""
