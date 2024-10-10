@@ -359,7 +359,7 @@ class EqualizerStreamData(Enum):
     )
     config_currentTransformerConfig = 110  # Current Transformer Configuration [String] ['Admin', 'Partner', 'User']
     state_meterEncryptionStatus = 111  # Meter Encryption Status [String] ['Admin', 'Partner', 'User']
-    state_surplusCharging = 115  # Surplus charging configuration [String] ['Admin', 'Partner', 'User']
+    config_surplusCharging = 115  # Surplus charging configuration [String] ['Admin', 'Partner', 'User']
     state_connectedAmps = 120  # Equalizer AMPs report ['Admin', 'Partner', 'User']
     state_connectedToCloud = 250  # Device is connected to AWS [Boolean] ['Admin', 'Partner', 'User']
     state_cloudDisconnectReason = 251  # AWS DisconnectReason [String] ['Admin', 'Partner', 'User']
