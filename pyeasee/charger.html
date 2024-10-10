@@ -67,6 +67,18 @@
 <dd>
 <div class="desc"><p>Delete charger basic charge plan setting from cloud</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.disable_basic_charge_plan"><code class="name flex">
+<span>async def <span class="ident">disable_basic_charge_plan</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="pyeasee.charger.Charger.disable_weekly_charge_plan"><code class="name flex">
+<span>async def <span class="ident">disable_weekly_charge_plan</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="pyeasee.charger.Charger.empty_config"><code class="name flex">
 <span>async def <span class="ident">empty_config</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
 </code></dt>
@@ -79,6 +91,12 @@
 <dd>
 <div class="desc"><p>Create an empty config data structure</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.enable_basic_charge_plan"><code class="name flex">
+<span>async def <span class="ident">enable_basic_charge_plan</span></span>(<span>self, enable=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enabled or disable basic charge plan without changing other settings.</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.enable_charger"><code class="name flex">
 <span>async def <span class="ident">enable_charger</span></span>(<span>self, enable: bool)</span>
 </code></dt>
@@ -90,6 +108,12 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Enable and disable idle current in charger settings</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.enable_weekly_charge_plan"><code class="name flex">
+<span>async def <span class="ident">enable_weekly_charge_plan</span></span>(<span>self, enable=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enable or disable charger weekly charge plan setting to cloud</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.force_update_lifetimeenergy"><code class="name flex">
 <span>async def <span class="ident">force_update_lifetimeenergy</span></span>(<span>self)</span>
@@ -200,7 +224,7 @@
 <div class="desc"><p>Set the level of access for a changer</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_basic_charge_plan"><code class="name flex">
-<span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True)</span>
+<span>async def <span class="ident">set_basic_charge_plan</span></span>(<span>self, id, chargeStartTime, chargeStopTime=None, repeat=True, isEnabled=True, limit=32)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger basic charge plan setting to cloud</p></div>
@@ -236,7 +260,7 @@
 <div class="desc"><p>Set circuit max offline current for charger, fallback value for limit if charger is offline</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_weekly_charge_plan"><code class="name flex">
-<span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, day, chargeStartTime, chargeStopTime, enabled=True)</span>
+<span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, day, chargeStartTime, chargeStopTime, enabled=True, limit=32)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger weekly charge plan setting to cloud</p></div>
@@ -381,10 +405,14 @@
 <li><code><a title="pyeasee.charger.Charger.delete_access" href="#pyeasee.charger.Charger.delete_access">delete_access</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_basic_charge_plan" href="#pyeasee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_weekly_charge_plan" href="#pyeasee.charger.Charger.delete_weekly_charge_plan">delete_weekly_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.disable_basic_charge_plan" href="#pyeasee.charger.Charger.disable_basic_charge_plan">disable_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.disable_weekly_charge_plan" href="#pyeasee.charger.Charger.disable_weekly_charge_plan">disable_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.empty_config" href="#pyeasee.charger.Charger.empty_config">empty_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.empty_state" href="#pyeasee.charger.Charger.empty_state">empty_state</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.enable_basic_charge_plan" href="#pyeasee.charger.Charger.enable_basic_charge_plan">enable_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_charger" href="#pyeasee.charger.Charger.enable_charger">enable_charger</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_idle_current" href="#pyeasee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.enable_weekly_charge_plan" href="#pyeasee.charger.Charger.enable_weekly_charge_plan">enable_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.force_update_lifetimeenergy" href="#pyeasee.charger.Charger.force_update_lifetimeenergy">force_update_lifetimeenergy</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.force_update_opmode" href="#pyeasee.charger.Charger.force_update_opmode">force_update_opmode</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
