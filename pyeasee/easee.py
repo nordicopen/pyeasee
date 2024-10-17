@@ -236,7 +236,7 @@ class Easee:
         """
         Signalr connected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SignalR stream connected")
+        _LOGGER.debug("SR stream connected")
         self._sr_backoff = SR_MIN_BACKOFF
         self.sr_connected = True
 
@@ -248,20 +248,20 @@ class Easee:
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
-        _LOGGER.error("SignalR stream disconnected or failed to connect")
+        _LOGGER.error("SR stream disconnected or failed to connect")
         if self._sr_task is not None:
             self._sr_task.cancel()
             try:
                 await self._sr_task
             except asyncio.CancelledError:
-                _LOGGER.debug("SignalR task cancelled")
+                _LOGGER.debug("SR task cancelled")
 
         self.sr_connect_in_progress = False
         self.sr_connected = False
         await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
-        _LOGGER.error("SignalR error recevied {message.error}")
+        _LOGGER.error("SR error recevied {message.error}")
 
     async def _sr_product_update_cb(self, stuff: List[Dict[str, Any]]) -> None:
         """
@@ -286,7 +286,7 @@ class Easee:
         Signalr connect - internal use only
         """
         if self.sr_connect_in_progress is True:
-            _LOGGER.debug("Already connecting")
+            _LOGGER.debug("SR already connecting")
             return
         self.sr_connect_in_progress = True
 
@@ -315,7 +315,6 @@ class Easee:
                 self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
                 await self.sr_connection.run()
             except AuthorizationError as ex:
-                self.sr_connection = None
                 self.sr_connected = False
                 backoff = self._sr_next()
                 _LOGGER.error("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
@@ -323,7 +322,6 @@ class Easee:
                 await self._refresh_token()
                 continue
             except Exception as ex:
-                self.sr_connection = None
                 self.sr_connected = False
                 backoff = self._sr_next()
                 _LOGGER.error("SR start exception: %s: %s. Retry in %d seconds", type(ex).__name__, ex, backoff)
@@ -347,17 +345,16 @@ class Easee:
 
             if self._sr_connect_start is not None:
                 timediff = datetime.now() - self._sr_connect_start
-                _LOGGER.debug("SignalR task started %d seconds ago", timediff.seconds)
-                if timediff.seconds > 10:
+                if timediff.seconds >= 10:
                     _LOGGER.error(
-                        "SignalR stream failed to connect in 10 seconds, assuming it has failed and killing lib task"
+                        "SR stream failed to connect in 10 seconds, assuming it has failed and killing lib task"
                     )
                     if self._sr_task is not None:
                         self._sr_task.cancel()
                         try:
                             await self._sr_task
                         except asyncio.CancelledError:
-                            _LOGGER.debug("SignalR task cancelled")
+                            _LOGGER.debug("SR task cancelled")
                     self.sr_connect_in_progress = False
                     await self._sr_connect(self._sr_next())
 
