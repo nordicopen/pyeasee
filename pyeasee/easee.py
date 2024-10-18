@@ -334,7 +334,7 @@ class Easee:
 
     async def _sr_watchdog(self):
         """
-        Singalr watchdog task, runs every second to check on status of signalr lib
+        SignalR watchdog task, runs every second to check on status of signalr lib
         """
         while True:
 
@@ -347,7 +347,7 @@ class Easee:
                 timediff = datetime.now() - self._sr_connect_start
                 if timediff.seconds >= 10:
                     _LOGGER.error(
-                        "SR stream failed to connect in 10 seconds, assuming it has failed and killing lib task"
+                        "SR stream failed to connect in 10 seconds, killing lib task"
                     )
                     if self._sr_task is not None:
                         self._sr_task.cancel()
