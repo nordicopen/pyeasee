@@ -256,6 +256,7 @@ class Easee:
             except asyncio.CancelledError:
                 _LOGGER.debug("SR task cancelled")
 
+        self.sr_connection = None
         self.sr_connect_in_progress = False
         self.sr_connected = False
         await self._sr_connect(self._sr_next())
@@ -355,6 +356,7 @@ class Easee:
                             await self._sr_task
                         except asyncio.CancelledError:
                             _LOGGER.debug("SR task cancelled")
+                    self.sr_connection = None
                     self.sr_connect_in_progress = False
                     await self._sr_connect(self._sr_next())
 
