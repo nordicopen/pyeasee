@@ -259,6 +259,7 @@ class Easee:
         self.sr_connection = None
         self.sr_connect_in_progress = False
         self.sr_connected = False
+        self._sr_connect_start = None
         await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
