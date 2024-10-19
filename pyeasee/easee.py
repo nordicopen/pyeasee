@@ -315,7 +315,7 @@ class Easee:
                 self.sr_connection.on_close(self._sr_close_cb)
                 self.sr_connection.on_error(self._sr_error_cb)
                 self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
-                _LOGGER.debug(f"SR run")
+                _LOGGER.debug("SR run")
                 await self.sr_connection.run()
             except AuthorizationError as ex:
                 self.sr_connected = False
@@ -349,9 +349,7 @@ class Easee:
             if self._sr_connect_start is not None:
                 timediff = datetime.now() - self._sr_connect_start
                 if timediff.seconds >= 10:
-                    _LOGGER.error(
-                        "SR stream failed to connect in 10 seconds, killing lib task"
-                    )
+                    _LOGGER.error("SR stream failed to connect in 10 seconds, killing lib task")
                     if self._sr_task is not None:
                         self._sr_task.cancel()
                         try:
