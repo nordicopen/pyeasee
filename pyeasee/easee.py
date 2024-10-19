@@ -314,6 +314,7 @@ class Easee:
                 self.sr_connection.on_close(self._sr_close_cb)
                 self.sr_connection.on_error(self._sr_error_cb)
                 self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
+                _LOGGER.debug(f"SR run")
                 await self.sr_connection.run()
             except AuthorizationError as ex:
                 self.sr_connected = False
@@ -358,6 +359,7 @@ class Easee:
                             _LOGGER.debug("SR task cancelled")
                     self.sr_connection = None
                     self.sr_connect_in_progress = False
+                    self._sr_connect_start = None
                     await self._sr_connect(self._sr_next())
 
     def sr_is_connected(self):
