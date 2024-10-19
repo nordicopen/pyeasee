@@ -111,6 +111,9 @@ class Easee:
         self.sr_connect_in_progress = False
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
+        self._sr_connect_start = None
+
+        self._sr_watchdog_task = asyncio.create_task(self._sr_watchdog(), name="pyeasee signalr watchdog task")
 
     def base_uri(self):
         return self.base
@@ -233,7 +236,7 @@ class Easee:
         """
         Signalr connected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SignalR stream connected")
+        _LOGGER.debug("SR stream connected")
         self._sr_backoff = SR_MIN_BACKOFF
         self.sr_connected = True
 
@@ -245,20 +248,22 @@ class Easee:
         """
         Signalr disconnected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SignalR stream disconnected or failed to connect")
+        _LOGGER.error("SR stream disconnected or failed to connect")
         if self._sr_task is not None:
             self._sr_task.cancel()
             try:
                 await self._sr_task
             except asyncio.CancelledError:
-                _LOGGER.debug("SignalR task cancelled")
+                _LOGGER.debug("SR task cancelled")
 
+        self.sr_connection = None
         self.sr_connect_in_progress = False
         self.sr_connected = False
+        self._sr_connect_start = None
         await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
-        _LOGGER.debug("SignalR error recevied {message.error}")
+        _LOGGER.error("SR error recevied {message.error}")
 
     async def _sr_product_update_cb(self, stuff: List[Dict[str, Any]]) -> None:
         """
@@ -276,21 +281,22 @@ class Easee:
             value = convert_stream_data(stuff["dataType"], stuff["value"])
             await callback(stuff["mid"], stuff["dataType"], stuff["id"], value)
         else:
-            _LOGGER.debug("No callback found for '%s'", stuff["mid"])
+            _LOGGER.error("No callback found for '%s'", stuff["mid"])
 
     async def _sr_connect(self, start_delay=0):
         """
         Signalr connect - internal use only
         """
         if self.sr_connect_in_progress is True:
-            _LOGGER.debug("Already connecting")
+            _LOGGER.debug("SR already connecting")
             return
         self.sr_connect_in_progress = True
 
         _LOGGER.debug(f"SR connect sleep {start_delay}")
         await asyncio.sleep(start_delay)
 
-        self._sr_task = asyncio.create_task(self._sr_connect_loop())
+        self._sr_task = asyncio.create_task(self._sr_connect_loop(), name="pyeasee signalr task")
+        self._sr_connect_start = datetime.now()
 
     async def _sr_connect_loop(self):
         """
@@ -309,22 +315,53 @@ class Easee:
                 self.sr_connection.on_close(self._sr_close_cb)
                 self.sr_connection.on_error(self._sr_error_cb)
                 self.sr_connection.on("ProductUpdate", self._sr_product_update_cb)
+                _LOGGER.debug(f"SR run")
                 await self.sr_connection.run()
             except AuthorizationError as ex:
+                self.sr_connected = False
                 backoff = self._sr_next()
-                _LOGGER.debug("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
+                _LOGGER.error("SR authentication failed: %s. Retry in %d seconds", type(ex).__name__, backoff)
                 await asyncio.sleep(backoff)
                 await self._refresh_token()
                 continue
             except Exception as ex:
+                self.sr_connected = False
                 backoff = self._sr_next()
-                _LOGGER.debug("SR start exception: %s: %s. Retry in %d seconds", type(ex).__name__, ex, backoff)
+                _LOGGER.error("SR start exception: %s: %s. Retry in %d seconds", type(ex).__name__, ex, backoff)
                 await asyncio.sleep(backoff)
                 continue
 
             break
 
         self.sr_connect_in_progress = False
+
+    async def _sr_watchdog(self):
+        """
+        SignalR watchdog task, runs every second to check on status of signalr lib
+        """
+        while True:
+
+            await asyncio.sleep(1)
+
+            if self.sr_connected is True:
+                continue
+
+            if self._sr_connect_start is not None:
+                timediff = datetime.now() - self._sr_connect_start
+                if timediff.seconds >= 10:
+                    _LOGGER.error(
+                        "SR stream failed to connect in 10 seconds, killing lib task"
+                    )
+                    if self._sr_task is not None:
+                        self._sr_task.cancel()
+                        try:
+                            await self._sr_task
+                        except asyncio.CancelledError:
+                            _LOGGER.debug("SR task cancelled")
+                    self.sr_connection = None
+                    self.sr_connect_in_progress = False
+                    self._sr_connect_start = None
+                    await self._sr_connect(self._sr_next())
 
     def sr_is_connected(self):
         return self.sr_connected
