@@ -30,6 +30,7 @@ _LOGGER = logging.getLogger(__name__)
 SR_MIN_BACKOFF = 0
 SR_MAX_BACKOFF = 300
 SR_INC_BACKOFF = 30
+SR_DATA_WATCHDOG_TIME = 300
 
 
 async def raise_for_status(response):
@@ -111,8 +112,7 @@ class Easee:
         self.sr_connect_in_progress = False
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
-        self._sr_connect_start = None
-
+        self._sr_last_data = None
         self._sr_watchdog_task = asyncio.create_task(self._sr_watchdog(), name="pyeasee signalr watchdog task")
 
     def base_uri(self):
@@ -259,7 +259,6 @@ class Easee:
         self.sr_connection = None
         self.sr_connect_in_progress = False
         self.sr_connected = False
-        self._sr_connect_start = None
         await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
@@ -269,6 +268,7 @@ class Easee:
         """
         Signalr new data recieved callback - called from signalr thread, internal use only
         """
+        self._sr_last_data = datetime.now()
         for data in stuff:
             await self._sr_callback(data)
 
@@ -296,7 +296,6 @@ class Easee:
         await asyncio.sleep(start_delay)
 
         self._sr_task = asyncio.create_task(self._sr_connect_loop(), name="pyeasee signalr task")
-        self._sr_connect_start = datetime.now()
 
     async def _sr_connect_loop(self):
         """
@@ -343,13 +342,12 @@ class Easee:
 
             await asyncio.sleep(1)
 
-            if self.sr_connected is True:
-                continue
-
-            if self._sr_connect_start is not None:
-                timediff = datetime.now() - self._sr_connect_start
-                if timediff.seconds >= 10:
-                    _LOGGER.error("SR stream failed to connect in 10 seconds, killing lib task")
+            if self._sr_last_data is not None:
+                timediff = datetime.now() - self._sr_last_data
+                if timediff.total_seconds() >= SR_DATA_WATCHDOG_TIME:
+                    _LOGGER.error(
+                        "SR stream has not received data in %d seconds, killing lib task", SR_DATA_WATCHDOG_TIME
+                    )
                     if self._sr_task is not None:
                         self._sr_task.cancel()
                         try:
@@ -358,7 +356,7 @@ class Easee:
                             _LOGGER.debug("SR task cancelled")
                     self.sr_connection = None
                     self.sr_connect_in_progress = False
-                    self._sr_connect_start = None
+                    self._sr_last_data = None
                     await self._sr_connect(self._sr_next())
 
     def sr_is_connected(self):
