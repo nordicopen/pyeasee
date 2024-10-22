@@ -80,16 +80,8 @@ async def __aiter__(
     self: websockets.legacy.client.Connect,
 ) -> AsyncIterator[websockets.legacy.client.WebSocketClientProtocol]:
     """
-    Asynchronous iterator for the Connect object.
-
-    This function attempts to establish a connection and yields the protocol when successful.
-    This override version of the function will bail out on any exceptions instead of retrying.
-
-    Args:
-        self (websockets.legacy.client.Connect): The Connect object.
-
-    Yields:
-        websockets.legacy.client.WebSocketClientProtocol: The WebSocket protocol.
+    Asynchronous iterator for the websocket Connect object.
+    This function overrides the error handling put in place in pysignalr so that exception propagates out.
     """
     while True:
         async with self as protocol:
@@ -134,7 +126,7 @@ class Easee:
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
 
-        # Override the __aiter__ method of the Connect class
+        # Override the __aiter__ method of the pysignalr.websocket Connect class
         pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
 
     def base_uri(self):
@@ -168,7 +160,6 @@ class Easee:
         await self.check_status(response)
         return response
 
-    # TODO: Quick fix for the auth fail errors due to something wrong with refresh token logic
     async def check_status(self, response):
         try:
             await raise_for_status(response)
@@ -258,7 +249,7 @@ class Easee:
         """
         Signalr connected callback - called from signalr thread, internal use only
         """
-        _LOGGER.debug("SR stream connected")
+        _LOGGER.info("SR stream connected")
         self._sr_backoff = SR_MIN_BACKOFF
         self.sr_connected = True
 
