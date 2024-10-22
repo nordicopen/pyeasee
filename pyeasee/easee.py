@@ -4,12 +4,14 @@ Main client for the Eesee account.
 import asyncio
 from datetime import datetime, timedelta
 import logging
-from typing import Any, Dict, List
+from typing import Any, AsyncIterator, Dict, List
 
 import aiohttp
+import pysignalr
 from pysignalr.client import SignalRClient
 from pysignalr.exceptions import AuthorizationError
 from pysignalr.messages import CompletionMessage
+import websockets.legacy.client
 
 from .charger import Charger
 from .exceptions import (
@@ -30,7 +32,6 @@ _LOGGER = logging.getLogger(__name__)
 SR_MIN_BACKOFF = 0
 SR_MAX_BACKOFF = 300
 SR_INC_BACKOFF = 30
-SR_DATA_WATCHDOG_TIME = 300
 
 
 async def raise_for_status(response):
@@ -75,6 +76,26 @@ async def raise_for_status(response):
         return True
 
 
+async def __aiter__(
+    self: websockets.legacy.client.Connect,
+) -> AsyncIterator[websockets.legacy.client.WebSocketClientProtocol]:
+    """
+    Asynchronous iterator for the Connect object.
+
+    This function attempts to establish a connection and yields the protocol when successful.
+    This override version of the function will bail out on any exceptions instead of retrying.
+
+    Args:
+        self (websockets.legacy.client.Connect): The Connect object.
+
+    Yields:
+        websockets.legacy.client.WebSocketClientProtocol: The WebSocket protocol.
+    """
+    while True:
+        async with self as protocol:
+            yield protocol
+
+
 class Easee:
     def __init__(self, username, password, session: aiohttp.ClientSession = None, user_agent=None):
         self.username = username
@@ -112,8 +133,9 @@ class Easee:
         self.sr_connect_in_progress = False
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
-        self._sr_last_data = None
-        self._sr_watchdog_task = asyncio.create_task(self._sr_watchdog(), name="pyeasee signalr watchdog task")
+
+        # Override the __aiter__ method of the Connect class
+        pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
 
     def base_uri(self):
         return self.base
@@ -249,17 +271,9 @@ class Easee:
         Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.error("SR stream disconnected or failed to connect")
-        if self._sr_task is not None:
-            self._sr_task.cancel()
-            try:
-                await self._sr_task
-            except asyncio.CancelledError:
-                _LOGGER.debug("SR task cancelled")
 
-        self.sr_connection = None
         self.sr_connect_in_progress = False
         self.sr_connected = False
-        await self._sr_connect(self._sr_next())
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
         _LOGGER.error("SR error recevied {message.error}")
@@ -333,31 +347,6 @@ class Easee:
             break
 
         self.sr_connect_in_progress = False
-
-    async def _sr_watchdog(self):
-        """
-        SignalR watchdog task, runs every second to check on status of signalr lib
-        """
-        while True:
-
-            await asyncio.sleep(1)
-
-            if self._sr_last_data is not None:
-                timediff = datetime.now() - self._sr_last_data
-                if timediff.total_seconds() >= SR_DATA_WATCHDOG_TIME:
-                    _LOGGER.error(
-                        "SR stream has not received data in %d seconds, killing lib task", SR_DATA_WATCHDOG_TIME
-                    )
-                    if self._sr_task is not None:
-                        self._sr_task.cancel()
-                        try:
-                            await self._sr_task
-                        except asyncio.CancelledError:
-                            _LOGGER.debug("SR task cancelled")
-                    self.sr_connection = None
-                    self.sr_connect_in_progress = False
-                    self._sr_last_data = None
-                    await self._sr_connect(self._sr_next())
 
     def sr_is_connected(self):
         return self.sr_connected
