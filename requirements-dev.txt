@@ -7,7 +7,7 @@ autoflake==2.3.0
 black
 bleach==6.1.0
 bump2version==1.0.1
-certifi==2024.2.2
+certifi==2024.7.4
 chardet==5.2.0
 click
 colorama==0.4.6
