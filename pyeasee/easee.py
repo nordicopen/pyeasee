@@ -271,8 +271,6 @@ class Easee:
         Signalr disconnected callback - called from signalr thread, internal use only
         """
         _LOGGER.error("SR stream disconnected or failed to connect")
-
-        self.sr_connect_in_progress = False
         self.sr_connected = False
 
     async def _sr_error_cb(self, message: CompletionMessage) -> None:
