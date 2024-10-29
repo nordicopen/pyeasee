@@ -2,9 +2,9 @@ clean:
 	rm -rf pyeasee.egg-info dist build
 
 lint:
-	isort pyeasee
-	black pyeasee --line-length 120
-	flake8 --ignore=E501,E231,F403 pyeasee
+	isort src
+	black src --line-length 120
+	flake8 --ignore=E501,E231,F403 src
 
 install_dev:
 	pip install -r requirements-dev.txt
@@ -13,11 +13,11 @@ test:
 	pytest -s -v
 
 bump:
-	bump2version --allow-dirty patch setup.py pyeasee/easee.py
+	bump2version --allow-dirty patch setup.py src/pyeasee/easee.py
 
 doc:
 	rm -rf html
-	pdoc --html --config show_source_code=False pyeasee
+	pdoc --html --config show_source_code=False src/pyeasee
 
 publish_docs: doc
 	git subtree push --prefix html origin gh-pages

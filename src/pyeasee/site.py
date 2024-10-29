@@ -34,7 +34,7 @@ class Equalizer(BaseDict):
         observation_ids = ",".join(str(s) for s in args)
         try:
             return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}")).json()
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_state(self):
@@ -42,7 +42,7 @@ class Equalizer(BaseDict):
         try:
             state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
             return EqualizerState(state)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_config(self):
@@ -50,7 +50,7 @@ class Equalizer(BaseDict):
         try:
             config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
             return EqualizerConfig(config)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def empty_state(self, raw=False):
@@ -69,7 +69,7 @@ class Equalizer(BaseDict):
             return await (
                 await self.easee.get(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy")
             ).json()
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_load_balancing(self, activate: bool, current_limit: int = 0):
@@ -86,14 +86,14 @@ class Equalizer(BaseDict):
 
         try:
             return await self.easee.post(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_latest_firmware(self):
         """Get the latest released firmeware version"""
         try:
             return await (await self.easee.get(f"/firmware/{self.id}/latest")).json()
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
 
@@ -118,7 +118,7 @@ class Circuit(BaseDict):
         }
         try:
             return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
@@ -130,7 +130,7 @@ class Circuit(BaseDict):
         }
         try:
             return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_max_offline_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
@@ -142,7 +142,7 @@ class Circuit(BaseDict):
         }
         try:
             return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
@@ -150,7 +150,7 @@ class Circuit(BaseDict):
         json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         try:
             return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     def get_chargers(self) -> List[Charger]:
@@ -245,7 +245,7 @@ class Site(BaseDict):
             self["costPerKWh"] = costPerKWh
             self["costPerKwhExcludeVat"] = costPerKwhExcludeVat
             return val
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_cost_between_dates(self, from_date: datetime, to_date: datetime):
