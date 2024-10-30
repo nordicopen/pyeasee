@@ -1,0 +1,38 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyeasee"
+version = "0.8.8"
+description = "Easee EV charger API library"
+readme = "README.md"
+authors = ["Ola Lidholm <olal@plea.se>"]
+license = "MIT"
+homepage = "https://github.com/nordicopen/pyeasee"
+repository = "https://github.com/nordicopen/pyeasee"
+keywords = ["easee", "ev", "charger", "api"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+aiohttp = "*"
+attrs = "*"
+certifi = "*"
+chardet = "*"
+idna = "*"
+multidict = "*"
+packaging = "*"
+pysignalr = "*"
+requests = "*"
+urllib3 = "*"
+yarl = "*"
+zipp = "*"
+
+[tool.poetry.dev-dependencies]
+aioresponses = "*"
+pytest = "*"
+pytest-asyncio = "*"
+flake8 = "*"
+black = "*"
+isort = "*"
+tox = "*"
