@@ -6,7 +6,7 @@ from aioresponses import aioresponses
 import pytest
 import pytest_asyncio
 
-from pyeasee import Easee
+from pyeasee.easee import Easee
 
 BASE_URL = "https://api.easee.com"
 

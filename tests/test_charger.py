@@ -1,6 +1,6 @@
 import pytest
 
-from pyeasee import Charger
+from pyeasee.charger import Charger
 
 
 class MockResponse:

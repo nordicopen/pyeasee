@@ -1,6 +1,6 @@
 import datetime
 
-from pyeasee import BaseDict
+from pyeasee.utils import BaseDict
 
 
 def test_parse_iso_date_without_millis():
