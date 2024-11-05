@@ -72,8 +72,8 @@ class Equalizer(BaseDict):
         except (ServerFailureException):
             return None
 
-    async def set_load_balancing(self, activate: bool, current_limit: int):
-        """Get the load balancing settings"""
+    async def set_load_balancing(self, activate: bool, current_limit: int = 0):
+        """Set the load balancing settings"""
         if activate is True:
             json = {
                 "mode": "chargingWithImport",
