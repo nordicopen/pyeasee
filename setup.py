@@ -1,7 +1,7 @@
 """Setup script for easee"""
 
 import os.path
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # This call to setup() does all the work
 setup(
@@ -19,7 +19,8 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
     ],
-    packages=["pyeasee"],
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     include_package_data=True,
     install_requires=["aiohttp", "pysignalr==1.0.0"],
     entry_points={"console_scripts": ["pyeasee=pyeasee.__main__:main"]},

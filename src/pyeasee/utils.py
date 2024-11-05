@@ -52,7 +52,7 @@ class BaseDict(Mapping):
         self._storage = entries
 
     def __getitem__(self, key):
-        if type(self._storage[key]) == str and validate_iso8601(self._storage[key]):
+        if isinstance(self._storage[key], str) and validate_iso8601(self._storage[key]):
             try:
                 return datetime.fromisoformat(self._storage[key]).replace(tzinfo=timezone.utc)
             except ValueError:

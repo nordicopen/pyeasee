@@ -244,7 +244,7 @@ class Charger(BaseDict):
         observation_ids = ",".join(str(s) for s in args)
         try:
             return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}")).json()
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
@@ -256,7 +256,7 @@ class Charger(BaseDict):
                 )
             ).text()
             return float(value)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
@@ -270,7 +270,7 @@ class Charger(BaseDict):
             sessions = [ChargerSession(session) for session in sessions]
             sessions.sort(key=lambda x: x["carConnected"], reverse=True)
             return sessions
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_config(self, from_cache=False, raw=False) -> ChargerConfig:
@@ -278,7 +278,7 @@ class Charger(BaseDict):
         try:
             config = await (await self.easee.get(f"/api/chargers/{self.id}/config")).json()
             return ChargerConfig(config, raw)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_state(self, raw=False) -> ChargerState:
@@ -286,7 +286,7 @@ class Charger(BaseDict):
         try:
             state = await (await self.easee.get(f"/api/chargers/{self.id}/state")).json()
             return ChargerState(state, raw)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def empty_config(self, raw=False) -> ChargerConfig:
@@ -306,35 +306,35 @@ class Charger(BaseDict):
         """Start charging session"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/start_charging")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def pause(self):
         """Pause charging session"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/pause_charging")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def resume(self):
         """Resume charging session"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/resume_charging")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def stop(self):
         """Stop charging session"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/stop_charging")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def toggle(self):
         """Toggle charging session start/stop/pause/resume"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/toggle_charging")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_basic_charge_plan(self) -> ChargerSchedule:
@@ -343,10 +343,10 @@ class Charger(BaseDict):
             plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
             plan = await plan.json()
             return ChargerSchedule(plan)
-        except (NotFoundException):
+        except NotFoundException:
             _LOGGER.debug("No scheduled charge plan")
             return None
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     # TODO: document types
@@ -366,7 +366,7 @@ class Charger(BaseDict):
 
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def disable_basic_charge_plan(self):
@@ -378,10 +378,10 @@ class Charger(BaseDict):
         try:
             plan = await self.easee.get(f"/api/chargers/{self.id}/basic_charge_plan")
             plan = await plan.json()
-        except (NotFoundException):
+        except NotFoundException:
             _LOGGER.debug("No scheduled charge plan")
             plan = None
-        except (ServerFailureException):
+        except ServerFailureException:
             plan = None
 
         if plan is not None:
@@ -390,7 +390,7 @@ class Charger(BaseDict):
 
             try:
                 return await self.easee.post(f"/api/chargers/{self.id}/basic_charge_plan", json=json)
-            except (ServerFailureException):
+            except ServerFailureException:
                 return None
 
     async def get_weekly_charge_plan(self) -> ChargerWeeklySchedule:
@@ -400,10 +400,10 @@ class Charger(BaseDict):
             plan = await plan.json()
             _LOGGER.debug(plan)
             return ChargerWeeklySchedule(plan)
-        except (NotFoundException):
+        except NotFoundException:
             _LOGGER.debug("No scheduled charge plan")
             return None
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     # TODO: document types
@@ -414,10 +414,10 @@ class Charger(BaseDict):
             plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
             plan = await plan.json()
             _LOGGER.debug(plan)
-        except (NotFoundException):
+        except NotFoundException:
             _LOGGER.debug("No scheduled charge plan")
             plan = None
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
         if plan is None:
@@ -460,7 +460,7 @@ class Charger(BaseDict):
 
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def disable_weekly_charge_plan(self):
@@ -473,10 +473,10 @@ class Charger(BaseDict):
             plan = await self.easee.get(f"/api/chargers/{self.id}/weekly_charge_plan")
             plan = await plan.json()
             _LOGGER.debug(plan)
-        except (NotFoundException):
+        except NotFoundException:
             _LOGGER.debug("No scheduled charge plan")
             plan = None
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
         if plan is not None:
@@ -485,7 +485,7 @@ class Charger(BaseDict):
 
             try:
                 return await self.easee.post(f"/api/chargers/{self.id}/weekly_charge_plan", json=json)
-            except (ServerFailureException):
+            except ServerFailureException:
                 return None
 
     async def enable_charger(self, enable: bool):
@@ -493,7 +493,7 @@ class Charger(BaseDict):
         json = {"enabled": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def enable_idle_current(self, enable: bool):
@@ -501,7 +501,7 @@ class Charger(BaseDict):
         json = {"enableIdleCurrent": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def limitToSinglePhaseCharging(self, enable: bool):
@@ -509,7 +509,7 @@ class Charger(BaseDict):
         json = {"limitToSinglePhaseCharging": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def phaseMode(self, mode: int = 2):
@@ -517,7 +517,7 @@ class Charger(BaseDict):
         json = {"phaseMode": mode}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def lockCablePermanently(self, enable: bool):
@@ -525,7 +525,7 @@ class Charger(BaseDict):
         json = {"state": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/lock_state", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def smartButtonEnabled(self, enable: bool):
@@ -533,28 +533,28 @@ class Charger(BaseDict):
         json = {"smartButtonEnabled": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def delete_basic_charge_plan(self):
         """Delete charger basic charge plan setting from cloud"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/basic_charge_plan")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def delete_weekly_charge_plan(self):
         """Delete charger basic charge plan setting from cloud"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/weekly_charge_plan")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def override_schedule(self):
         """Override scheduled charging and start charging"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/override_schedule")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def smart_charging(self, enable: bool):
@@ -562,28 +562,28 @@ class Charger(BaseDict):
         json = {"smartCharging": enable}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def reboot(self):
         """Reboot charger"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/reboot")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def update_firmware(self):
         """Update charger firmware"""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/update_firmware")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_latest_firmware(self):
         """Get the latest released firmeware version"""
         try:
             return await (await self.easee.get(f"/firmware/{self.id}/latest")).json()
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_dynamic_charger_circuit_current(
@@ -616,7 +616,7 @@ class Charger(BaseDict):
         json = {"dynamicChargerCurrent": current}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_max_charger_current(self, current: int):
@@ -624,7 +624,7 @@ class Charger(BaseDict):
         json = {"maxChargerCurrent": current}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def set_access(self, access: Union[int, str]):
@@ -640,26 +640,26 @@ class Charger(BaseDict):
 
         try:
             return await self.easee.put(f"/api/chargers/{self.id}/access", json=json[access])
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def delete_access(self):
         """Revert permissions overridden on a charger level"""
         try:
             return await self.easee.delete(f"/api/chargers/{self.id}/access")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def force_update_lifetimeenergy(self):
         """Forces charger to update Lifetime Energy reading to the cloud. Warning: Rate limited to once every 3 minutes."""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/poll_lifetimeenergy")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def force_update_opmode(self):
         """Forces charger to update Op Mode to the cloud. Warning: Rate limited to once every 3 minutes."""
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/commands/poll_chargeropmode")
-        except (ServerFailureException):
+        except ServerFailureException:
             return None

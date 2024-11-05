@@ -1,12 +1,12 @@
-import asyncio
 import json
 import os
 
 import aiohttp
+from aioresponses import aioresponses
 import pytest
 import pytest_asyncio
-from aioresponses import aioresponses
-from pyeasee import Charger, Easee
+
+from pyeasee.easee import Easee
 
 BASE_URL = "https://api.easee.com"
 
@@ -99,7 +99,6 @@ async def test_get_site_state(aiosession, aioresponse):
     charger_state = site_state.get_charger_state("EH123497", raw=True)
 
     assert charger_state["chargerOpMode"] == 1
-
 
     charger_state = site_state.get_charger_state("NOTEXIST")
     assert charger_state is None

@@ -1,6 +1,7 @@
 """
 Main client for the Eesee account.
 """
+
 import asyncio
 from datetime import datetime, timedelta
 import logging
@@ -380,7 +381,7 @@ class Easee:
             records = await (await self.get("/api/chargers")).json()
             _LOGGER.debug("Chargers:  %s", records)
             return [Charger(k, self) for k in records]
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_site(self, id: int) -> Site:
@@ -389,7 +390,7 @@ class Easee:
             data = await (await self.get(f"/api/sites/{id}?detailed=true")).json()
             _LOGGER.debug("Site:  %s", data)
             return Site(data, self)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_sites(self) -> List[Site]:
@@ -399,7 +400,7 @@ class Easee:
             _LOGGER.debug("Sites:  %s", records)
             sites = await asyncio.gather(*[self.get_site(r["id"]) for r in records])
             return sites
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_account_products(self) -> List[Site]:
@@ -414,7 +415,7 @@ class Easee:
                 site["equalizers"] = r["equalizers"]
                 sites.append(site)
             return sites
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_site_state(self, id: str) -> SiteState:
@@ -422,7 +423,7 @@ class Easee:
         try:
             state = await (await self.get(f"/api/sites/{id}/state")).json()
             return SiteState(state)
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_active_countries(self) -> List[Any]:
@@ -431,7 +432,7 @@ class Easee:
             records = await (await self.get("/api/resources/countries/active")).json()
             _LOGGER.debug("Active countries:  %s", records)
             return records
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
 
     async def get_currencies(self) -> List[Any]:
@@ -440,5 +441,5 @@ class Easee:
             records = await (await self.get("/api/resources/currencies")).json()
             _LOGGER.debug("Currencies:  %s", records)
             return records
-        except (ServerFailureException):
+        except ServerFailureException:
             return None
