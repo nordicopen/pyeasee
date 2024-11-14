@@ -258,3 +258,30 @@ class Site(BaseDict):
             return costs
         except (ServerFailureException, ForbiddenServiceException):
             return None
+
+    async def get_users(self):
+        """Get a list of users connected to this site"""
+
+        try:
+            users = await (await self.easee.get(f"/api/sites/{self.id}/users")).json()
+            return users
+        except (ServerFailureException, ForbiddenServiceException):
+            return None
+
+    async def get_user_monthly_consumption(self, user_id):
+        """Get user consumption"""
+
+        try:
+            consumption = await (await self.easee.get(f"/api/sites/{self.id}/users/{user_id}/monthly")).json()
+            return consumption
+        except (ServerFailureException, ForbiddenServiceException):
+            return None
+
+    async def get_user_yearly_consumption(self, user_id):
+        """Get user consumption"""
+
+        try:
+            consumption = await (await self.easee.get(f"/api/sites/{self.id}/users/{user_id}/yearly")).json()
+            return consumption
+        except (ServerFailureException, ForbiddenServiceException):
+            return None
