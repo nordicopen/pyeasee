@@ -141,10 +141,10 @@
 <div class="desc"><p>Get Equalizer state</p></div>
 </dd>
 <dt id="pyeasee.site.Equalizer.set_load_balancing"><code class="name flex">
-<span>async def <span class="ident">set_load_balancing</span></span>(<span>self, activate: bool, current_limit: int)</span>
+<span>async def <span class="ident">set_load_balancing</span></span>(<span>self, activate: bool, current_limit: int = 0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get the load balancing settings</p></div>
+<div class="desc"><p>Set the load balancing settings</p></div>
 </dd>
 </dl>
 </dd>
@@ -214,6 +214,24 @@
 </code></dt>
 <dd>
 <div class="desc"><p>Get equalizers for the site</p></div>
+</dd>
+<dt id="pyeasee.site.Site.get_user_monthly_consumption"><code class="name flex">
+<span>async def <span class="ident">get_user_monthly_consumption</span></span>(<span>self, user_id)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get user consumption</p></div>
+</dd>
+<dt id="pyeasee.site.Site.get_user_yearly_consumption"><code class="name flex">
+<span>async def <span class="ident">get_user_yearly_consumption</span></span>(<span>self, user_id)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get user consumption</p></div>
+</dd>
+<dt id="pyeasee.site.Site.get_users"><code class="name flex">
+<span>async def <span class="ident">get_users</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a list of users connected to this site</p></div>
 </dd>
 <dt id="pyeasee.site.Site.set_currency"><code class="name flex">
 <span>async def <span class="ident">set_currency</span></span>(<span>self, currency: str)</span>
@@ -317,6 +335,9 @@
 <li><code><a title="pyeasee.site.Site.get_circuits" href="#pyeasee.site.Site.get_circuits">get_circuits</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_cost_between_dates" href="#pyeasee.site.Site.get_cost_between_dates">get_cost_between_dates</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_equalizers" href="#pyeasee.site.Site.get_equalizers">get_equalizers</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_user_monthly_consumption" href="#pyeasee.site.Site.get_user_monthly_consumption">get_user_monthly_consumption</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_user_yearly_consumption" href="#pyeasee.site.Site.get_user_yearly_consumption">get_user_yearly_consumption</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_users" href="#pyeasee.site.Site.get_users">get_users</a></code></li>
 <li><code><a title="pyeasee.site.Site.set_currency" href="#pyeasee.site.Site.set_currency">set_currency</a></code></li>
 <li><code><a title="pyeasee.site.Site.set_name" href="#pyeasee.site.Site.set_name">set_name</a></code></li>
 <li><code><a title="pyeasee.site.Site.set_price" href="#pyeasee.site.Site.set_price">set_price</a></code></li>
