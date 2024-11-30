@@ -26,7 +26,7 @@ from .exceptions import (
 from .site import Site, SiteState
 from .utils import convert_stream_data
 
-__VERSION__ = "0.8.9"
+__VERSION__ = "0.8.10"
 
 _LOGGER = logging.getLogger(__name__)
 
