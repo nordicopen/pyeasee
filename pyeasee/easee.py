@@ -4,6 +4,7 @@ Main client for the Eesee account.
 import asyncio
 from datetime import datetime, timedelta
 import logging
+import ssl
 from typing import Any, AsyncIterator, Dict, List
 
 import aiohttp
@@ -89,7 +90,14 @@ async def __aiter__(
 
 
 class Easee:
-    def __init__(self, username, password, session: aiohttp.ClientSession = None, user_agent=None):
+    def __init__(
+        self,
+        username,
+        password,
+        session: aiohttp.ClientSession | None = None,
+        user_agent=None,
+        ssl: ssl.SSLContext | None = None,
+    ):
         self.username = username
         self.password = password
         self.external_session = True if session else False
@@ -97,6 +105,7 @@ class Easee:
             append_user_agent = ""
         else:
             append_user_agent = f"; {user_agent}"
+        self._ssl = ssl
 
         _LOGGER.info("Easee python library version: %s", __VERSION__)
 
@@ -312,7 +321,7 @@ class Easee:
         while True:
             try:
                 await self._verify_updated_token()
-                self.sr_connection = SignalRClient(self.sr_base, headers=self.sr_headers)
+                self.sr_connection = SignalRClient(self.sr_base, headers=self.sr_headers, ssl=self._ssl)
                 self.sr_connection.on_open(self._sr_open_cb)
                 self.sr_connection.on_close(self._sr_close_cb)
                 self.sr_connection.on_error(self._sr_error_cb)

@@ -264,6 +264,7 @@ class ChargerStreamData(Enum):
         232  # Available current for charging on P3 according to Equalizer [Double] ['Admin', 'Partner', 'User']
     )
     state_diagnosticsString = 240  # Various diagnostic information for testing. Must be enabled by setting DiagnosticsMode == 256 [String] ['Admin', 'Partner']
+    config_wiFiMACAddress = 241  # Device WiFi MAC address
     state_connectedToCloud = 250  # Device is connected to AWS [Boolean] ['Admin', 'Partner', 'User']
     state_cloudDisconnectReason = 251  # AWS DisconnectReason [String] ['Admin', 'Partner', 'User']
 
