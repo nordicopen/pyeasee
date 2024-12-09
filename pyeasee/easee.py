@@ -341,6 +341,8 @@ class Easee:
                 _LOGGER.error("SR start exception: %s: %s. Retry in %d seconds", type(ex).__name__, ex, backoff)
                 await asyncio.sleep(backoff)
                 continue
+            except asyncio.CancelledError:
+                _LOGGER.debug("SR task cancelled (self)")
 
             break
 
@@ -378,8 +380,15 @@ class Easee:
         """
         Disconnect the signalr stream - internal use only
         """
-        if self.sr_connection is not None:
-            self.sr_connection = None
+        if self._sr_task is not None:
+            self._sr_task.cancel()
+            try:
+                await self._sr_task
+            except asyncio.CancelledError:
+                _LOGGER.debug("SR task cancelled")
+        self._sr_task = None
+        self.sr_connection = None
+        self.sr_connect_in_progress = False
 
     async def get_chargers(self) -> List[Charger]:
         """
