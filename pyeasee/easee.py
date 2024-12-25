@@ -5,7 +5,7 @@ import asyncio
 from datetime import datetime, timedelta
 import logging
 import ssl
-from typing import Any, AsyncIterator, Dict, List
+from typing import Any, AsyncIterator, Dict, List, Optional
 
 import aiohttp
 import pysignalr
@@ -94,9 +94,9 @@ class Easee:
         self,
         username,
         password,
-        session: aiohttp.ClientSession | None = None,
+        session: Optional[aiohttp.ClientSession] = None,
         user_agent=None,
-        ssl: ssl.SSLContext | None = None,
+        ssl: Optional[ssl.SSLContext] = None,
     ):
         self.username = username
         self.password = password
