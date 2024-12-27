@@ -5,43 +5,43 @@ from enum import Enum
 
 class ChargerStreamData(Enum):
     state_selfTestResult = 1  # OK or error codes [String] ['Admin', 'Partner', 'User']
-    SelfTestDetails = 2  # JSON with details from self-test [String] ['Admin', 'Partner']
-    WifiEvent = 10  # Enum with WiFi event codes. Requires telemetry debug mode. Will be updated on WiFi events when using cellular, will otherwise be reported in ChargerOfflineReason [Integer] ['Admin', 'Partner']
+    state_selfTestDetails = 2  # JSON with details from self-test [String] ['Admin', 'Partner']
+    state_wifiEvent = 10  # Enum with WiFi event codes. Requires telemetry debug mode. Will be updated on WiFi events when using cellular, will otherwise be reported in ChargerOfflineReason [Integer] ['Admin', 'Partner']
     state_chargerOfflineReason = 11  # Enum describing why charger is offline [Integer] ['Admin', 'Partner', 'User']
-    EaseeLinkCommandResponse = (
+    state_easeeLinkCommandResponse = (
         13  # Response on a EaseeLink command sent to another devic [Integer] ['Admin', 'Partner']
     )
-    EaseeLinkDataReceived = 14  # Data received on EaseeLink from another device [String] ['Admin', 'Partner']
+    state_easeeLinkDataReceived = 14  # Data received on EaseeLink from another device [String] ['Admin', 'Partner']
     config_localPreAuthorizeEnabled = (
         15  # Preauthorize with whitelist enabled. Readback on setting [event] [Boolean] ['Admin', 'Partner', 'User']
     )
     config_localAuthorizeOfflineEnabled = 16  # Allow offline charging for whitelisted RFID token. Readback on setting [event] [Boolean] ['Admin', 'Partner', 'User']
     config_allowOfflineTxForUnknownId = 17  # Allow offline charging for all RFID tokens. Readback on setting [event] [Boolean] ['Admin', 'Partner', 'User']
-    ErraticEVMaxToggles = 18  # 0 == erratic checking disabled, otherwise the number of toggles between states Charging and Charging Complate that will trigger an error [Integer] ['Admin', 'Partner']
-    BackplateType = 19  # Readback on backplate type [Integer] ['Admin', 'Partner']
-    SiteStructure = 20  # Site Structure [boot] [String] ['Admin', 'Partner']
+    config_erraticEVMaxToggles = 18  # 0 == erratic checking disabled, otherwise the number of toggles between states Charging and Charging Complate that will trigger an error [Integer] ['Admin', 'Partner']
+    config_backplateType = 19  # Readback on backplate type [Integer] ['Admin', 'Partner']
+    config_siteStructure = 20  # Site Structure [boot] [String] ['Admin', 'Partner']
     config_detectedPowerGridType = (
         21  # Detected power grid type according to PowerGridType table [boot] [Integer] ['Admin', 'Partner', 'User']
     )
     config_circuitMaxCurrentP1 = 22  # Set circuit maximum current [Amperes] [Double] ['Admin', 'Partner', 'User']
     config_circuitMaxCurrentP2 = 23  # Set circuit maximum current [Amperes] [Double] ['Admin', 'Partner', 'User']
     config_circuitMaxCurrentP3 = 24  # Set circuit maximum current [Amperes] [Double] ['Admin', 'Partner', 'User']
-    Location = 25  # Location coordinate [event] [Position] ['Admin', 'Partner']
-    SiteIDString = 26  # Site ID string [event] [String] ['Admin', 'Partner']
-    SiteIDNumeric = 27  # Site ID numeric value [event] [Integer] ['Admin', 'Partner']
-    RfidAuthTimeoutSec = 28  # Timeout for backend to send authorization reply. After timeout offline rules apply. [Integer] ['Admin', 'Partner']
+    config_location = 25  # Location coordinate [event] [Position] ['Admin', 'Partner']
+    config_siteIDString = 26  # Site ID string [event] [String] ['Admin', 'Partner']
+    config_siteIDNumeric = 27  # Site ID numeric value [event] [Integer] ['Admin', 'Partner']
+    config_rfidAuthTimeoutSec = 28  # Timeout for backend to send authorization reply. After timeout offline rules apply. [Integer] ['Admin', 'Partner']
     state_lockCablePermanently = 30  # Lock type2 cable permanently [Boolean] ['Admin', 'Partner', 'User']
     config_isEnabled = 31  # Set true to enable charger, false disables charger [Boolean] ['Admin', 'Partner', 'User']
     state_temperatureMonitorState = (
         32  # State of the monitor: OFF=0, MONITORING=-1, ACTIVE=1 [Integer] ['Admin', 'Partner']
     )
-    CircuitSequenceNumber = 33  # Charger sequence number on circuit [Integer] ['Admin', 'Partner']
-    SinglePhaseNumber = 34  # Phase to use in 1-phase charging [Integer] ['Admin', 'Partner']
+    config_circuitSequenceNumber = 33  # Charger sequence number on circuit [Integer] ['Admin', 'Partner']
+    config_singlePhaseNumber = 34  # Phase to use in 1-phase charging [Integer] ['Admin', 'Partner']
     config_enable3PhasesDEPRECATED = 35  # Allow charging using 3-phases [Boolean] ['Admin', 'Partner', 'User']
     config_wiFiSSID = 36  # WiFi SSID name [String] ['Admin', 'Partner', 'User']
     config_enableIdleCurrent = 37  # Charger signals available current when EV is done charging [user option][event] [Boolean] ['Admin', 'Partner', 'User']
     config_phaseMode = 38  # Phase mode on this charger. 1-Locked to 1-Phase, 2-Auto, 3-Locked to 3-phase(only Home) [Integer] ['Admin', 'Partner', 'User']
-    ForcedThreePhaseOnITWithGndFault = 39  # Default disabled. Must be set manually if grid type is indeed three phase IT [Boolean] ['Admin', 'Partner']
+    config_forcedThreePhaseOnITWithGndFault = 39  # Default disabled. Must be set manually if grid type is indeed three phase IT [Boolean] ['Admin', 'Partner']
     config_ledStripBrightness = 40  # LED strip brightness, 0-100% [Integer] ['Admin', 'Partner', 'User']
     config_localAuthorizationRequired = 41  # Local RFID authorization is required for charging [user options][event] [Boolean] ['Admin', 'Partner', 'User']
     config_authorizationRequired = 42  # Authorization is requried for charging [Boolean] ['Admin', 'Partner', 'User']
@@ -62,9 +62,9 @@ class ChargerStreamData(Enum):
     state_offlineMaxCircuitCurrentP3 = (
         52  # Maximum circuit current P3 when offline [event] [Integer] ['Admin', 'Partner', 'User']
     )
-    ReleaseCableAtPowerOff = 54  # Release Cable At Power Off [Boolean] ['Admin', 'Partner']
-    ListenToControlPulse = 56  # True = charger needs control pulse to consider itself online. Readback on charger setting [event] [Boolean] ['Admin', 'Partner']
-    ControlPulseRTT = 57  # Control pulse round-trip time in milliseconds [Integer] ['Admin', 'Partner']
+    config_releaseCableAtPowerOff = 54  # Release Cable At Power Off [Boolean] ['Admin', 'Partner']
+    config_listenToControlPulse = 56  # True = charger needs control pulse to consider itself online. Readback on charger setting [event] [Boolean] ['Admin', 'Partner']
+    config_controlPulseRTT = 57  # Control pulse round-trip time in milliseconds [Integer] ['Admin', 'Partner']
     schedule_chargingSchedule = 62  # Charging schedule [json] [String] ['Admin', 'Partner', 'User']
     config_pairedEqualizer = 65  # Paired equalizer details [String] ['Admin', 'Partner']
     state_wiFiAPEnabled = (
@@ -87,27 +87,27 @@ class ChargerStreamData(Enum):
     state_numberOfCarsFullyCharged = 79  # Number of cars that appear to be fully charged [Integer] ['Admin', 'Partner']
     state_chargerFirmware = 80  # Embedded software package release id [boot] [Integer] ['Admin', 'Partner', 'User']
     state_ICCID = 81  # SIM integrated circuit card identifier [String] ['Admin', 'Partner']
-    ModemFwId = 82  # Modem firmware version [String] ['Admin', 'Partner']
-    OTAErrorCode = 83  # OTA error code, see table [event] [Integer] ['Admin', 'Partner']
-    MobileNetworkOperator = 84  # Current mobile network operator [pollable] [String] ['Admin', 'Partner']
-    RebootReason = 89  # Reason of reboot. Bitmask of flags. [Integer] ['Admin', 'Partner']
-    PowerPCBVersion = 90  # Power PCB hardware version [Integer] ['Admin', 'Partner']
-    ComPCBVersion = 91  # Communication PCB hardware version [Integer] ['Admin', 'Partner']
+    state_modemFwId = 82  # Modem firmware version [String] ['Admin', 'Partner']
+    state_OTAErrorCode = 83  # OTA error code, see table [event] [Integer] ['Admin', 'Partner']
+    state_mobileNetworkOperator = 84  # Current mobile network operator [pollable] [String] ['Admin', 'Partner']
+    state_rebootReason = 89  # Reason of reboot. Bitmask of flags. [Integer] ['Admin', 'Partner']
+    state_powerPCBVersion = 90  # Power PCB hardware version [Integer] ['Admin', 'Partner']
+    state_comPCBVersion = 91  # Communication PCB hardware version [Integer] ['Admin', 'Partner']
     state_reasonForNoCurrent = 96  # Enum describing why a charger with a car connected is not offering current to the car [Integer] ['Admin', 'Partner', 'User']
-    LoadBalancingNumberOfConnectedChargers = 97  # Number of connected chargers in the load balancin. Including the master. Sent from Master only. [Integer] ['Admin', 'Partner']
+    state_loadBalancingNumberOfConnectedChargers = 97  # Number of connected chargers in the load balancin. Including the master. Sent from Master only. [Integer] ['Admin', 'Partner']
     state_UDPNumOfConnectedNodes = (
         98  # Number of chargers connected to master through UDP / WIFI [Integer] ['Admin', 'Partner']
     )
     state_localConnection = 99  # Slaves only. Current connection to master, 0 = None, 1= Radio, 2 = WIFI UDP, 3 = Radio and WIFI UDP [Integer] ['Admin', 'Partner']
     state_pilotMode = 100  # Pilot Mode Letter (A-F) [event] [String] ['Admin', 'Partner']
-    CarConnectedDEPRECATED = 101  # Car connection state [Boolean] ['Admin', 'Partner']
+    state_carConnectedDEPRECATED = 101  # Car connection state [Boolean] ['Admin', 'Partner']
     state_smartCharging = (
         102  # Smart charging state enabled by capacitive touch button [event] [Boolean] ['Admin', 'Partner', 'User']
     )
     state_cableLocked = 103  # Cable lock state [event] [Boolean] ['Admin', 'Partner', 'User']
     state_cableRating = 104  # Cable rating read [Amperes][event] [Integer] ['Admin', 'Partner', 'User']
-    PilotHigh = 105  # Pilot signal high [Volt][debug] [Integer] ['Admin', 'Partner']
-    PilotLow = 106  # Pilot signal low [Volt][debug] [Integer] ['Admin', 'Partner']
+    state_pilotHigh = 105  # Pilot signal high [Volt][debug] [Integer] ['Admin', 'Partner']
+    state_pilotLow = 106  # Pilot signal low [Volt][debug] [Integer] ['Admin', 'Partner']
     state_backPlateID = 107  # Back Plate RFID of charger [boot] [String] ['Admin', 'Partner']
     state_userIDTokenReversed = 108  # User ID token string from RFID reading [event](NB! Must reverse these strings) [String] ['Admin', 'Partner']
     state_chargerOpMode = (
@@ -120,41 +120,45 @@ class ChargerStreamData(Enum):
     state_outputCurrent = 114  # Available current signaled to car with pilot tone [Double] ['Admin', 'Partner', 'User']
     state_deratedCurrent = 115  # Available current after derating [A] [Double] ['Admin', 'Partner', 'User']
     state_deratingActive = 116  # Available current is limited by the charger due to high temperature [event] [Boolean] ['Admin', 'Partner', 'User']
-    DebugString = 117  # Debug string [String] ['Admin', 'Partner']
+    state_debugString = 117  # Debug string [String] ['Admin', 'Partner']
     state_errorString = 118  # Descriptive error string [event] [String] ['Admin', 'Partner', 'User']
     state_errorCode = 119  # Error code according to error code table [event] [Integer] ['Admin', 'Partner', 'User']
     state_totalPower = 120  # Total power [kW][telemetry] [Double] ['Admin', 'Partner', 'User']
     state_sessionEnergy = 121  # Session accumulated energy [kWh][telemetry] [Double] ['Admin', 'Partner', 'User']
     state_energyPerHour = 122  # Accumulated energy per hour [kWh][event] [Double] ['Admin', 'Partner', 'User']
-    LegacyEvStatus = 123  # 0 = not legacy ev, 1 = legacy ev detected, 2 = reviving ev [Integer] ['Admin', 'Partner']
+    state_legacyEvStatus = (
+        123  # 0 = not legacy ev, 1 = legacy ev detected, 2 = reviving ev [Integer] ['Admin', 'Partner']
+    )
     state_lifetimeEnergy = (
         124  # Accumulated energy in the lifetime of the charger [kWh] [Double] ['Admin', 'Partner', 'User']
     )
     state_lifetimeRelaySwitches = 125  # Total number of relay switches in the lifetime of the charger (irrespective of the number of phases used) [Integer] ['Admin', 'Partner']
     state_lifetimeHours = 126  # Total number of hours in operation [Integer] ['Admin', 'Partner']
-    DynamicCurrentOfflineFallbackDEPRICATED = (
+    config_dynamicCurrentOfflineFallbackDEPRICATED = (
         127  # Maximum circuit current when offline [event] [Integer] ['Admin', 'Partner']
     )
     state_userIDToken = 128  # User ID token string from RFID reading [event] [String] ['Admin', 'Partner']
     state_ChargingSession = 129  # Charging sessions [json][event] [String] ['Admin', 'Partner']
     state_cellRSSI = 130  # Cellular signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
-    CellRAT = 131  # Cellular radio access technology according to RAT table [event] [Integer] ['Admin', 'Partner']
+    state_CellRAT = (
+        131  # Cellular radio access technology according to RAT table [event] [Integer] ['Admin', 'Partner']
+    )
     state_wiFiRSSI = 132  # WiFi signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
-    CellAddress = 133  # IP address assigned by cellular network [debug] [String] ['Admin', 'Partner']
-    WiFiAddress = 134  # IP address assigned by WiFi network [debug] [String] ['Admin', 'Partner']
-    WiFiType = 135  # WiFi network type letters (G, N, AC, etc) [debug] [String] ['Admin', 'Partner']
+    config_CellAddress = 133  # IP address assigned by cellular network [debug] [String] ['Admin', 'Partner']
+    config_wiFiAddress = 134  # IP address assigned by WiFi network [debug] [String] ['Admin', 'Partner']
+    config_wiFiType = 135  # WiFi network type letters (G, N, AC, etc) [debug] [String] ['Admin', 'Partner']
     state_localRSSI = 136  # Local radio signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
-    MasterBackPlateID = 137  # Back Plate RFID of master [event] [String] ['Admin', 'Partner']
-    LocalTxPower = 138  # Local radio transmission power [dBm][telemetry] [Integer] ['Admin', 'Partner']
-    LocalState = 139  # Local radio state [event] [String] ['Admin', 'Partner']
+    state_masterBackPlateID = 137  # Back Plate RFID of master [event] [String] ['Admin', 'Partner']
+    state_localTxPower = 138  # Local radio transmission power [dBm][telemetry] [Integer] ['Admin', 'Partner']
+    state_localState = 139  # Local radio state [event] [String] ['Admin', 'Partner']
     state_foundWiFi = 140  # List of found WiFi SSID and RSSI values [event] [String] ['Admin', 'Partner', 'User']
     state_chargerRAT = (
         141  # Radio access technology in use: 0 = cellular, 1 = wifi [Integer] ['Admin', 'Partner', 'User']
     )
-    CellularInterfaceErrorCount = 142  # The number of times since boot the system has reported an error on this interface [poll] [Integer] ['Admin', 'Partner']
-    CellularInterfaceResetCount = 143  # The number of times since boot the interface was reset due to high error count [poll] [Integer] ['Admin', 'Partner']
-    WifiInterfaceErrorCount = 144  # The number of times since boot the system has reported an error on this interface [poll] [Integer] ['Admin', 'Partner']
-    WifiInterfaceResetCount = 145  # The number of times since boot the interface was reset due to high error count [poll] [Integer] ['Admin', 'Partner']
+    state_cellularInterfaceErrorCount = 142  # The number of times since boot the system has reported an error on this interface [poll] [Integer] ['Admin', 'Partner']
+    state_cellularInterfaceResetCount = 143  # The number of times since boot the interface was reset due to high error count [poll] [Integer] ['Admin', 'Partner']
+    state_wifiInterfaceErrorCount = 144  # The number of times since boot the system has reported an error on this interface [poll] [Integer] ['Admin', 'Partner']
+    state_wifiInterfaceResetCount = 145  # The number of times since boot the interface was reset due to high error count [poll] [Integer] ['Admin', 'Partner']
     config_localNodeType = (
         146  # 0-Unconfigured, 1-Master, 2-Extender, 3-End device [Integer] ['Admin', 'Partner', 'User']
     )
