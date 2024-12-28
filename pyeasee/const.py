@@ -144,7 +144,7 @@ class ChargerStreamData(Enum):
         131  # Cellular radio access technology according to RAT table [event] [Integer] ['Admin', 'Partner']
     )
     state_wiFiRSSI = 132  # WiFi signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
-    config_CellAddress = 133  # IP address assigned by cellular network [debug] [String] ['Admin', 'Partner']
+    config_cellAddress = 133  # IP address assigned by cellular network [debug] [String] ['Admin', 'Partner']
     config_wiFiAddress = 134  # IP address assigned by WiFi network [debug] [String] ['Admin', 'Partner']
     config_wiFiType = 135  # WiFi network type letters (G, N, AC, etc) [debug] [String] ['Admin', 'Partner']
     state_localRSSI = 136  # Local radio signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
