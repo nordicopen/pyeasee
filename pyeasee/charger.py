@@ -628,7 +628,7 @@ class Charger(BaseDict):
             return None
 
     async def set_led_strip_brightness(self, brightness: int):
-        """Set charger max current"""
+        """Set LED strip brightness."""
         json = {"ledStripBrightness": brightness}
         try:
             return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
