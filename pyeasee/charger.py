@@ -627,6 +627,14 @@ class Charger(BaseDict):
         except (ServerFailureException):
             return None
 
+    async def set_led_strip_brightness(self, brightness: int):
+        """Set LED strip brightness."""
+        json = {"ledStripBrightness": brightness}
+        try:
+            return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+        except (ServerFailureException):
+            return None
+
     async def set_access(self, access: Union[int, str]):
         """Set the level of access for a changer"""
         json = {
