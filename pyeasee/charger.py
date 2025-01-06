@@ -611,11 +611,11 @@ class Charger(BaseDict):
         else:
             _LOGGER.info("Circuit info must be initialized for offline current to be set")
 
-    async def set_dynamic_charger_current(self, current: int):
+    async def set_dynamic_charger_current(self, current: int, timeToLive: int = 0):
         """Set charger dynamic current"""
-        json = {"dynamicChargerCurrent": current}
+        json = {"amps": current, "minutes": timeToLive}
         try:
-            return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+            return await self.easee.post(f"/api/chargers/{self.id}/commands/set_dynamic_charger_current", json=json)
         except (ServerFailureException):
             return None
 
