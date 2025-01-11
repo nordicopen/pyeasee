@@ -2,6 +2,8 @@ from datetime import datetime
 import logging
 from typing import Any, Dict, List
 
+from aiohttp.client_exceptions import ContentTypeError
+
 from .charger import Charger, ChargerConfig, ChargerState
 from .exceptions import ForbiddenServiceException, ServerFailureException
 from .utils import BaseDict
@@ -34,7 +36,7 @@ class Equalizer(BaseDict):
         observation_ids = ",".join(str(s) for s in args)
         try:
             return await (await self.easee.get(f"/state/{self.id}/observations?ids={observation_ids}")).json()
-        except (ServerFailureException):
+        except (ServerFailureException, ContentTypeError):
             return None
 
     async def get_state(self):
@@ -42,7 +44,7 @@ class Equalizer(BaseDict):
         try:
             state = await (await self.easee.get(f"/api/equalizers/{self.id}/state")).json()
             return EqualizerState(state)
-        except (ServerFailureException):
+        except (ServerFailureException, ContentTypeError):
             return None
 
     async def get_config(self):
@@ -50,7 +52,7 @@ class Equalizer(BaseDict):
         try:
             config = await (await self.easee.get(f"/api/equalizers/{self.id}/config")).json()
             return EqualizerConfig(config)
-        except (ServerFailureException):
+        except (ServerFailureException, ContentTypeError):
             return None
 
     async def empty_state(self, raw=False):
@@ -69,7 +71,7 @@ class Equalizer(BaseDict):
             return await (
                 await self.easee.get(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy")
             ).json()
-        except (ServerFailureException):
+        except (ServerFailureException, ContentTypeError):
             return None
 
     async def set_load_balancing(self, activate: bool, current_limit: int = 0):
@@ -93,7 +95,7 @@ class Equalizer(BaseDict):
         """Get the latest released firmeware version"""
         try:
             return await (await self.easee.get(f"/firmware/{self.id}/latest")).json()
-        except (ServerFailureException):
+        except (ServerFailureException, ContentTypeError):
             return None
 
 
@@ -256,7 +258,7 @@ class Site(BaseDict):
                 await self.easee.get(f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
             ).json()
             return costs
-        except (ServerFailureException, ForbiddenServiceException):
+        except (ServerFailureException, ForbiddenServiceException, ContentTypeError):
             return None
 
     async def get_users(self):
@@ -265,7 +267,7 @@ class Site(BaseDict):
         try:
             users = await (await self.easee.get(f"/api/sites/{self.id}/users")).json()
             return users
-        except (ServerFailureException, ForbiddenServiceException):
+        except (ServerFailureException, ForbiddenServiceException, ContentTypeError):
             return None
 
     async def get_user_monthly_consumption(self, user_id):
@@ -274,7 +276,7 @@ class Site(BaseDict):
         try:
             consumption = await (await self.easee.get(f"/api/sites/{self.id}/users/{user_id}/monthly")).json()
             return consumption
-        except (ServerFailureException, ForbiddenServiceException):
+        except (ServerFailureException, ForbiddenServiceException, ContentTypeError):
             return None
 
     async def get_user_yearly_consumption(self, user_id):
@@ -283,5 +285,5 @@ class Site(BaseDict):
         try:
             consumption = await (await self.easee.get(f"/api/sites/{self.id}/users/{user_id}/yearly")).json()
             return consumption
-        except (ServerFailureException, ForbiddenServiceException):
+        except (ServerFailureException, ForbiddenServiceException, ContentTypeError):
             return None

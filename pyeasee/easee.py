@@ -3,6 +3,7 @@ Main client for the Eesee account.
 """
 import asyncio
 from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 import logging
 import ssl
 from typing import Any, AsyncIterator, Dict, List
@@ -135,38 +136,68 @@ class Easee:
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
 
+        self._rate_limit_dt = datetime.now()
+
         # Override the __aiter__ method of the pysignalr.websocket Connect class
         pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
 
     def base_uri(self):
         return self.base
 
+    async def rate_limit(self):
+        diff = datetime.now() - self._rate_limit_dt
+        millis = diff / timedelta(milliseconds=1)
+        if millis < 1000:
+            _LOGGER.debug("Rate limiting %f", float(1000 - millis) / 1000)
+            await asyncio.sleep(float(1000 - millis) / 1000)
+        self._rate_limit_dt = datetime.now()
+
     async def post(self, url, **kwargs):
-        _LOGGER.debug("POST: %s (%s)", url, kwargs)
-        await self._verify_updated_token()
-        response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await self.check_status(response)
+        await self.rate_limit()
+        retry = 5
+        while retry > 0:
+            retry = retry - 1
+            _LOGGER.debug("POST: %s (%s)", url, kwargs)
+            await self._verify_updated_token()
+            response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
+            if await self.check_status(response):
+                break
         return response
 
     async def put(self, url, **kwargs):
-        _LOGGER.debug("PUT: %s (%s)", url, kwargs)
-        await self._verify_updated_token()
-        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await self.check_status(response)
+        await self.rate_limit()
+        retry = 5
+        while retry > 0:
+            retry = retry - 1
+            _LOGGER.debug("PUT: %s (%s)", url, kwargs)
+            await self._verify_updated_token()
+            response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
+            if await self.check_status(response):
+                break
         return response
 
     async def get(self, url, **kwargs):
-        _LOGGER.debug("GET: %s (%s)", url, kwargs)
-        await self._verify_updated_token()
-        response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await self.check_status(response)
+        await self.rate_limit()
+        retry = 5
+        while retry > 0:
+            retry = retry - 1
+            _LOGGER.debug("GET: %s (%s)", url, kwargs)
+            await self._verify_updated_token()
+            response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
+            if await self.check_status(response):
+                break
         return response
 
     async def delete(self, url, **kwargs):
-        _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
-        await self._verify_updated_token()
-        response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
-        await self.check_status(response)
+        await self.rate_limit()
+        retry = 5
+        while retry > 0:
+            retry = retry - 1
+            _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
+            await self._verify_updated_token()
+            response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
+            if await self.check_status(response):
+                break
         return response
 
     async def check_status(self, response):
@@ -179,9 +210,24 @@ class Easee:
             await raise_for_status(response)
         except ForbiddenServiceException:
             raise
+        except TooManyRequestsException:
+            retry_after = response.headers.get("Retry-After")
+            retry_after_seconds = 30
+            if retry_after is not None:
+                _LOGGER.debug("Server rate limit, retry after %s.", retry_after)
+                try:
+                    retry_after_seconds = int(retry_after)
+                except ValueError:
+                    retry_after_seconds = (parsedate_to_datetime(retry_after) - datetime.now()).total_seconds()
+            else:
+                _LOGGER.debug("Server rate limit without Retry-After header, sleeping %d seconds.", retry_after_seconds)
+            await asyncio.sleep(retry_after_seconds)
+            return False
         except Exception as ex:
             _LOGGER.debug("Got other exception from status: %s", type(ex).__name__)
             raise
+
+        return True
 
     async def _verify_updated_token(self):
         """
