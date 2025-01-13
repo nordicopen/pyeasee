@@ -137,7 +137,7 @@ class Easee:
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
 
-        self.throttler = Throttler(rate_limit=20, period=10.0, retry_interval=0.5)
+        self.throttler = Throttler(rate_limit=15, period=9.0, retry_interval=1.0)
 
         # Override the __aiter__ method of the pysignalr.websocket Connect class
         pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
