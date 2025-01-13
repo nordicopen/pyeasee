@@ -2,11 +2,11 @@
 Main client for the Eesee account.
 """
 import asyncio
+from collections import deque
 from datetime import datetime, timedelta
 import logging
 import ssl
 import time
-from collections import deque
 from typing import Any, AsyncIterator, Deque, Dict, List
 
 import aiohttp
@@ -468,6 +468,7 @@ class Easee:
             return records
         except (ServerFailureException):
             return None
+
 
 class Throttler:
     def __init__(self, rate_limit: int, period=1.0, retry_interval=0.01):
