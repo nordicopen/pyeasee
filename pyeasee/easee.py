@@ -14,7 +14,7 @@ import pysignalr
 from pysignalr.client import SignalRClient
 from pysignalr.exceptions import AuthorizationError
 from pysignalr.messages import CompletionMessage
-import websockets.legacy.client
+import websockets.asyncio.client
 
 from .charger import Charger
 from .exceptions import (
@@ -80,8 +80,8 @@ async def raise_for_status(response):
 
 
 async def __aiter__(
-    self: websockets.legacy.client.Connect,
-) -> AsyncIterator[websockets.legacy.client.WebSocketClientProtocol]:
+    self: websockets.asyncio.client.connect,
+) -> AsyncIterator[websockets.asyncio.client.ClientConnection]:
     """
     Asynchronous iterator for the websocket Connect object.
     This function overrides the error handling put in place in pysignalr so that exception propagates out.
@@ -140,7 +140,7 @@ class Easee:
         self.throttler = Throttler(rate_limit=15, period=9.0, retry_interval=1.0)
 
         # Override the __aiter__ method of the pysignalr.websocket Connect class
-        pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
+        pysignalr.websockets.asyncio.client.connect.__aiter__ = __aiter__  # type: ignore[method-assign]
 
     def base_uri(self):
         return self.base
