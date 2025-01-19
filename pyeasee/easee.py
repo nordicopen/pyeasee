@@ -2,10 +2,12 @@
 Main client for the Eesee account.
 """
 import asyncio
+from collections import deque
 from datetime import datetime, timedelta
 import logging
 import ssl
-from typing import Any, AsyncIterator, Dict, List, Optional
+import time
+from typing import Any, AsyncIterator, Deque, Dict, List, Optional
 
 import aiohttp
 import pysignalr
@@ -26,7 +28,7 @@ from .exceptions import (
 from .site import Site, SiteState
 from .utils import convert_stream_data
 
-__VERSION__ = "0.8.11"
+__VERSION__ = "0.8.13"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -135,6 +137,8 @@ class Easee:
         self._sr_backoff = SR_MIN_BACKOFF
         self._sr_task = None
 
+        self.throttler = Throttler(rate_limit=15, period=9.0, retry_interval=1.0)
+
         # Override the __aiter__ method of the pysignalr.websocket Connect class
         pysignalr.websockets.legacy.client.Connect.__aiter__ = __aiter__  # type: ignore[method-assign]
 
@@ -144,28 +148,32 @@ class Easee:
     async def post(self, url, **kwargs):
         _LOGGER.debug("POST: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
+        async with self.throttler:
+            response = await self.session.post(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def put(self, url, **kwargs):
         _LOGGER.debug("PUT: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
+        async with self.throttler:
+            response = await self.session.put(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def get(self, url, **kwargs):
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
+        async with self.throttler:
+            response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
     async def delete(self, url, **kwargs):
         _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
         await self._verify_updated_token()
-        response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
+        async with self.throttler:
+            response = await self.session.delete(f"{self.base}{url}", headers=self.headers, **kwargs)
         await self.check_status(response)
         return response
 
@@ -461,3 +469,36 @@ class Easee:
             return records
         except (ServerFailureException):
             return None
+
+
+class Throttler:
+    def __init__(self, rate_limit: int, period=1.0, retry_interval=0.01):
+        self.rate_limit = rate_limit
+        self.period = period
+        self.retry_interval = retry_interval
+
+        self._task_logs: Deque[float] = deque()
+
+    def flush(self):
+        now = time.monotonic()
+        while self._task_logs:
+            if now - self._task_logs[0] > self.period:
+                self._task_logs.popleft()
+            else:
+                break
+
+    async def acquire(self):
+        while True:
+            self.flush()
+            if len(self._task_logs) < self.rate_limit:
+                break
+            _LOGGER.debug("Delay due to throttling")
+            await asyncio.sleep(self.retry_interval)
+
+        self._task_logs.append(time.monotonic())
+
+    async def __aenter__(self):
+        await self.acquire()
+
+    async def __aexit__(self, exc_type, exc, tb):
+        pass

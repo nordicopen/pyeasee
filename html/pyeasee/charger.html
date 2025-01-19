@@ -239,10 +239,16 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <div class="desc"><p>Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted.</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_dynamic_charger_current"><code class="name flex">
-<span>async def <span class="ident">set_dynamic_charger_current</span></span>(<span>self, current: int)</span>
+<span>async def <span class="ident">set_dynamic_charger_current</span></span>(<span>self, current: int, timeToLive: int = 0)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set charger dynamic current</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.set_led_strip_brightness"><code class="name flex">
+<span>async def <span class="ident">set_led_strip_brightness</span></span>(<span>self, brightness: int)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set LED strip brightness.</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_max_charger_circuit_current"><code class="name flex">
 <span>async def <span class="ident">set_max_charger_circuit_current</span></span>(<span>self, currentP1: int, currentP2: int = None, currentP3: int = None)</span>
@@ -437,6 +443,7 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <li><code><a title="pyeasee.charger.Charger.set_basic_charge_plan" href="#pyeasee.charger.Charger.set_basic_charge_plan">set_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_dynamic_charger_circuit_current" href="#pyeasee.charger.Charger.set_dynamic_charger_circuit_current">set_dynamic_charger_circuit_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_dynamic_charger_current" href="#pyeasee.charger.Charger.set_dynamic_charger_current">set_dynamic_charger_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_led_strip_brightness" href="#pyeasee.charger.Charger.set_led_strip_brightness">set_led_strip_brightness</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_current" href="#pyeasee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_offline_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_offline_charger_circuit_current">set_max_offline_charger_circuit_current</a></code></li>
