@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 
 from .charger import Charger, ChargerConfig, ChargerState
 from .exceptions import ForbiddenServiceException, ServerFailureException
+from .throttler import Throttler
 from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
@@ -190,6 +191,7 @@ class Site(BaseDict):
         self.id: int = data["id"]
         self.name: str = data["name"]
         self.easee = easee
+        self._breakdown_throttler = Throttler(rate_limit=10, period=3600, name="price breakdown")
 
     def get_circuits(self) -> List[Circuit]:
         """Get circuits for the site"""
@@ -252,9 +254,12 @@ class Site(BaseDict):
         """Get the charging cost between from_datetime and to_datetime"""
 
         try:
-            costs = await (
-                await self.easee.get(f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}")
-            ).json()
+            async with self._breakdown_throttler:
+                costs = await (
+                    await self.easee.get(
+                        f"/api/sites/{self.id}/breakdown/{from_date.isoformat()}/{to_date.isoformat()}"
+                    )
+                ).json()
             return costs
         except (ServerFailureException, ForbiddenServiceException):
             return None
