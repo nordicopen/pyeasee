@@ -242,6 +242,7 @@ class Easee:
             res = await self.session.post(
                 f"{self.base}/api/accounts/refresh_token", headers=self.minimal_headers, json=data
             )
+            await raise_for_status(res)
             await self._handle_token_response(res)
         except (AuthorizationFailedException, BadRequestException):
             _LOGGER.debug("Could not get new access token from refresh token, getting new one")
