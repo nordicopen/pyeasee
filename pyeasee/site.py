@@ -29,6 +29,7 @@ class Equalizer(BaseDict):
         self.name: str = data["name"]
         self.site = site
         self.easee = easee
+        self._max_allocated_current_throttler = Throttler(rate_limit=1, period=60, name="max allocated current")
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
@@ -87,6 +88,20 @@ class Equalizer(BaseDict):
 
         try:
             return await self.easee.post(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=json)
+        except (ServerFailureException):
+            return None
+
+    async def set_max_allocated_current(self, current_limit: int):
+        """Set the load balancing settings"""
+        json = {
+            "maxCurrent": current_limit,
+        }
+
+        try:
+            async with self._max_allocated_current_throttler:
+                return await self.easee.post(
+                    f"/api/equalizers/{self.id}/commands/configure_max_allocated_current", json=json
+                )
         except (ServerFailureException):
             return None
 
