@@ -113,6 +113,10 @@ class Easee:
         self.base = "https://api.easee.com"
         self.sr_base = "https://streams.easee.com/hubs/chargers"
         self.token = {}
+        self.get_headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
+            "Accept": "application/json",
+        }
         self.headers = {
             "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
             "Accept": "application/json",
@@ -165,7 +169,7 @@ class Easee:
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
         async with self._general_throttler:
-            response = await self.session.get(f"{self.base}{url}", headers=self.headers, **kwargs)
+            response = await self.session.get(f"{self.base}{url}", headers=self.get_headers, **kwargs)
         await self.check_status(response)
         return response
 
@@ -207,6 +211,7 @@ class Easee:
             await self._refresh_token()
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
+        self.get_headers["Authorization"] = f"Bearer {accessToken}"
         self.sr_headers["Authorization"] = f"Bearer {accessToken}"
 
     async def _handle_token_response(self, res):
