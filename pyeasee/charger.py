@@ -258,6 +258,20 @@ class Charger(BaseDict):
             return float(value)
         except (ServerFailureException):
             return None
+    
+    async def get_hourly_consumption_between_dates(self, from_date: datetime, to_date: datetime):
+        """Gets hourly consumption between two dates
+            Note when calling: Seems to be capped at requesting max one month at a time
+        """
+        try:
+            value = await (
+                await self.easee.get(
+                    f"/api/chargers/{self.id}/usage/hourly/{from_date.isoformat()}/{to_date.isoformat()}"
+                )
+            ).json()
+            return value
+        except (ServerFailureException):
+            return None
 
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
         """Gets charging sessions between two dates"""
