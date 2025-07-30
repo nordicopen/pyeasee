@@ -6,6 +6,7 @@ from enum import Enum
 class ChargerStreamData(Enum):
     state_selfTestResult = 1  # OK or error codes [String] ['Admin', 'Partner', 'User']
     state_selfTestDetails = 2  # JSON with details from self-test [String] ['Admin', 'Partner']
+    state_debugLog = 5
     state_wifiEvent = 10  # Enum with WiFi event codes. Requires telemetry debug mode. Will be updated on WiFi events when using cellular, will otherwise be reported in ChargerOfflineReason [Integer] ['Admin', 'Partner']
     state_chargerOfflineReason = 11  # Enum describing why charger is offline [Integer] ['Admin', 'Partner', 'User']
     state_easeeLinkCommandResponse = (
