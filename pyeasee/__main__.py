@@ -57,6 +57,8 @@ def parse_arguments():
     parser.add_argument("-r", "--signalr", help="Listen to signalr stream", action="store_true")
     parser.add_argument("-co", "--cost", help="Retrieve cost for last year", action="store_true")
     parser.add_argument("--countries", help="Get active countries information", action="store_true")
+    parser.add_argument("-ou", "--ocppurl", help="OCPP URL")
+    parser.add_argument("-od", "--ocppdisable", help="OCPP Disable", action="store_true")
     parser.add_argument(
         "-d",
         "--debug",
@@ -250,6 +252,25 @@ async def async_main():
                 #                print "\ninput:", input_queue.get()
                 break
 
+    if args.ocppurl:
+        print(args.ocppurl)
+        chargers: List[Charger] = await easee.get_chargers()
+        for charger in chargers:
+            response = await charger.set_ocpp_config(True, args.ocppurl)
+            print("Version: " + response)
+            await charger.apply_ocpp_config(response)
+            response = await charger.get_ocpp_config()
+            print(response)
+
+    if args.ocppdisable:
+        chargers: List[Charger] = await easee.get_chargers()
+        for charger in chargers:
+            response = await charger.set_ocpp_config(False, "ws://127.0.0.1:9000")
+            print("Version: " + response)
+            await charger.apply_ocpp_config(response)
+            response = await charger.get_ocpp_config()
+            print(response)
+
     await easee.close()
 
 
@@ -263,6 +284,7 @@ async def chargers_info(chargers: List[Charger]):
         week_schedule = await charger.get_weekly_charge_plan()
         observation_test = await charger.get_observations(30, 31, 35, 36, 45)
         firmware = await charger.get_latest_firmware()
+        ocpp = await charger.get_ocpp_config()
         ch = charger.get_data()
         ch["state"] = state.get_data()
         ch["config"] = config.get_data()
@@ -272,6 +294,7 @@ async def chargers_info(chargers: List[Charger]):
             ch["schedule"] = schedule.get_data()
         if week_schedule is not None:
             ch["week_schedule"] = week_schedule.get_data()
+        ch["ocpp"] = ocpp
         data.append(ch)
 
     print(json.dumps(data, indent=2))

@@ -685,3 +685,33 @@ class Charger(BaseDict):
             return await self.easee.post(f"/api/chargers/{self.id}/commands/poll_chargeropmode")
         except (ServerFailureException):
             return None
+
+    async def get_ocpp_config(self):
+        """Reads the OCPP config of the charger"""
+        try:
+            return await (await self.easee.get(f"/local-ocpp/v1/connection-details/{self.id}")).json()
+        except (NotFoundException):
+            return None
+        except (ServerFailureException):
+            return None
+
+    async def set_ocpp_config(self, enable, url):
+        """Writes the OCPP config of the charger"""
+        if enable:
+            enablestr = "DualProtocol"
+        else:
+            enablestr = "OcppOff"
+        json = {"connectivityMode": enablestr, "websocketConnectionArgs": {"url": url}}
+        try:
+            result = await (await self.easee.post(f"/local-ocpp/v1/connection-details/{self.id}", json=json)).json()
+            return result["version"]
+        except (ServerFailureException):
+            return None
+
+    async def apply_ocpp_config(self, version):
+        """Applies a stored OCPP config of the charger"""
+        json = {"version": version}
+        try:
+            return await (await self.easee.post(f"/local-ocpp/v1/connections/chargers/{self.id}", json=json)).json()
+        except (ServerFailureException):
+            return None
