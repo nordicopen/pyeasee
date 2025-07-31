@@ -3,6 +3,7 @@ import logging
 from typing import Any, Dict, Union
 
 from .exceptions import NotFoundException, ServerFailureException
+from .throttler import Throttler
 from .utils import BaseDict
 
 _LOGGER = logging.getLogger(__name__)
@@ -238,6 +239,10 @@ class Charger(BaseDict):
         self.site = site
         self.circuit = circuit
         self.easee = easee
+        self._consumption_between_dates_throttler = Throttler(
+            rate_limit=10, period=3600, name="consumption between dates"
+        )
+        self._sessions_between_dates_throttler = Throttler(rate_limit=10, period=3600, name="sessions between dates")
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
@@ -250,18 +255,19 @@ class Charger(BaseDict):
     async def get_consumption_between_dates(self, from_date: datetime, to_date):
         """Gets consumption between two dates"""
         try:
-            value = await (
-                await self.easee.get(
-                    f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
-                )
-            ).text()
-            return float(value)
+            async with self._consumption_between_dates_throttler:
+                value = await (
+                    await self.easee.get(
+                        f"/api/sessions/charger/{self.id}/total/{from_date.isoformat()}/{to_date.isoformat()}"
+                    )
+                ).text()
+                return float(value)
         except (ServerFailureException):
             return None
-    
+
     async def get_hourly_consumption_between_dates(self, from_date: datetime, to_date: datetime):
         """Gets hourly consumption between two dates
-            Note when calling: Seems to be capped at requesting max one month at a time
+        Note when calling: Seems to be capped at requesting max one month at a time
         """
         try:
             value = await (
@@ -276,14 +282,15 @@ class Charger(BaseDict):
     async def get_sessions_between_dates(self, from_date: datetime, to_date):
         """Gets charging sessions between two dates"""
         try:
-            sessions = await (
-                await self.easee.get(
-                    f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
-                )
-            ).json()
-            sessions = [ChargerSession(session) for session in sessions]
-            sessions.sort(key=lambda x: x["carConnected"], reverse=True)
-            return sessions
+            async with self._sessions_between_dates_throttler:
+                sessions = await (
+                    await self.easee.get(
+                        f"/api/sessions/charger/{self.id}/sessions/{from_date.isoformat()}/{to_date.isoformat()}"
+                    )
+                ).json()
+                sessions = [ChargerSession(session) for session in sessions]
+                sessions.sort(key=lambda x: x["carConnected"], reverse=True)
+                return sessions
         except (ServerFailureException):
             return None
 
