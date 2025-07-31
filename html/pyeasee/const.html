@@ -34,10 +34,59 @@
 <dl>
 <dt id="pyeasee.const.ChargerStreamData"><code class="flex name class">
 <span>class <span class="ident">ChargerStreamData</span></span>
-<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>An enumeration.</p></div>
+<div class="desc"><p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; class Color(Enum):
+...     RED = 1
+...     BLUE = 2
+...     GREEN = 3
+</code></pre>
+<p>Access them by:</p>
+<ul>
+<li>attribute access:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color.RED
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>value lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color(1)
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>name lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color['RED']
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; len(Color)
+3
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; list(Color)
+[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]
+</code></pre>
+<p>Methods can be added to enumerations, and members can have their own
+attributes &ndash; see the documentation for details.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>enum.Enum</li>
@@ -46,712 +95,765 @@
 <dl>
 <dt id="pyeasee.const.ChargerStreamData.config_allowOfflineTxForUnknownId"><code class="name">var <span class="ident">config_allowOfflineTxForUnknownId</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_authorizationRequired"><code class="name">var <span class="ident">config_authorizationRequired</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_backplateType"><code class="name">var <span class="ident">config_backplateType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_cellAddress"><code class="name">var <span class="ident">config_cellAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_circuitMaxCurrentP1"><code class="name">var <span class="ident">config_circuitMaxCurrentP1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_circuitMaxCurrentP2"><code class="name">var <span class="ident">config_circuitMaxCurrentP2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_circuitMaxCurrentP3"><code class="name">var <span class="ident">config_circuitMaxCurrentP3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_circuitSequenceNumber"><code class="name">var <span class="ident">config_circuitSequenceNumber</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_controlPulseRTT"><code class="name">var <span class="ident">config_controlPulseRTT</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_detectedPowerGridType"><code class="name">var <span class="ident">config_detectedPowerGridType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_dynamicCurrentOfflineFallbackDEPRICATED"><code class="name">var <span class="ident">config_dynamicCurrentOfflineFallbackDEPRICATED</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_enable3PhasesDEPRECATED"><code class="name">var <span class="ident">config_enable3PhasesDEPRECATED</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_enableIdleCurrent"><code class="name">var <span class="ident">config_enableIdleCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_erraticEVMaxToggles"><code class="name">var <span class="ident">config_erraticEVMaxToggles</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_forcedThreePhaseOnITWithGndFault"><code class="name">var <span class="ident">config_forcedThreePhaseOnITWithGndFault</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_isEnabled"><code class="name">var <span class="ident">config_isEnabled</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_ledStripBrightness"><code class="name">var <span class="ident">config_ledStripBrightness</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_listenToControlPulse"><code class="name">var <span class="ident">config_listenToControlPulse</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localAuthorizationRequired"><code class="name">var <span class="ident">config_localAuthorizationRequired</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localAuthorizeOfflineEnabled"><code class="name">var <span class="ident">config_localAuthorizeOfflineEnabled</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localNodeType"><code class="name">var <span class="ident">config_localNodeType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localParentAddrOrNumOfNodes"><code class="name">var <span class="ident">config_localParentAddrOrNumOfNodes</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localPreAuthorizeEnabled"><code class="name">var <span class="ident">config_localPreAuthorizeEnabled</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localRadioChannel"><code class="name">var <span class="ident">config_localRadioChannel</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_localShortAddress"><code class="name">var <span class="ident">config_localShortAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_location"><code class="name">var <span class="ident">config_location</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_maxChargerCurrent"><code class="name">var <span class="ident">config_maxChargerCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_offlineChargingMode"><code class="name">var <span class="ident">config_offlineChargingMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_pairedEqualizer"><code class="name">var <span class="ident">config_pairedEqualizer</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_phaseMode"><code class="name">var <span class="ident">config_phaseMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_releaseCableAtPowerOff"><code class="name">var <span class="ident">config_releaseCableAtPowerOff</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_remoteStartRequired"><code class="name">var <span class="ident">config_remoteStartRequired</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_rfidAuthTimeoutSec"><code class="name">var <span class="ident">config_rfidAuthTimeoutSec</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_singlePhaseNumber"><code class="name">var <span class="ident">config_singlePhaseNumber</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_siteIDNumeric"><code class="name">var <span class="ident">config_siteIDNumeric</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_siteIDString"><code class="name">var <span class="ident">config_siteIDString</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_siteStructure"><code class="name">var <span class="ident">config_siteStructure</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_smartButtonEnabled"><code class="name">var <span class="ident">config_smartButtonEnabled</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_wiFiAddress"><code class="name">var <span class="ident">config_wiFiAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_wiFiMACAddress"><code class="name">var <span class="ident">config_wiFiMACAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_wiFiSSID"><code class="name">var <span class="ident">config_wiFiSSID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.config_wiFiType"><code class="name">var <span class="ident">config_wiFiType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.schedule_chargingSchedule"><code class="name">var <span class="ident">schedule_chargingSchedule</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_CellRAT"><code class="name">var <span class="ident">state_CellRAT</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_ChargingSession"><code class="name">var <span class="ident">state_ChargingSession</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_ICCID"><code class="name">var <span class="ident">state_ICCID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_LTERSRP"><code class="name">var <span class="ident">state_LTERSRP</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_LTERSRQ"><code class="name">var <span class="ident">state_LTERSRQ</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_LTESINR"><code class="name">var <span class="ident">state_LTESINR</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_OTAErrorCode"><code class="name">var <span class="ident">state_OTAErrorCode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_UDPNumOfConnectedNodes"><code class="name">var <span class="ident">state_UDPNumOfConnectedNodes</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_backPlateHallSensor"><code class="name">var <span class="ident">state_backPlateHallSensor</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_backPlateID"><code class="name">var <span class="ident">state_backPlateID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_backPlateLocked"><code class="name">var <span class="ident">state_backPlateLocked</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cableLocked"><code class="name">var <span class="ident">state_cableLocked</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cableRating"><code class="name">var <span class="ident">state_cableRating</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_carConnectedDEPRECATED"><code class="name">var <span class="ident">state_carConnectedDEPRECATED</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cellRSSI"><code class="name">var <span class="ident">state_cellRSSI</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cellularInterfaceErrorCount"><code class="name">var <span class="ident">state_cellularInterfaceErrorCount</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cellularInterfaceResetCount"><code class="name">var <span class="ident">state_cellularInterfaceResetCount</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_chargerFirmware"><code class="name">var <span class="ident">state_chargerFirmware</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_chargerOfflineReason"><code class="name">var <span class="ident">state_chargerOfflineReason</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_chargerOpMode"><code class="name">var <span class="ident">state_chargerOpMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_chargerRAT"><code class="name">var <span class="ident">state_chargerRAT</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_chargingSessionStart"><code class="name">var <span class="ident">state_chargingSessionStart</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL1"><code class="name">var <span class="ident">state_circuitTotalAllocatedPhaseConductorCurrentL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL2"><code class="name">var <span class="ident">state_circuitTotalAllocatedPhaseConductorCurrentL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL3"><code class="name">var <span class="ident">state_circuitTotalAllocatedPhaseConductorCurrentL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalPhaseConductorCurrentL1"><code class="name">var <span class="ident">state_circuitTotalPhaseConductorCurrentL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalPhaseConductorCurrentL2"><code class="name">var <span class="ident">state_circuitTotalPhaseConductorCurrentL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_circuitTotalPhaseConductorCurrentL3"><code class="name">var <span class="ident">state_circuitTotalPhaseConductorCurrentL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_cloudDisconnectReason"><code class="name">var <span class="ident">state_cloudDisconnectReason</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_comPCBVersion"><code class="name">var <span class="ident">state_comPCBVersion</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_connectedToCloud"><code class="name">var <span class="ident">state_connectedToCloud</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_currentMotor"><code class="name">var <span class="ident">state_currentMotor</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="pyeasee.const.ChargerStreamData.state_debugLog"><code class="name">var <span class="ident">state_debugLog</span></code></dt>
+<dd>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_debugString"><code class="name">var <span class="ident">state_debugString</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_deratedCurrent"><code class="name">var <span class="ident">state_deratedCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_deratingActive"><code class="name">var <span class="ident">state_deratingActive</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_diagnosticsString"><code class="name">var <span class="ident">state_diagnosticsString</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_dynamicChargerCurrent"><code class="name">var <span class="ident">state_dynamicChargerCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_dynamicCircuitCurrentP1"><code class="name">var <span class="ident">state_dynamicCircuitCurrentP1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_dynamicCircuitCurrentP2"><code class="name">var <span class="ident">state_dynamicCircuitCurrentP2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_dynamicCircuitCurrentP3"><code class="name">var <span class="ident">state_dynamicCircuitCurrentP3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_easeeLinkCommandResponse"><code class="name">var <span class="ident">state_easeeLinkCommandResponse</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_easeeLinkDataReceived"><code class="name">var <span class="ident">state_easeeLinkDataReceived</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_energyPerHour"><code class="name">var <span class="ident">state_energyPerHour</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_eqAvailableCurrentP1"><code class="name">var <span class="ident">state_eqAvailableCurrentP1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_eqAvailableCurrentP2"><code class="name">var <span class="ident">state_eqAvailableCurrentP2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_eqAvailableCurrentP3"><code class="name">var <span class="ident">state_eqAvailableCurrentP3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_errorCode"><code class="name">var <span class="ident">state_errorCode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_errorString"><code class="name">var <span class="ident">state_errorString</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_fatalErrorCode"><code class="name">var <span class="ident">state_fatalErrorCode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_foundWiFi"><code class="name">var <span class="ident">state_foundWiFi</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inCurrentT2"><code class="name">var <span class="ident">state_inCurrentT2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inCurrentT3"><code class="name">var <span class="ident">state_inCurrentT3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inCurrentT4"><code class="name">var <span class="ident">state_inCurrentT4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inCurrentT5"><code class="name">var <span class="ident">state_inCurrentT5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT1T2"><code class="name">var <span class="ident">state_inVoltageT1T2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT1T3"><code class="name">var <span class="ident">state_inVoltageT1T3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT1T4"><code class="name">var <span class="ident">state_inVoltageT1T4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT1T5"><code class="name">var <span class="ident">state_inVoltageT1T5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT2T3"><code class="name">var <span class="ident">state_inVoltageT2T3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT2T4"><code class="name">var <span class="ident">state_inVoltageT2T4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT2T5"><code class="name">var <span class="ident">state_inVoltageT2T5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT3T4"><code class="name">var <span class="ident">state_inVoltageT3T4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT3T5"><code class="name">var <span class="ident">state_inVoltageT3T5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_inVoltageT4T5"><code class="name">var <span class="ident">state_inVoltageT4T5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_intRelHumidity"><code class="name">var <span class="ident">state_intRelHumidity</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_ledMode"><code class="name">var <span class="ident">state_ledMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_legacyEvStatus"><code class="name">var <span class="ident">state_legacyEvStatus</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_lifetimeEnergy"><code class="name">var <span class="ident">state_lifetimeEnergy</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_lifetimeHours"><code class="name">var <span class="ident">state_lifetimeHours</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_lifetimeRelaySwitches"><code class="name">var <span class="ident">state_lifetimeRelaySwitches</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_lightAmbient"><code class="name">var <span class="ident">state_lightAmbient</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_loadBalancingNumberOfConnectedChargers"><code class="name">var <span class="ident">state_loadBalancingNumberOfConnectedChargers</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_localConnection"><code class="name">var <span class="ident">state_localConnection</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_localRSSI"><code class="name">var <span class="ident">state_localRSSI</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_localState"><code class="name">var <span class="ident">state_localState</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_localTxPower"><code class="name">var <span class="ident">state_localTxPower</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_lockCablePermanently"><code class="name">var <span class="ident">state_lockCablePermanently</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_masterBackPlateID"><code class="name">var <span class="ident">state_masterBackPlateID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_mobileNetworkOperator"><code class="name">var <span class="ident">state_mobileNetworkOperator</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_modemFwId"><code class="name">var <span class="ident">state_modemFwId</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_nominalVoltage"><code class="name">var <span class="ident">state_nominalVoltage</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_numberOfCarsCharging"><code class="name">var <span class="ident">state_numberOfCarsCharging</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_numberOfCarsConnected"><code class="name">var <span class="ident">state_numberOfCarsConnected</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_numberOfCarsFullyCharged"><code class="name">var <span class="ident">state_numberOfCarsFullyCharged</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_numberOfCarsInQueue"><code class="name">var <span class="ident">state_numberOfCarsInQueue</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_offlineMaxCircuitCurrentP1"><code class="name">var <span class="ident">state_offlineMaxCircuitCurrentP1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_offlineMaxCircuitCurrentP2"><code class="name">var <span class="ident">state_offlineMaxCircuitCurrentP2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_offlineMaxCircuitCurrentP3"><code class="name">var <span class="ident">state_offlineMaxCircuitCurrentP3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outVoltPin1to2"><code class="name">var <span class="ident">state_outVoltPin1to2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outVoltPin1to3"><code class="name">var <span class="ident">state_outVoltPin1to3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outVoltPin1to4"><code class="name">var <span class="ident">state_outVoltPin1to4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outVoltPin1to5"><code class="name">var <span class="ident">state_outVoltPin1to5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outVoltPin2_3"><code class="name">var <span class="ident">state_outVoltPin2_3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outputCurrent"><code class="name">var <span class="ident">state_outputCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_outputPhase"><code class="name">var <span class="ident">state_outputPhase</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_pairedUserIDToken"><code class="name">var <span class="ident">state_pairedUserIDToken</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_pilotHigh"><code class="name">var <span class="ident">state_pilotHigh</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_pilotLow"><code class="name">var <span class="ident">state_pilotLow</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_pilotMode"><code class="name">var <span class="ident">state_pilotMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_powerPCBVersion"><code class="name">var <span class="ident">state_powerPCBVersion</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_reasonForNoCurrent"><code class="name">var <span class="ident">state_reasonForNoCurrent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_rebootReason"><code class="name">var <span class="ident">state_rebootReason</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_selfTestDetails"><code class="name">var <span class="ident">state_selfTestDetails</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_selfTestResult"><code class="name">var <span class="ident">state_selfTestResult</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_sessionEnergy"><code class="name">var <span class="ident">state_sessionEnergy</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_smartCharging"><code class="name">var <span class="ident">state_smartCharging</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempAmbient"><code class="name">var <span class="ident">state_tempAmbient</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempAmbientPowerBoard"><code class="name">var <span class="ident">state_tempAmbientPowerBoard</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempAmbientPowerBoardTop"><code class="name">var <span class="ident">state_tempAmbientPowerBoardTop</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempInputT2"><code class="name">var <span class="ident">state_tempInputT2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempInputT3"><code class="name">var <span class="ident">state_tempInputT3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempInputT4"><code class="name">var <span class="ident">state_tempInputT4</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempInputT5"><code class="name">var <span class="ident">state_tempInputT5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempMax"><code class="name">var <span class="ident">state_tempMax</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempOutputL1"><code class="name">var <span class="ident">state_tempOutputL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempOutputL2"><code class="name">var <span class="ident">state_tempOutputL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempOutputL3"><code class="name">var <span class="ident">state_tempOutputL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempOutputN"><code class="name">var <span class="ident">state_tempOutputN</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempRelayL"><code class="name">var <span class="ident">state_tempRelayL</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_tempRelayN"><code class="name">var <span class="ident">state_tempRelayN</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_temperatureMonitorState"><code class="name">var <span class="ident">state_temperatureMonitorState</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_totalPower"><code class="name">var <span class="ident">state_totalPower</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_userIDToken"><code class="name">var <span class="ident">state_userIDToken</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_userIDTokenReversed"><code class="name">var <span class="ident">state_userIDTokenReversed</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_voltLevel12"><code class="name">var <span class="ident">state_voltLevel12</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_voltLevel33"><code class="name">var <span class="ident">state_voltLevel33</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_voltLevel5"><code class="name">var <span class="ident">state_voltLevel5</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_wiFiAPEnabled"><code class="name">var <span class="ident">state_wiFiAPEnabled</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_wiFiRSSI"><code class="name">var <span class="ident">state_wiFiRSSI</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_wifiEvent"><code class="name">var <span class="ident">state_wifiEvent</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_wifiInterfaceErrorCount"><code class="name">var <span class="ident">state_wifiInterfaceErrorCount</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.ChargerStreamData.state_wifiInterfaceResetCount"><code class="name">var <span class="ident">state_wifiInterfaceResetCount</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData"><code class="flex name class">
 <span>class <span class="ident">DatatypesStreamData</span></span>
-<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>An enumeration.</p></div>
+<div class="desc"><p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; class Color(Enum):
+...     RED = 1
+...     BLUE = 2
+...     GREEN = 3
+</code></pre>
+<p>Access them by:</p>
+<ul>
+<li>attribute access:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color.RED
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>value lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color(1)
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>name lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color['RED']
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; len(Color)
+3
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; list(Color)
+[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]
+</code></pre>
+<p>Methods can be added to enumerations, and members can have their own
+attributes &ndash; see the documentation for details.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>enum.Enum</li>
@@ -760,40 +862,89 @@
 <dl>
 <dt id="pyeasee.const.DatatypesStreamData.Binary"><code class="name">var <span class="ident">Binary</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.Boolean"><code class="name">var <span class="ident">Boolean</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.Double"><code class="name">var <span class="ident">Double</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.Integer"><code class="name">var <span class="ident">Integer</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.Position"><code class="name">var <span class="ident">Position</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.Statistics"><code class="name">var <span class="ident">Statistics</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.DatatypesStreamData.String"><code class="name">var <span class="ident">String</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData"><code class="flex name class">
 <span>class <span class="ident">EqualizerStreamData</span></span>
-<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+<span>(</span><span>*args, **kwds)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>An enumeration.</p></div>
+<div class="desc"><p>Create a collection of name/value pairs.</p>
+<p>Example enumeration:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; class Color(Enum):
+...     RED = 1
+...     BLUE = 2
+...     GREEN = 3
+</code></pre>
+<p>Access them by:</p>
+<ul>
+<li>attribute access:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color.RED
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>value lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color(1)
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<ul>
+<li>name lookup:</li>
+</ul>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Color['RED']
+<Color.RED: 1></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>Enumerations can be iterated over, and know how many members they have:</p>
+<pre><code class="language-python-repl">&gt;&gt;&gt; len(Color)
+3
+</code></pre>
+<pre><code class="language-python-repl">&gt;&gt;&gt; list(Color)
+[&lt;Color.RED: 1&gt;, &lt;Color.BLUE: 2&gt;, &lt;Color.GREEN: 3&gt;]
+</code></pre>
+<p>Methods can be added to enumerations, and members can have their own
+attributes &ndash; see the documentation for details.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>enum.Enum</li>
@@ -802,295 +953,295 @@
 <dl>
 <dt id="pyeasee.const.EqualizerStreamData.config_childReport"><code class="name">var <span class="ident">config_childReport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_circuitPhaseMapping"><code class="name">var <span class="ident">config_circuitPhaseMapping</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_currentTransformerConfig"><code class="name">var <span class="ident">config_currentTransformerConfig</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_equalizerID"><code class="name">var <span class="ident">config_equalizerID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_gridType"><code class="name">var <span class="ident">config_gridType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_masterBackPlateID"><code class="name">var <span class="ident">config_masterBackPlateID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_meterID"><code class="name">var <span class="ident">config_meterID</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_meterType"><code class="name">var <span class="ident">config_meterType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_modbusConfiguration"><code class="name">var <span class="ident">config_modbusConfiguration</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_numPhases"><code class="name">var <span class="ident">config_numPhases</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_siteStructure"><code class="name">var <span class="ident">config_siteStructure</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_ssid"><code class="name">var <span class="ident">config_ssid</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.config_surplusCharging"><code class="name">var <span class="ident">config_surplusCharging</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_APMacAddress"><code class="name">var <span class="ident">state_APMacAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_OBISListIdentifier"><code class="name">var <span class="ident">state_OBISListIdentifier</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_activePowerExport"><code class="name">var <span class="ident">state_activePowerExport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_activePowerImport"><code class="name">var <span class="ident">state_activePowerImport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_availableCurrentL1"><code class="name">var <span class="ident">state_availableCurrentL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_availableCurrentL2"><code class="name">var <span class="ident">state_availableCurrentL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_availableCurrentL3"><code class="name">var <span class="ident">state_availableCurrentL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_bootReason"><code class="name">var <span class="ident">state_bootReason</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_clockAndDateMeter"><code class="name">var <span class="ident">state_clockAndDateMeter</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_cloudDisconnectReason"><code class="name">var <span class="ident">state_cloudDisconnectReason</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_connectedAmps"><code class="name">var <span class="ident">state_connectedAmps</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_connectedToCloud"><code class="name">var <span class="ident">state_connectedToCloud</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_connectivityReport"><code class="name">var <span class="ident">state_connectivityReport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_cumulativeActivePowerExport"><code class="name">var <span class="ident">state_cumulativeActivePowerExport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_cumulativeActivePowerImport"><code class="name">var <span class="ident">state_cumulativeActivePowerImport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_cumulativeReactivePowerExport"><code class="name">var <span class="ident">state_cumulativeReactivePowerExport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_cumulativeReactivePowerImport"><code class="name">var <span class="ident">state_cumulativeReactivePowerImport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_currentL1"><code class="name">var <span class="ident">state_currentL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_currentL2"><code class="name">var <span class="ident">state_currentL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_currentL3"><code class="name">var <span class="ident">state_currentL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_deviceMode"><code class="name">var <span class="ident">state_deviceMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_easeeLinkCommandResponse"><code class="name">var <span class="ident">state_easeeLinkCommandResponse</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_easeeLinkDataReceived"><code class="name">var <span class="ident">state_easeeLinkDataReceived</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_equalizedChargeCurrentL1"><code class="name">var <span class="ident">state_equalizedChargeCurrentL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_equalizedChargeCurrentL2"><code class="name">var <span class="ident">state_equalizedChargeCurrentL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_equalizedChargeCurrentL3"><code class="name">var <span class="ident">state_equalizedChargeCurrentL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_exceptionData"><code class="name">var <span class="ident">state_exceptionData</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_highCurrentTransitions"><code class="name">var <span class="ident">state_highCurrentTransitions</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_internalTemperature"><code class="name">var <span class="ident">state_internalTemperature</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_ledMode"><code class="name">var <span class="ident">state_ledMode</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_loadbalanceThrottle"><code class="name">var <span class="ident">state_loadbalanceThrottle</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localNodeType"><code class="name">var <span class="ident">state_localNodeType</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localParentAddress"><code class="name">var <span class="ident">state_localParentAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localRSSI"><code class="name">var <span class="ident">state_localRSSI</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localRadioChannel"><code class="name">var <span class="ident">state_localRadioChannel</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localShortAddress"><code class="name">var <span class="ident">state_localShortAddress</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_localTxPower"><code class="name">var <span class="ident">state_localTxPower</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_maxPowerImport"><code class="name">var <span class="ident">state_maxPowerImport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_meterDataSnapshot"><code class="name">var <span class="ident">state_meterDataSnapshot</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_meterEncryptionStatus"><code class="name">var <span class="ident">state_meterEncryptionStatus</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_meterErrors"><code class="name">var <span class="ident">state_meterErrors</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_phaseLearningStatus"><code class="name">var <span class="ident">state_phaseLearningStatus</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_phaseMappingReport"><code class="name">var <span class="ident">state_phaseMappingReport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_rcpi"><code class="name">var <span class="ident">state_rcpi</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_reactivePowerExport"><code class="name">var <span class="ident">state_reactivePowerExport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_reactivePowerImport"><code class="name">var <span class="ident">state_reactivePowerImport</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_selfTestDetails"><code class="name">var <span class="ident">state_selfTestDetails</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_selfTestResult"><code class="name">var <span class="ident">state_selfTestResult</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_siteIDNumeric"><code class="name">var <span class="ident">state_siteIDNumeric</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_softwareRelease"><code class="name">var <span class="ident">state_softwareRelease</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_vBusMin"><code class="name">var <span class="ident">state_vBusMin</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_vCap"><code class="name">var <span class="ident">state_vCap</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_vbusMax"><code class="name">var <span class="ident">state_vbusMax</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageL1L2"><code class="name">var <span class="ident">state_voltageL1L2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageL1L3"><code class="name">var <span class="ident">state_voltageL1L3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageL2L3"><code class="name">var <span class="ident">state_voltageL2L3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageNL1"><code class="name">var <span class="ident">state_voltageNL1</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageNL2"><code class="name">var <span class="ident">state_voltageNL2</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_voltageNL3"><code class="name">var <span class="ident">state_voltageNL3</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="pyeasee.const.EqualizerStreamData.state_wifiReconnects"><code class="name">var <span class="ident">state_wifiReconnects</span></code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 </dd>
@@ -1188,6 +1339,7 @@
 <li><code><a title="pyeasee.const.ChargerStreamData.state_comPCBVersion" href="#pyeasee.const.ChargerStreamData.state_comPCBVersion">state_comPCBVersion</a></code></li>
 <li><code><a title="pyeasee.const.ChargerStreamData.state_connectedToCloud" href="#pyeasee.const.ChargerStreamData.state_connectedToCloud">state_connectedToCloud</a></code></li>
 <li><code><a title="pyeasee.const.ChargerStreamData.state_currentMotor" href="#pyeasee.const.ChargerStreamData.state_currentMotor">state_currentMotor</a></code></li>
+<li><code><a title="pyeasee.const.ChargerStreamData.state_debugLog" href="#pyeasee.const.ChargerStreamData.state_debugLog">state_debugLog</a></code></li>
 <li><code><a title="pyeasee.const.ChargerStreamData.state_debugString" href="#pyeasee.const.ChargerStreamData.state_debugString">state_debugString</a></code></li>
 <li><code><a title="pyeasee.const.ChargerStreamData.state_deratedCurrent" href="#pyeasee.const.ChargerStreamData.state_deratedCurrent">state_deratedCurrent</a></code></li>
 <li><code><a title="pyeasee.const.ChargerStreamData.state_deratingActive" href="#pyeasee.const.ChargerStreamData.state_deratingActive">state_deratingActive</a></code></li>
