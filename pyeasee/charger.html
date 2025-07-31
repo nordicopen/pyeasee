@@ -52,6 +52,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="pyeasee.charger.Charger.apply_ocpp_config"><code class="name flex">
+<span>async def <span class="ident">apply_ocpp_config</span></span>(<span>self, version)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Applies a stored OCPP config of the charger</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.delete_access"><code class="name flex">
 <span>async def <span class="ident">delete_access</span></span>(<span>self)</span>
 </code></dt>
@@ -148,6 +154,13 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <dd>
 <div class="desc"><p>Gets consumption between two dates</p></div>
 </dd>
+<dt id="pyeasee.charger.Charger.get_hourly_consumption_between_dates"><code class="name flex">
+<span>async def <span class="ident">get_hourly_consumption_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date: datetime.datetime)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Gets hourly consumption between two dates
+Note when calling: Seems to be capped at requesting max one month at a time</p></div>
+</dd>
 <dt id="pyeasee.charger.Charger.get_latest_firmware"><code class="name flex">
 <span>async def <span class="ident">get_latest_firmware</span></span>(<span>self)</span>
 </code></dt>
@@ -159,6 +172,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 </code></dt>
 <dd>
 <div class="desc"><p>Gets observation IDs</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.get_ocpp_config"><code class="name flex">
+<span>async def <span class="ident">get_ocpp_config</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reads the OCPP config of the charger</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.get_sessions_between_dates"><code class="name flex">
 <span>async def <span class="ident">get_sessions_between_dates</span></span>(<span>self, from_date: datetime.datetime, to_date)</span>
@@ -267,6 +286,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 </code></dt>
 <dd>
 <div class="desc"><p>Set circuit max offline current for charger, fallback value for limit if charger is offline</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.set_ocpp_config"><code class="name flex">
+<span>async def <span class="ident">set_ocpp_config</span></span>(<span>self, enable, url)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Writes the OCPP config of the charger</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_weekly_charge_plan"><code class="name flex">
 <span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, day, chargeStartTime, chargeStopTime, enabled=True, limit=32)</span>
@@ -411,6 +436,7 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <li>
 <h4><code><a title="pyeasee.charger.Charger" href="#pyeasee.charger.Charger">Charger</a></code></h4>
 <ul class="">
+<li><code><a title="pyeasee.charger.Charger.apply_ocpp_config" href="#pyeasee.charger.Charger.apply_ocpp_config">apply_ocpp_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_access" href="#pyeasee.charger.Charger.delete_access">delete_access</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_basic_charge_plan" href="#pyeasee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_weekly_charge_plan" href="#pyeasee.charger.Charger.delete_weekly_charge_plan">delete_weekly_charge_plan</a></code></li>
@@ -427,8 +453,10 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <li><code><a title="pyeasee.charger.Charger.get_basic_charge_plan" href="#pyeasee.charger.Charger.get_basic_charge_plan">get_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_config" href="#pyeasee.charger.Charger.get_config">get_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_consumption_between_dates" href="#pyeasee.charger.Charger.get_consumption_between_dates">get_consumption_between_dates</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_hourly_consumption_between_dates" href="#pyeasee.charger.Charger.get_hourly_consumption_between_dates">get_hourly_consumption_between_dates</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_latest_firmware" href="#pyeasee.charger.Charger.get_latest_firmware">get_latest_firmware</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_observations" href="#pyeasee.charger.Charger.get_observations">get_observations</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.get_ocpp_config" href="#pyeasee.charger.Charger.get_ocpp_config">get_ocpp_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_sessions_between_dates" href="#pyeasee.charger.Charger.get_sessions_between_dates">get_sessions_between_dates</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_weekly_charge_plan" href="#pyeasee.charger.Charger.get_weekly_charge_plan">get_weekly_charge_plan</a></code></li>
@@ -447,6 +475,7 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_charger_circuit_current">set_max_charger_circuit_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_charger_current" href="#pyeasee.charger.Charger.set_max_charger_current">set_max_charger_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_max_offline_charger_circuit_current" href="#pyeasee.charger.Charger.set_max_offline_charger_circuit_current">set_max_offline_charger_circuit_current</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.set_ocpp_config" href="#pyeasee.charger.Charger.set_ocpp_config">set_ocpp_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.set_weekly_charge_plan" href="#pyeasee.charger.Charger.set_weekly_charge_plan">set_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.smartButtonEnabled" href="#pyeasee.charger.Charger.smartButtonEnabled">smartButtonEnabled</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.smart_charging" href="#pyeasee.charger.Charger.smart_charging">smart_charging</a></code></li>
