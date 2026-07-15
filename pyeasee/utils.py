@@ -59,7 +59,7 @@ class BaseDict(Mapping):
                 try:
                     return datetime.strptime(self._storage[key], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
                 except ValueError:
-                    (dt, msecs) = self._storage[key].split(".")
+                    dt, msecs = self._storage[key].split(".")
                     return datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
         return self._storage[key]
 
