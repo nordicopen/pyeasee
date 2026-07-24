@@ -170,7 +170,10 @@ class Circuit(BaseDict):
             return None
 
     def get_chargers(self) -> List[Charger]:
-        return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]
+        try:
+            return [Charger(c, self.easee, self.site, self) for c in self["chargers"]]
+        except TypeError:
+            return []
 
 
 class SiteState(BaseDict):
@@ -210,11 +213,17 @@ class Site(BaseDict):
 
     def get_circuits(self) -> List[Circuit]:
         """Get circuits for the site"""
-        return [Circuit(c, self, self.easee) for c in self["circuits"]]
+        try:
+            return [Circuit(c, self, self.easee) for c in self["circuits"]]
+        except TypeError:
+            return []
 
     def get_equalizers(self) -> List[Equalizer]:
         """Get equalizers for the site"""
-        return [Equalizer(e, self, self.easee) for e in self["equalizers"]]
+        try:
+            return [Equalizer(e, self, self.easee) for e in self["equalizers"]]
+        except TypeError:
+            return []
 
     async def set_name(self, name: str):
         """Set name for the site"""
