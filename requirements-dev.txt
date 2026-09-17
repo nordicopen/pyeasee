@@ -52,5 +52,6 @@ typed-ast
 urllib3==2.2.2
 wcwidth==0.2.13
 webencodings==0.5.1
+websockets==15.0.1
 yarl==1.9.4
 zipp==3.19.1
