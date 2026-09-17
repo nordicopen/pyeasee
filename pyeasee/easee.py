@@ -13,6 +13,7 @@ import pysignalr
 from pysignalr.client import SignalRClient
 from pysignalr.exceptions import AuthorizationError
 from pysignalr.messages import CompletionMessage
+from pysignalr.transport.websocket import WebsocketTransport
 import websockets.asyncio.client
 
 from .charger import Charger
@@ -91,6 +92,55 @@ async def __aiter__(
             yield protocol
 
 
+async def _negotiate_with_cookie_forwarding(self: WebsocketTransport) -> None:
+    """
+    Patched version of WebsocketTransport._negotiate that forwards cookies set on the
+    negotiate response. See https://github.com/baking-bad/pysignalr/pull/49.
+    """
+    from http import HTTPStatus
+
+    from aiohttp import ClientSession, ClientTimeout, CookieJar
+    from pysignalr import exceptions
+    from pysignalr.utils import get_connection_url, get_negotiate_url, replace_scheme
+    from yarl import URL
+
+    if not hasattr(self, "_cookie_jar"):
+        self._cookie_jar = CookieJar()
+        self._static_cookie = self._headers.get("Cookie")
+
+    negotiate_url = get_negotiate_url(self._url)
+    session = ClientSession(timeout=ClientTimeout(connect=self._connection_timeout))
+    async with session:
+        async with session.post(negotiate_url, headers=self._headers) as response:
+            if response.status == HTTPStatus.OK:
+                data = await response.json()
+                self._cookie_jar.update_cookies(response.cookies, response.url)
+            elif response.status == HTTPStatus.UNAUTHORIZED:
+                raise exceptions.AuthorizationError
+            else:
+                raise exceptions.ConnectionError(response.status)
+
+    connection_id = data.get("connectionId")
+    url = data.get("url")
+    access_token = data.get("accessToken")
+
+    if connection_id:
+        self._url = get_connection_url(self._url, connection_id)
+    elif url and access_token:
+        self._url = replace_scheme(url, ws=True)
+        self._headers["Authorization"] = f"Bearer {access_token}"
+    else:
+        raise exceptions.ServerError(str(data))
+
+    cookies = [f"{c.key}={c.value}" for c in self._cookie_jar.filter_cookies(URL(self._url)).values()]
+    if self._static_cookie:
+        cookies.insert(0, self._static_cookie)
+    if cookies:
+        self._headers["Cookie"] = "; ".join(cookies)
+    elif "Cookie" in self._headers:
+        del self._headers["Cookie"]
+
+
 class Easee:
     def __init__(
         self,
@@ -146,6 +196,9 @@ class Easee:
 
         # Override the __aiter__ method of the pysignalr.websocket Connect class
         pysignalr.websockets.asyncio.client.connect.__aiter__ = __aiter__  # type: ignore[method-assign]
+
+        # Override WebsocketTransport._negotiate to forward session-affinity cookies to the WS handshake
+        WebsocketTransport._negotiate = _negotiate_with_cookie_forwarding  # type: ignore[method-assign]
 
     def base_uri(self):
         return self.base
