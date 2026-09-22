@@ -20,12 +20,6 @@ async def async_main():
         for circuit in circuits:
             chargers = circuit.get_chargers()
             for charger in chargers:
-                # Some chargers return an error
-                try:
-                    state = await charger.get_state()
-                except Exception as e:
-                    print(f"    Error getting state for charger {charger.name} ({charger.id}): {e}")
-                    continue
                 # Fetch one month at a time, as the API limits the requested time period
                 charger_consumption = []
                 year = 2025
