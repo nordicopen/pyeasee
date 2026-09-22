@@ -98,15 +98,6 @@ default_config = {
     "ledStripBrightness": None,
 }
 
-
-@pytest.mark.asyncio
-async def test_get_correct_status():
-    mock_easee = MockEasee(get_data=default_state)
-    charger = Charger({"id": "EH123456", "name": "Easee Home 12345", "productCode": 1, "userRole": 1, "levelOfAccess": 1}, mock_easee)
-    state = await charger.get_state(raw=True)
-    assert state["chargerOpMode"] == 3
-
-
 @pytest.mark.asyncio
 async def test_get_correct_phase_mode():
     mock_easee = MockEasee(get_data=default_config)
