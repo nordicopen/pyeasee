@@ -11,12 +11,12 @@ _LOGGER = logging.getLogger(__name__)
 
 wd_number = {
     "monday": 0,
-    "tuesday": 0,
-    "wednesday": 0,
-    "thursday": 0,
-    "friday": 0,
-    "saturday": 0,
-    "sunday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
 }
 
 wd_name = [
