@@ -40,7 +40,7 @@ async def async_main():
                 if charger_consumption:
                     df = pl.DataFrame(charger_consumption)
                     df = df.with_columns([
-                        pl.col("from").str.to_datetime().dt.replace_time_zone(None).alias("datetime"),
+                        pl.col("from").str.to_datetime(time_zone="UTC").dt.replace_time_zone(None).alias("datetime"),
                         pl.lit(charger.id).alias("chargerId")
                     ])
                     df = df.drop(["from", "to"])
