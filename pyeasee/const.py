@@ -248,7 +248,7 @@ class ChargerStreamData(Enum):
     state_outVoltPin1to5 = (
         205  # Output voltage RMS between type 2 pin 1 and 5 [Volt][telemetry] [Double] ['Admin', 'Partner']
     )
-    state_outVoltPin2_3 = 206  # Output voltage RMS between type 2 pin 2 and 3 [Volt] [Double] ['Admin', 'Partner']
+    state_outVoltPin2to3 = 206  # Output voltage RMS between type 2 pin 2 and 3 [Volt] [Double] ['Admin', 'Partner']
     state_voltLevel33 = 210  # 3.3 Volt Level [Volt][telemetry] [Integer] ['Admin', 'Partner']
     state_voltLevel5 = 211  # 5 Volt Level [Volt][telemetry] [Integer] ['Admin', 'Partner']
     state_voltLevel12 = 212  # 12 Volt Level [Volt][telemetry] [Integer] ['Admin', 'Partner']

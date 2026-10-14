@@ -243,6 +243,8 @@ class Charger(BaseDict):
             rate_limit=10, period=3600, name="consumption between dates"
         )
         self._sessions_between_dates_throttler = Throttler(rate_limit=10, period=3600, name="sessions between dates")
+        # Note: this is arbitrary, no actual specific limit exists at this time for setting limits
+        self._limit_setting_throttler = Throttler(rate_limit=12, period=60, name="charger limit")
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
@@ -636,7 +638,8 @@ class Charger(BaseDict):
         """Set charger dynamic current"""
         json = {"amps": current, "minutes": timeToLive}
         try:
-            return await self.easee.post(f"/api/chargers/{self.id}/commands/set_dynamic_charger_current", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/chargers/{self.id}/commands/set_dynamic_charger_current", json=json)
         except ServerFailureException:
             return None
 
@@ -644,7 +647,8 @@ class Charger(BaseDict):
         """Set charger max current"""
         json = {"maxChargerCurrent": current}
         try:
-            return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/chargers/{self.id}/settings", json=json)
         except ServerFailureException:
             return None
 
