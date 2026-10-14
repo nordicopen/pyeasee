@@ -495,6 +495,9 @@ class Charger(BaseDict):
         stop_td = timedelta(days=stop_dt.weekday() - wd_number[startDay.lower()])
         stop_dt = stop_dt - stop_td
 
+        if stop_dt < start_dt:
+            stop_dt = stop_dt + timedelta(days=1)
+
         tz = ZoneInfo(json["timezone"])
         start_dt = start_dt.astimezone(tz)
         stop_dt = stop_dt.astimezone(tz)
