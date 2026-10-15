@@ -139,7 +139,7 @@ class ChargerStreamData(Enum):
         127  # Maximum circuit current when offline [event] [Integer] ['Admin', 'Partner']
     )
     state_userIDToken = 128  # User ID token string from RFID reading [event] [String] ['Admin', 'Partner']
-    state_ChargingSession = 129  # Charging sessions [json][event] [String] ['Admin', 'Partner']
+    state_chargingSession = 129  # Charging sessions [json][event] [String] ['Admin', 'Partner']
     state_cellRSSI = 130  # Cellular signal strength [dBm][telemetry] [Integer] ['Admin', 'Partner', 'User']
     state_CellRAT = (
         131  # Cellular radio access technology according to RAT table [event] [Integer] ['Admin', 'Partner']

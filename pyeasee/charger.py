@@ -327,7 +327,7 @@ class Charger(BaseDict):
         config = {}
         return ChargerConfig(config, raw)
 
-    async def empty_state(self, raw=False) -> ChargerConfig:
+    async def empty_state(self, raw=False) -> ChargerState:
         """Create an empty config data structure"""
         state = {
             "chargerOpMode": 0,
