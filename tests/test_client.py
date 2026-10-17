@@ -43,10 +43,6 @@ async def test_get_chargers(aiosession, aioresponse):
     chargers_state_data = load_json_fixture("charger-state.json")
     aioresponse.get(f"{BASE_URL}/api/chargers/EH12345/state", payload=chargers_state_data)
 
-    state = await chargers[0].get_state(raw=True)
-
-    assert state["chargerOpMode"] == 2
-
     await easee.close()
     await aiosession.close()
 

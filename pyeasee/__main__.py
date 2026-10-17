@@ -7,12 +7,91 @@ import sys
 import threading
 from typing import List
 
-from . import Charger, Circuit, DatatypesStreamData, Easee, Equalizer, Site
+from . import (
+    Charger,
+    ChargerStreamData,
+    Circuit,
+    DatatypesStreamData,
+    Easee,
+    Equalizer,
+    Site,
+)
 from .utils import lookup_charger_stream_id, lookup_equalizer_stream_id
+
+chargerObservations = {
+    ChargerStreamData.state_reasonForNoCurrent.value,
+    ChargerStreamData.state_lockCablePermanently.value,
+    ChargerStreamData.state_smartCharging.value,
+    ChargerStreamData.state_cableLocked.value,
+    ChargerStreamData.state_chargerOpMode.value,
+    ChargerStreamData.state_totalPower.value,
+    ChargerStreamData.state_sessionEnergy.value,
+    ChargerStreamData.state_energyPerHour.value,
+    ChargerStreamData.state_wiFiRSSI.value,
+    ChargerStreamData.state_cellRSSI.value,
+    ChargerStreamData.state_localRSSI.value,
+    ChargerStreamData.state_outputPhase.value,
+    ChargerStreamData.state_dynamicCircuitCurrentP1.value,
+    ChargerStreamData.state_dynamicCircuitCurrentP2.value,
+    ChargerStreamData.state_dynamicCircuitCurrentP3.value,
+    ChargerStreamData.state_chargerFirmware.value,
+    ChargerStreamData.state_inCurrentT2.value,
+    ChargerStreamData.state_inCurrentT3.value,
+    ChargerStreamData.state_inCurrentT4.value,
+    ChargerStreamData.state_inCurrentT5.value,
+    ChargerStreamData.state_outputCurrent.value,
+    ChargerStreamData.state_inVoltageT1T2.value,
+    ChargerStreamData.state_inVoltageT1T3.value,
+    ChargerStreamData.state_inVoltageT1T4.value,
+    ChargerStreamData.state_inVoltageT1T5.value,
+    ChargerStreamData.state_inVoltageT2T3.value,
+    ChargerStreamData.state_inVoltageT2T4.value,
+    ChargerStreamData.state_inVoltageT2T5.value,
+    ChargerStreamData.state_inVoltageT3T4.value,
+    ChargerStreamData.state_inVoltageT3T5.value,
+    ChargerStreamData.state_inVoltageT4T5.value,
+    ChargerStreamData.state_ledMode.value,
+    ChargerStreamData.state_cableRating.value,
+    ChargerStreamData.state_dynamicChargerCurrent.value,
+    ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL1.value,
+    ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL2.value,
+    ChargerStreamData.state_circuitTotalAllocatedPhaseConductorCurrentL3.value,
+    ChargerStreamData.state_circuitTotalPhaseConductorCurrentL1.value,
+    ChargerStreamData.state_circuitTotalPhaseConductorCurrentL2.value,
+    ChargerStreamData.state_circuitTotalPhaseConductorCurrentL3.value,
+    ChargerStreamData.state_wiFiAPEnabled.value,
+    ChargerStreamData.state_lifetimeEnergy.value,
+    ChargerStreamData.state_offlineMaxCircuitCurrentP1.value,
+    ChargerStreamData.state_offlineMaxCircuitCurrentP2.value,
+    ChargerStreamData.state_offlineMaxCircuitCurrentP3.value,
+    ChargerStreamData.state_eqAvailableCurrentP1.value,
+    ChargerStreamData.state_eqAvailableCurrentP2.value,
+    ChargerStreamData.state_eqAvailableCurrentP3.value,
+    ChargerStreamData.state_tempMax.value,
+    ChargerStreamData.state_chargerOfflineReason.value,
+    ChargerStreamData.state_deratingActive.value,
+    ChargerStreamData.state_errorString.value,
+    ChargerStreamData.state_errorCode.value,
+    ChargerStreamData.state_foundWiFi.value,
+    ChargerStreamData.state_chargerRAT.value,
+    ChargerStreamData.state_fatalErrorCode.value,
+    ChargerStreamData.state_connectedToCloud.value,
+    ChargerStreamData.state_cloudDisconnectReason.value,
+    ChargerStreamData.state_pilotMode.value,
+}
 
 CACHED_TOKEN = "easee-token.json"
 
 _LOGGER = logging.getLogger(__file__)
+
+
+def observations_interpret(streamdata, observations):
+    output = {}
+
+    for observation in observations:
+        output[streamdata(observation["id"]).name] = observation["value"]
+
+    return output
 
 
 def add_input(queue):
@@ -182,7 +261,7 @@ async def async_main():
                 )
                 chargers = circuit.get_chargers()
                 for charger in chargers:
-                    state = await charger.get_state()
+                    state = await charger.get_observations(*chargerObservations)
                     config = await charger.get_config()
                     print(
                         f"      "
@@ -191,7 +270,7 @@ async def async_main():
                         f" enabled: {config.__getitem__('isEnabled')}"
                         f" online: {state.__getitem__('isOnline')}"
                         f" version: {state.__getitem__('chargerFirmware')}"
-                        f" voltage: {round(state.__getitem__('voltage'),1)}"
+                        f" voltage: {round(state.__getitem__('state_inVoltageT2T3'),1)}"
                         f" current: {round(state.__getitem__('outputCurrent'),1)}"
                         f" "
                     )
@@ -278,7 +357,7 @@ async def chargers_info(chargers: List[Charger]):
     print("\n\n****************\nCHARGERS\n****************")
     data = []
     for charger in chargers:
-        state = await charger.get_state()
+        state = await charger.get_observations(*chargerObservations)
         config = await charger.get_config()
         schedule = await charger.get_basic_charge_plan()
         week_schedule = await charger.get_weekly_charge_plan()
@@ -286,14 +365,14 @@ async def chargers_info(chargers: List[Charger]):
         firmware = await charger.get_latest_firmware()
         ocpp = await charger.get_ocpp_config()
         ch = charger.get_data()
-        ch["state"] = state.get_data()
+        ch["state"] = observations_interpret(ChargerStreamData, state["observations"])
         ch["config"] = config.get_data()
         ch["firmware"] = firmware
         ch["observation"] = observation_test
         if schedule is not None:
-            ch["schedule"] = schedule.get_data()
+            ch["schedule"] = schedule
         if week_schedule is not None:
-            ch["week_schedule"] = week_schedule.get_data()
+            ch["week_schedule"] = week_schedule
         ch["ocpp"] = ocpp
         data.append(ch)
 
@@ -352,7 +431,9 @@ async def costs_info(costs):
 async def charger_loop(charger: Charger, header=False):
     """Return the state attributes."""
     # await charger.async_update()
-    state = await charger.get_state()
+    # state = await charger.get_state()
+    state = await charger.get_observations(*chargerObservations)
+    state = observations_interpret(ChargerStreamData, state["observations"])
     # config = await charger.get_config() # not used yet
 
     if header:
@@ -372,24 +453,24 @@ async def charger_loop(charger: Charger, header=False):
         print(" ")
 
     print(str_fixed_length(f"{charger.name}", 15), end=" ")
-    print(str_fixed_length(f"{state.__getitem__('chargerOpMode')}", 20), end=" ")
-    print(str_fixed_length(f"{state.__getitem__('isOnline')}", 7), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('totalPower'),2)}kW", 7), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('outputCurrent'),1)}A", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT2'),1)}A", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT3'),1)}A", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT4'),1)}A", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('inCurrentT5'),1)}A", 10), end=" ")
-    print(str_fixed_length(f"{round(state.__getitem__('voltage'),1)}V", 10), end=" ")
+    print(str_fixed_length(f"{state.__getitem__('state_chargerOpMode')}", 20), end=" ")
+    print(str_fixed_length(f"{state.__getitem__('state_chargerOfflineReason')}", 7), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_totalPower'),2)}kW", 7), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_outputCurrent'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_inCurrentT2'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_inCurrentT3'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_inCurrentT4'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_inCurrentT5'),1)}A", 10), end=" ")
+    print(str_fixed_length(f"{round(state.__getitem__('state_inVoltageT2T3'),1)}V", 10), end=" ")
     print(
-        str_fixed_length(f"{round(state.__getitem__('sessionEnergy'),2)}kWh", 10),
+        str_fixed_length(f"{round(state.__getitem__('state_sessionEnergy'),2)}kWh", 10),
         end=" ",
     )
     print(
-        str_fixed_length(f"{round(state.__getitem__('energyPerHour'),2)}kWh/h", 10),
+        str_fixed_length(f"{round(state.__getitem__('state_energyPerHour'),2)}kWh/h", 10),
         end=" ",
     )
-    print(str_fixed_length(f"{str(state.__getitem__('reasonForNoCurrent'))}", 25), end=" ")
+    print(str_fixed_length(f"{str(state.__getitem__('state_reasonForNoCurrent'))}", 25), end=" ")
     print(" ")
 
 
