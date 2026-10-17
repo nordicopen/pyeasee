@@ -30,6 +30,8 @@ class Equalizer(BaseDict):
         self.site = site
         self.easee = easee
         self._max_allocated_current_throttler = Throttler(rate_limit=1, period=60, name="max allocated current")
+        # Note: this is arbitrary, no actual specific limit exists at this time for setting limits
+        self._limit_setting_throttler = Throttler(rate_limit=12, period=60, name="limit setting")
 
     async def get_observations(self, *args):
         """Gets observation IDs"""
@@ -133,7 +135,8 @@ class Circuit(BaseDict):
             "timeToLive": timeToLive,
         }
         try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
         except ServerFailureException:
             return None
 
@@ -145,7 +148,8 @@ class Circuit(BaseDict):
             "maxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
         try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
         except ServerFailureException:
             return None
 
@@ -157,7 +161,8 @@ class Circuit(BaseDict):
             "offlineMaxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
         try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
         except ServerFailureException:
             return None
 
@@ -165,7 +170,8 @@ class Circuit(BaseDict):
         """Set circuit rated current - requires elevated access (installers only)"""
         json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         try:
-            return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
+            async with self._limit_setting_throttler:
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
         except ServerFailureException:
             return None
 
