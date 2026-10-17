@@ -1,6 +1,6 @@
 # Data IDs for Charger from signalr stream
 
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 class ChargerStreamData(Enum):
@@ -380,3 +380,14 @@ class DatatypesStreamData(Enum):
     Position = 5
     String = 6
     Statistics = 7
+
+
+class ReportCategory(IntEnum):
+    """Report categories for session export."""
+
+    CHARGER_SUMMARY = 10
+    CHARGER_DETAILED = 11
+    EASEE_KEY_SUMMARY = 12
+    EASEE_KEY_DETAILED = 13
+    ENERGY_SUMMARY = 19
+

@@ -169,8 +169,9 @@ class Easee:
     async def get(self, url, **kwargs):
         _LOGGER.debug("GET: %s (%s)", url, kwargs)
         await self._verify_updated_token()
+        headers = kwargs.pop("headers", self.get_headers)
         async with self._general_throttler:
-            response = await self.session.get(f"{self.base}{url}", headers=self.get_headers, **kwargs)
+            response = await self.session.get(f"{self.base}{url}", headers=headers, **kwargs)
         await self.check_status(response)
         return response
 
