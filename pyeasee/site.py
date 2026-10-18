@@ -123,6 +123,8 @@ class Circuit(BaseDict):
         self.id: int = data["id"]
         self.site = site
         self.easee = easee
+        # Note: this is arbitrary, no actual specific limit exists at this time for setting limits
+        self._limit_setting_throttler = Throttler(rate_limit=12, period=60, name="limit setting")
 
     async def set_dynamic_current(
         self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0
