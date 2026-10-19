@@ -335,16 +335,11 @@ class Site(BaseDict):
             else str(to_date)
         )
 
-        headers = {
-            **self.easee.get_headers,
-            "Accept": "application/octet-stream",
-        }
-
         url = f"/api/sessions/export/siteId/{self.id}/from/{from_str}/to/{to_str}?category={category}"
         try:
-            res = await self.easee.get(url, headers=headers)
+            res = await self.easee.get_bin(url)
             return await res.read()
         except NotFoundException:
             fallback_url = f"/api/sessions/export/{self.id}/{category}/{from_str}/{to_str}"
-            res = await self.easee.get(fallback_url, headers=headers)
+            res = await self.easee.get_bin(fallback_url)
             return await res.read()
