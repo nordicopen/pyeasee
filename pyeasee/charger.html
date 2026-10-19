@@ -96,6 +96,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <dd>
 <div class="desc"></div>
 </dd>
+<dt id="pyeasee.charger.Charger.disable_delayed_charge_plan"><code class="name flex">
+<span>async def <span class="ident">disable_delayed_charge_plan</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt id="pyeasee.charger.Charger.disable_weekly_charge_plan"><code class="name flex">
 <span>async def <span class="ident">disable_weekly_charge_plan</span></span>(<span>self)</span>
 </code></dt>
@@ -109,7 +115,7 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <div class="desc"><p>Create an empty config data structure</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.empty_state"><code class="name flex">
-<span>async def <span class="ident">empty_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerConfig" href="#pyeasee.charger.ChargerConfig">ChargerConfig</a></span>
+<span>async def <span class="ident">empty_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Create an empty config data structure</p></div>
@@ -125,6 +131,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 </code></dt>
 <dd>
 <div class="desc"><p>Enable and disable charger in charger settings</p></div>
+</dd>
+<dt id="pyeasee.charger.Charger.enable_delayed_charge_plan"><code class="name flex">
+<span>async def <span class="ident">enable_delayed_charge_plan</span></span>(<span>self, enable=True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enabled or disable delayed charge plan without changing other settings.</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.enable_idle_current"><code class="name flex">
 <span>async def <span class="ident">enable_idle_current</span></span>(<span>self, enable: bool)</span>
@@ -204,12 +216,6 @@ Note when calling: Seems to be capped at requesting max one month at a time</p><
 </code></dt>
 <dd>
 <div class="desc"><p>Gets charging sessions between two dates</p></div>
-</dd>
-<dt id="pyeasee.charger.Charger.get_state"><code class="name flex">
-<span>async def <span class="ident">get_state</span></span>(<span>self, raw=False) ‑> <a title="pyeasee.charger.ChargerState" href="#pyeasee.charger.ChargerState">ChargerState</a></span>
-</code></dt>
-<dd>
-<div class="desc"><p>get state for charger</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.get_weekly_charge_plan"><code class="name flex">
 <span>async def <span class="ident">get_weekly_charge_plan</span></span>(<span>self) ‑> <a title="pyeasee.charger.ChargerWeeklySchedule" href="#pyeasee.charger.ChargerWeeklySchedule">ChargerWeeklySchedule</a></span>
@@ -320,7 +326,7 @@ Note when calling: Seems to be capped at requesting max one month at a time</p><
 <div class="desc"><p>Sets the operator of the charger</p></div>
 </dd>
 <dt id="pyeasee.charger.Charger.set_weekly_charge_plan"><code class="name flex">
-<span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, day, chargeStartTime, chargeStopTime, enabled=True, limit=32)</span>
+<span>async def <span class="ident">set_weekly_charge_plan</span></span>(<span>self, startDay, stopDay, chargeStartTime, chargeStopTime, enabled=True, limit=32)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set and post charger weekly charge plan setting to cloud</p></div>
@@ -466,11 +472,13 @@ Note when calling: Seems to be capped at requesting max one month at a time</p><
 <li><code><a title="pyeasee.charger.Charger.delete_basic_charge_plan" href="#pyeasee.charger.Charger.delete_basic_charge_plan">delete_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.delete_weekly_charge_plan" href="#pyeasee.charger.Charger.delete_weekly_charge_plan">delete_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.disable_basic_charge_plan" href="#pyeasee.charger.Charger.disable_basic_charge_plan">disable_basic_charge_plan</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.disable_delayed_charge_plan" href="#pyeasee.charger.Charger.disable_delayed_charge_plan">disable_delayed_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.disable_weekly_charge_plan" href="#pyeasee.charger.Charger.disable_weekly_charge_plan">disable_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.empty_config" href="#pyeasee.charger.Charger.empty_config">empty_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.empty_state" href="#pyeasee.charger.Charger.empty_state">empty_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_basic_charge_plan" href="#pyeasee.charger.Charger.enable_basic_charge_plan">enable_basic_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_charger" href="#pyeasee.charger.Charger.enable_charger">enable_charger</a></code></li>
+<li><code><a title="pyeasee.charger.Charger.enable_delayed_charge_plan" href="#pyeasee.charger.Charger.enable_delayed_charge_plan">enable_delayed_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_idle_current" href="#pyeasee.charger.Charger.enable_idle_current">enable_idle_current</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.enable_weekly_charge_plan" href="#pyeasee.charger.Charger.enable_weekly_charge_plan">enable_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.force_update_lifetimeenergy" href="#pyeasee.charger.Charger.force_update_lifetimeenergy">force_update_lifetimeenergy</a></code></li>
@@ -484,7 +492,6 @@ Note when calling: Seems to be capped at requesting max one month at a time</p><
 <li><code><a title="pyeasee.charger.Charger.get_ocpp_config" href="#pyeasee.charger.Charger.get_ocpp_config">get_ocpp_config</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_operator" href="#pyeasee.charger.Charger.get_operator">get_operator</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_sessions_between_dates" href="#pyeasee.charger.Charger.get_sessions_between_dates">get_sessions_between_dates</a></code></li>
-<li><code><a title="pyeasee.charger.Charger.get_state" href="#pyeasee.charger.Charger.get_state">get_state</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.get_weekly_charge_plan" href="#pyeasee.charger.Charger.get_weekly_charge_plan">get_weekly_charge_plan</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.limitToSinglePhaseCharging" href="#pyeasee.charger.Charger.limitToSinglePhaseCharging">limitToSinglePhaseCharging</a></code></li>
 <li><code><a title="pyeasee.charger.Charger.lockCablePermanently" href="#pyeasee.charger.Charger.lockCablePermanently">lockCablePermanently</a></code></li>
