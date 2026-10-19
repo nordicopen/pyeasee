@@ -23,7 +23,7 @@ async def async_main():
     for site in sites:
         print(f"Downloading report for site {site.name} ({site.id})...")
         pdf_bytes = await site.get_report(
-            first_prev_month, last_prev_month, category=ReportCategory.CHARGER_DETAILED
+            first_prev_month, last_prev_month, category=ReportCategory.CHARGER_DETAILED_PDF
         )
         filename = f"report_site_{site.id}_{first_prev_month.strftime('%Y-%m')}.pdf"
         with open(filename, "wb") as f:

@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 from .charger import Charger, ChargerConfig, ChargerState
 from .const import ReportCategory
-from .exceptions import ForbiddenServiceException, NotFoundException, ServerFailureException
+from .exceptions import ForbiddenServiceException, ServerFailureException
 from .throttler import Throttler
 from .utils import BaseDict
 
@@ -320,7 +320,7 @@ class Site(BaseDict):
         self,
         from_date: datetime,
         to_date: datetime,
-        category: int = ReportCategory.CHARGER_DETAILED,
+        category: int = ReportCategory.CHARGER_DETAILED_PDF,
     ) -> bytes:
         """Get session export report (PDF / binary) between from_date and to_date"""
 
@@ -335,11 +335,7 @@ class Site(BaseDict):
             else str(to_date)
         )
 
-        url = f"/api/sessions/export/siteId/{self.id}/from/{from_str}/to/{to_str}?category={category}"
-        try:
-            res = await self.easee.get_bin(url)
-            return await res.read()
-        except NotFoundException:
-            fallback_url = f"/api/sessions/export/{self.id}/{category}/{from_str}/{to_str}"
-            res = await self.easee.get_bin(fallback_url)
-            return await res.read()
+        res = await self.easee.get_bin(
+            f"/api/sessions/export/{self.id}/{int(category)}/{from_str}/{to_str}"
+        )
+        return await res.read()

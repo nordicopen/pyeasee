@@ -124,7 +124,7 @@ async def test_get_site_report(aiosession, aioresponse):
 
     fake_pdf = b"%PDF-1.7 Fake PDF content"
     aioresponse.get(
-        f"{BASE_URL}/api/sessions/export/siteId/55555/from/2026-09-01T00:00:00Z/to/2026-09-30T23:59:59Z?category=11",
+        f"{BASE_URL}/api/sessions/export/55555/11/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
         body=fake_pdf,
         content_type="application/octet-stream",
     )
@@ -141,14 +141,37 @@ async def test_get_site_report(aiosession, aioresponse):
 
     # Test explicit ReportCategory enum
     aioresponse.get(
-        f"{BASE_URL}/api/sessions/export/siteId/55555/from/2026-09-01T00:00:00Z/to/2026-09-30T23:59:59Z?category=11",
+        f"{BASE_URL}/api/sessions/export/55555/11/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
         body=fake_pdf,
         content_type="application/octet-stream",
     )
     report_bytes_explicit = await site.get_report(
-        from_dt, to_dt, category=ReportCategory.CHARGER_DETAILED
+        from_dt, to_dt, category=ReportCategory.CHARGER_DETAILED_PDF
     )
     assert report_bytes_explicit == fake_pdf
+
+    # Test explicit int category
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/10/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_pdf,
+        content_type="application/octet-stream",
+    )
+    report_bytes_int = await site.get_report(
+        from_dt, to_dt, category=10
+    )
+    assert report_bytes_int == fake_pdf
+
+    # Test CSV category enum (e.g. USER_SUMMARY_CSV = 0)
+    fake_csv = b"userId,userName,energy\n1,User1,42.5\n"
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/0/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_csv,
+        content_type="application/octet-stream",
+    )
+    report_bytes_csv = await site.get_report(
+        from_dt, to_dt, category=ReportCategory.USER_SUMMARY_CSV
+    )
+    assert report_bytes_csv == fake_csv
 
     await easee.close()
     await aiosession.close()
