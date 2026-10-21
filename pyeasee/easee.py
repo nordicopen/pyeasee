@@ -483,3 +483,23 @@ class Easee:
             return records
         except ServerFailureException:
             return None
+
+    async def get_observation_properties(self) -> List[Any]:
+        """Get all observation properties"""
+        try:
+            properties = await (await self.get("/api/resources/observation_properties")).json()
+            _LOGGER.debug("Properties:  %s", properties)
+            return properties
+        except ServerFailureException:
+            return None
+
+    async def get_userid_from_key(self, key: str):
+        """Find userid from auth key"""
+        try:
+            userid = await (await self.get(f"/api/accounts/userIdByKey/{key}")).json()
+            _LOGGER.debug("User id:  %s", userid)
+            return userid
+        except ServerFailureException:
+            return None
+        except ForbiddenServiceException:
+            return None
