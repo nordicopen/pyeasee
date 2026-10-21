@@ -102,3 +102,73 @@ async def test_get_site_state(aiosession, aioresponse):
 
     await easee.close()
     await aiosession.close()
+
+
+@pytest.mark.asyncio
+async def test_get_site_report(aiosession, aioresponse):
+    from datetime import datetime, timezone
+    from pyeasee import ReportCategory
+
+    token_data = load_json_fixture("token.json")
+    aioresponse.post(f"{BASE_URL}/api/accounts/login", payload=token_data)
+
+    sites_data = load_json_fixture("sites.json")
+    aioresponse.get(f"{BASE_URL}/api/sites", payload=sites_data)
+
+    site_data = load_json_fixture("site.json")
+    aioresponse.get(f"{BASE_URL}/api/sites/55555?detailed=true", payload=site_data)
+
+    fake_pdf = b"%PDF-1.7 Fake PDF content"
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/11/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_pdf,
+        content_type="application/octet-stream",
+    )
+
+    easee = Easee("+46070123456", "password", aiosession)
+    sites = await easee.get_sites()
+    site = sites[0]
+
+    from_dt = datetime(2026, 9, 1, 0, 0, 0, tzinfo=timezone.utc)
+    to_dt = datetime(2026, 9, 30, 23, 59, 59, tzinfo=timezone.utc)
+    # Test default category
+    report_bytes = await site.get_report(from_dt, to_dt)
+    assert report_bytes == fake_pdf
+
+    # Test explicit ReportCategory enum
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/11/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_pdf,
+        content_type="application/octet-stream",
+    )
+    report_bytes_explicit = await site.get_report(
+        from_dt, to_dt, category=ReportCategory.CHARGER_DETAILED_PDF
+    )
+    assert report_bytes_explicit == fake_pdf
+
+    # Test explicit int category
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/10/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_pdf,
+        content_type="application/octet-stream",
+    )
+    report_bytes_int = await site.get_report(
+        from_dt, to_dt, category=10
+    )
+    assert report_bytes_int == fake_pdf
+
+    # Test CSV category enum (e.g. USER_SUMMARY_CSV = 0)
+    fake_csv = b"userId,userName,energy\n1,User1,42.5\n"
+    aioresponse.get(
+        f"{BASE_URL}/api/sessions/export/55555/0/2026-09-01T00:00:00Z/2026-09-30T23:59:59Z",
+        body=fake_csv,
+        content_type="application/octet-stream",
+    )
+    report_bytes_csv = await site.get_report(
+        from_dt, to_dt, category=ReportCategory.USER_SUMMARY_CSV
+    )
+    assert report_bytes_csv == fake_csv
+
+    await easee.close()
+    await aiosession.close()
+

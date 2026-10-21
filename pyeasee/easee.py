@@ -118,6 +118,10 @@ class Easee:
             "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
             "Accept": "application/json",
         }
+        self.get_bin_headers = {
+            "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
+            "Accept": "application/octet-stream",
+        }
         self.headers = {
             "User-Agent": f"pyeasee/{__VERSION__} REST client{append_user_agent}",
             "Accept": "application/json",
@@ -174,6 +178,14 @@ class Easee:
         await self.check_status(response)
         return response
 
+    async def get_bin(self, url, **kwargs):
+        _LOGGER.debug("GET (bin): %s (%s)", url, kwargs)
+        await self._verify_updated_token()
+        async with self._general_throttler:
+            response = await self.session.get(f"{self.base}{url}", headers=self.get_bin_headers, **kwargs)
+        await self.check_status(response)
+        return response
+
     async def delete(self, url, **kwargs):
         _LOGGER.debug("DELETE: %s (%s)", url, kwargs)
         await self._verify_updated_token()
@@ -213,6 +225,7 @@ class Easee:
         accessToken = self.token["accessToken"]
         self.headers["Authorization"] = f"Bearer {accessToken}"
         self.get_headers["Authorization"] = f"Bearer {accessToken}"
+        self.get_bin_headers["Authorization"] = f"Bearer {accessToken}"
         self.sr_headers["Authorization"] = f"Bearer {accessToken}"
 
     async def _handle_token_response(self, res):
