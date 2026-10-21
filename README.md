@@ -10,7 +10,7 @@ You can install the libray from [PyPI](https://pypi.org/project/pyeasee/):
 
     pip install pyeasee
 
-The library is tested on Python 3.13
+The library is tested on Python 3.14
 
 ## Command line tool
 
