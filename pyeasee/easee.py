@@ -28,7 +28,7 @@ from .site import Site, SiteState
 from .throttler import Throttler
 from .utils import convert_stream_data
 
-__VERSION__ = "0.8.19"
+__VERSION__ = "0.8.20"
 
 _LOGGER = logging.getLogger(__name__)
 
