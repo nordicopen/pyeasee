@@ -332,18 +332,8 @@ class Site(BaseDict):
     ) -> bytes:
         """Get session export report (PDF / binary) between from_date and to_date"""
 
-        from_str = (
-            from_date.strftime("%Y-%m-%dT%H:%M:%SZ")
-            if isinstance(from_date, datetime)
-            else str(from_date)
-        )
-        to_str = (
-            to_date.strftime("%Y-%m-%dT%H:%M:%SZ")
-            if isinstance(to_date, datetime)
-            else str(to_date)
-        )
+        from_str = from_date.strftime("%Y-%m-%dT%H:%M:%SZ") if isinstance(from_date, datetime) else str(from_date)
+        to_str = to_date.strftime("%Y-%m-%dT%H:%M:%SZ") if isinstance(to_date, datetime) else str(to_date)
 
-        res = await self.easee.get_bin(
-            f"/api/sessions/export/{self.id}/{int(category)}/{from_str}/{to_str}"
-        )
+        res = await self.easee.get_bin(f"/api/sessions/export/{self.id}/{int(category)}/{from_str}/{to_str}")
         return await res.read()

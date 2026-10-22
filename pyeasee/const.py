@@ -406,5 +406,3 @@ class ReportCategory(IntEnum):
     ENERGY_SUMMARY_CSV = 18
     ENERGY_SUMMARY_PDF = 19
     ENERGY_SUMMARY_XLSX = 20
-
-
