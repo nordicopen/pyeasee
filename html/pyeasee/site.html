@@ -244,6 +244,12 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <dd>
 <div class="desc"><p>Get equalizers for the site</p></div>
 </dd>
+<dt id="pyeasee.site.Site.get_report"><code class="name flex">
+<span>async def <span class="ident">get_report</span></span>(<span>self,<br>from_date: datetime.datetime,<br>to_date: datetime.datetime,<br>category: int = 11) ‑> bytes</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get session export report (PDF / binary) between from_date and to_date</p></div>
+</dd>
 <dt id="pyeasee.site.Site.get_user_monthly_consumption"><code class="name flex">
 <span>async def <span class="ident">get_user_monthly_consumption</span></span>(<span>self, user_id)</span>
 </code></dt>
@@ -364,6 +370,7 @@ methods except for <strong>getitem</strong>, <strong>iter</strong>, and <strong>
 <li><code><a title="pyeasee.site.Site.get_circuits" href="#pyeasee.site.Site.get_circuits">get_circuits</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_cost_between_dates" href="#pyeasee.site.Site.get_cost_between_dates">get_cost_between_dates</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_equalizers" href="#pyeasee.site.Site.get_equalizers">get_equalizers</a></code></li>
+<li><code><a title="pyeasee.site.Site.get_report" href="#pyeasee.site.Site.get_report">get_report</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_user_monthly_consumption" href="#pyeasee.site.Site.get_user_monthly_consumption">get_user_monthly_consumption</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_user_yearly_consumption" href="#pyeasee.site.Site.get_user_yearly_consumption">get_user_yearly_consumption</a></code></li>
 <li><code><a title="pyeasee.site.Site.get_users" href="#pyeasee.site.Site.get_users">get_users</a></code></li>
