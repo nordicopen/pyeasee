@@ -506,13 +506,11 @@ class Easee:
         except ServerFailureException:
             return None
 
-    async def get_userid_from_key(self, key: str):
-        """Find userid from auth key"""
+    async def get_keys(self):
+        """Get all charging keys"""
         try:
-            userid = await (await self.get(f"/api/accounts/userIdByKey/{key}")).json()
-            _LOGGER.debug("User id:  %s", userid)
-            return userid
+            keys = await (await self.get("/api/accounts/easeekeys")).json()
+            _LOGGER.debug("Keys:  %s", keys)
+            return keys
         except ServerFailureException:
-            return None
-        except ForbiddenServiceException:
             return None
