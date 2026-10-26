@@ -111,23 +111,19 @@ class Equalizer(BaseDict):
         except ServerFailureException:
             return None
 
-    async def set_max_continous_current(self, current_limit: int):
+    async def set_max_continuous_current(self, current_limit: int):
         """Set limit for main fuse"""
         try:
             config = await (await self.easee.get(f"/state/{self.id}/observations?ids=20")).json()
         except ServerFailureException:
             return None
 
-        _LOGGER.debug("Config: %s", config)
         config = json.loads(config["observations"][0]["value"])
-        _LOGGER.debug("Config: %s", config)
 
         jsondata = {
             "fuseSize": config["ratedCurrent"],
             "maxContinuousCurrent": current_limit,
         }
-
-        _LOGGER.debug("jsondata: %s", jsondata)
 
         try:
             async with self._max_allocated_current_throttler:
