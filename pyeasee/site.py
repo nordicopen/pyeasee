@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import logging
 from typing import Any, Dict, List
 
@@ -80,31 +81,53 @@ class Equalizer(BaseDict):
     async def set_load_balancing(self, activate: bool, current_limit: int = 0):
         """Set the load balancing settings"""
         if activate is True:
-            json = {
+            jsondata = {
                 "mode": "chargingWithImport",
                 "chargingWithImport": {"eligible": activate, "maximumImportAddedCurrent": current_limit},
             }
         else:
-            json = {
+            jsondata = {
                 "mode": "none",
             }
 
         try:
-            return await self.easee.post(f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=json)
+            return await self.easee.post(
+                f"/cloud-loadbalancing/equalizer/{self.id}/config/surplus-energy", json=jsondata
+            )
         except ServerFailureException:
             return None
 
     async def set_max_allocated_current(self, current_limit: int):
         """Set the load balancing settings"""
-        json = {
+        jsondata = {
             "maxCurrent": current_limit,
         }
 
         try:
             async with self._max_allocated_current_throttler:
                 return await self.easee.post(
-                    f"/api/equalizers/{self.id}/commands/configure_max_allocated_current", json=json
+                    f"/api/equalizers/{self.id}/commands/configure_max_allocated_current", json=jsondata
                 )
+        except ServerFailureException:
+            return None
+
+    async def set_max_continuous_current(self, current_limit: int):
+        """Set limit for main fuse"""
+        try:
+            config = await (await self.easee.get(f"/state/{self.id}/observations?ids=20")).json()
+        except ServerFailureException:
+            return None
+
+        config = json.loads(config["observations"][0]["value"])
+
+        jsondata = {
+            "fuseSize": config["ratedCurrent"],
+            "maxContinuousCurrent": current_limit,
+        }
+
+        try:
+            async with self._max_allocated_current_throttler:
+                return await self.easee.post(f"/api/equalizers/{self.id}/commands/configure_fuse", json=jsondata)
         except ServerFailureException:
             return None
 
@@ -131,7 +154,7 @@ class Circuit(BaseDict):
         self, currentP1: int, currentP2: int = None, currentP3: int = None, timeToLive: int = 0
     ):
         """Set dynamic current on circuit level. timeToLive specifies, in minutes, for how long the new dynamic current is valid. timeToLive = 0 means that the new dynamic current is valid until changed the next time. The dynamic current is always reset to default when the charger is restarted"""
-        json = {
+        jsondata = {
             "phase1": currentP1,
             "phase2": currentP2 if currentP2 is not None else currentP1,
             "phase3": currentP3 if currentP3 is not None else currentP1,
@@ -139,42 +162,46 @@ class Circuit(BaseDict):
         }
         try:
             async with self._limit_setting_throttler:
-                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=json)
+                return await self.easee.post(
+                    f"/api/sites/{self.site.id}/circuits/{self.id}/dynamicCurrent", json=jsondata
+                )
         except ServerFailureException:
             return None
 
     async def set_max_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """Set circuit max current"""
-        json = {
+        jsondata = {
             "maxCircuitCurrentP1": currentP1,
             "maxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
             "maxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
         try:
             async with self._limit_setting_throttler:
-                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=jsondata)
         except ServerFailureException:
             return None
 
     async def set_max_offline_current(self, currentP1: int, currentP2: int = None, currentP3: int = None):
         """Set circuit max offline current, fallback value for limit if charger is offline"""
-        json = {
+        jsondata = {
             "offlineMaxCircuitCurrentP1": currentP1,
             "offlineMaxCircuitCurrentP2": currentP2 if currentP2 is not None else currentP1,
             "offlineMaxCircuitCurrentP3": currentP3 if currentP3 is not None else currentP1,
         }
         try:
             async with self._limit_setting_throttler:
-                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=json)
+                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/settings", json=jsondata)
         except ServerFailureException:
             return None
 
     async def set_rated_current(self, ratedCurrentFuseValue: int):
         """Set circuit rated current - requires elevated access (installers only)"""
-        json = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
+        jsondata = {"ratedCurrentFuseValue": ratedCurrentFuseValue}
         try:
             async with self._limit_setting_throttler:
-                return await self.easee.post(f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=json)
+                return await self.easee.post(
+                    f"/api/sites/{self.site.id}/circuits/{self.id}/rated_current", json=jsondata
+                )
         except ServerFailureException:
             return None
 
@@ -236,13 +263,13 @@ class Site(BaseDict):
 
     async def set_name(self, name: str):
         """Set name for the site"""
-        json = {**self.get_data(), "name": name}
-        return await self.easee.put(f"/api/sites/{self.id}", json=json)
+        jsondata = {**self.get_data(), "name": name}
+        return await self.easee.put(f"/api/sites/{self.id}", json=jsondata)
 
     async def set_currency(self, currency: str):
         """Set currency for the site"""
-        json = {**self.get_data(), "currencyId": currency}
-        val = await self.easee.put(f"/api/sites/{self.id}", json=json)
+        jsondata = {**self.get_data(), "currencyId": currency}
+        val = await self.easee.put(f"/api/sites/{self.id}", json=jsondata)
         self["currencyId"] = currency
         return val
 
@@ -255,7 +282,7 @@ class Site(BaseDict):
     ):
         """Set price per kWh for the site"""
 
-        json = {"costPerKWh": costPerKWh}
+        jsondata = {"costPerKWh": costPerKWh}
 
         if vat is None:
             vat = self.get("vat")
@@ -266,7 +293,7 @@ class Site(BaseDict):
         if costPerKwhExcludeVat is None:
             costPerKwhExcludeVat = costPerKWh / (100.0 + vat) * 100.0
 
-        json = {
+        jsondata = {
             "currencyId": currency,
             "costPerKWh": costPerKWh,
             "vat": vat,
@@ -274,7 +301,7 @@ class Site(BaseDict):
         }
 
         try:
-            val = await self.easee.post(f"/api/sites/{self.id}/price", json=json)
+            val = await self.easee.post(f"/api/sites/{self.id}/price", json=jsondata)
             self["vat"] = vat
             self["currencyId"] = currency
             self["costPerKWh"] = costPerKWh
