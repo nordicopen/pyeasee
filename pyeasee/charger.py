@@ -471,7 +471,7 @@ class Charger(BaseDict):
         if plan is None:
             json = {
                 "enabled": enabled,
-                "timeezone": "UTC",
+                "timezone": "UTC",
                 "periods": [],
             }
         else:
