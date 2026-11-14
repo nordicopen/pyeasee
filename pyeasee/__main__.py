@@ -262,16 +262,16 @@ async def async_main():
                 chargers = circuit.get_chargers()
                 for charger in chargers:
                     state = await charger.get_observations(*chargerObservations)
+                    state = observations_interpret(ChargerStreamData, state["observations"])
                     config = await charger.get_config()
                     print(
                         f"      "
                         f" Charger: {charger.__getitem__('name')}"
                         f" (ID: {charger.id}),"
                         f" enabled: {config.__getitem__('isEnabled')}"
-                        f" online: {state.__getitem__('isOnline')}"
-                        f" version: {state.__getitem__('chargerFirmware')}"
+                        f" version: {state.__getitem__('state_chargerFirmware')}"
                         f" voltage: {round(state.__getitem__('state_inVoltageT2T3'),1)}"
-                        f" current: {round(state.__getitem__('outputCurrent'),1)}"
+                        f" current: {round(state.__getitem__('state_outputCurrent'),1)}"
                         f" "
                     )
 
